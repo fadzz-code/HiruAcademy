@@ -22,7 +22,7 @@ export function getLearningData(membership: Membership, level: string, chapter: 
   const limited = membership === "free";
   return {
     membership,
-    level: level.toUpperCase() === "DASAR" ? "Dasar" : level.toUpperCase(),
+    level: level.toUpperCase(),
     chapter,
     title: "Pengenalan & Pondasi",
     description: "Konten contoh untuk menunjukkan struktur pengalaman belajar HIRU. Materi final akan mengikuti konfigurasi program.",

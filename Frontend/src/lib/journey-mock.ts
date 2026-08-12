@@ -7,7 +7,6 @@ export type JourneyLevel = { slug: string; code: string; title: string; descript
 export type JourneyChapter = { key: string; orderLabel: string; title: string; description: string; state: ChapterState; statusLabel: string; progressLabel: string; activities: string[] };
 
 const levels = [
-  { slug: "dasar", code: "基", title: "Dasar Bahasa Jepang", description: "Pondasi awal untuk mulai mengenal sistem tulisan dan pola bahasa Jepang." },
   { slug: "n5", code: "N5", title: "JLPT N5", description: "Perjalanan level awal dengan materi dan aktivitas belajar bertahap." },
   { slug: "n4", code: "N4", title: "JLPT N4", description: "Lanjutkan pemahaman bahasa Jepang melalui konteks yang lebih beragam." },
   { slug: "n3", code: "N3", title: "JLPT N3", description: "Preview perjalanan tingkat menengah dalam keluarga level HIRU." },
@@ -18,8 +17,8 @@ const levels = [
 const stateLabels: Record<LevelState, string> = { completed: "Selesai", current: "Sedang dipelajari", available: "Tersedia", limited: "Akses terbatas", locked: "Terkunci" };
 
 function levelStates(membership: Membership): LevelState[] {
-  if (membership === "free") return ["current", "limited", "locked", "locked", "locked", "locked"];
-  return ["completed", "current", "available", "locked", "locked", "locked"];
+  if (membership === "free") return ["limited", "limited", "limited", "limited", "limited"];
+  return ["current", "available", "available", "locked", "locked"];
 }
 
 export function getJourneyLevels(membership: Membership): JourneyLevel[] {
@@ -46,6 +45,12 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
   });
 }
 
-export function findJourneyLevel(membership: Membership, slug: string): JourneyLevel {
-  return getJourneyLevels(membership).find((level) => level.slug === slug) ?? getJourneyLevels(membership)[0];
+export function findJourneyLevel(membership: Membership, slug: string): JourneyLevel | undefined {
+  return getJourneyLevels(membership).find((level) => level.slug === slug);
+}
+
+export function canAccessLearning(membership: Membership, levelSlug: string, chapterKey: string): boolean {
+  const level = findJourneyLevel(membership, levelSlug);
+  if (!level || level.state === "locked") return false;
+  return getJourneyChapters(membership, level).some((chapter) => chapter.key === chapterKey && chapter.state !== "locked");
 }

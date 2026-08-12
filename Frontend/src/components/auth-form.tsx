@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type AuthMode = "login" | "register";
@@ -34,9 +35,18 @@ function PasswordField({ id, label, autoComplete }: { id: string; label: string;
 
 export function AuthForm({ mode }: { mode: AuthMode }) {
   const register = mode === "register";
+  const router = useRouter();
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!register) {
+      // TEMP FRONTEND MVP: replace this mock redirect with real Laravel/Sanctum authentication later.
+      router.push("/dashboard?membership=free");
+    }
+  }
 
   return (
-    <form className="auth-form" onSubmit={(event) => event.preventDefault()} noValidate={false}>
+    <form className="auth-form" onSubmit={submit} noValidate={!register}>
       {register && (
         <div className="auth-field">
           <label htmlFor="name">Nama lengkap</label>
@@ -72,7 +82,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </div>
       )}
 
-      <button className="auth-submit" type="submit">{register ? "Buat akun" : "Masuk ke akun"}<span aria-hidden="true">→</span></button>
+      <button className="auth-submit" type="submit">{register ? "Buat akun" : "Masuk Ke akun"}<span aria-hidden="true">→</span></button>
 
       <p className="auth-switch">{register ? "Sudah punya akun?" : "Belum punya akun?"} <Link href={register ? "/login" : "/register"}>{register ? "Masuk" : "Daftar sekarang"}</Link></p>
     </form>

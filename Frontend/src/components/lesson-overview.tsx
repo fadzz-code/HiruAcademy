@@ -12,7 +12,7 @@ export function LessonOverview({ data }: { data: LearningData }) {
       <nav className="learning-breadcrumb" aria-label="Breadcrumb"><Link href={`/journey/${data.level.toLowerCase()}${query}`}>Journey</Link><span>/</span><b>{data.title}</b></nav>
       <header className="lesson-hero"><div><p className="dash-kicker">{data.level} · Chapter contoh</p><h1>{data.title}</h1><p>{data.description}</p></div><div className="lesson-japanese"><ruby>一歩<rt>いっぽ</rt></ruby><span>ずつ</span><small>selangkah demi selangkah</small></div></header>
 
-      <section className="japanese-modes"><article><span className="mode-label">Japanese Pemula</span><h2><ruby>日本語<rt>にほんご</rt></ruby>を <ruby>学<rt>まな</rt></ruby>びます。</h2><p>Belajar dengan bantuan furigana untuk mendukung proses membaca.</p></article><article><span className="mode-label professional">Japanese Profesional</span><h2>日本語を学びます。</h2><p>Presentasi tanpa bantuan baca untuk pengalaman yang lebih mandiri.</p></article></section>
+      <section className="japanese-modes"><article><span className="mode-label">Jepang Pemula</span><h2><ruby>日本語<rt>にほんご</rt></ruby>を <ruby>学<rt>まな</rt></ruby>びます。</h2><p>Belajar dengan bantuan furigana untuk mendukung proses membaca.</p></article><article><span className="mode-label professional">Jepang Profesional</span><h2>日本語を学びます。</h2><p>Presentasi tanpa bantuan baca untuk pengalaman yang lebih mandiri.</p></article></section>
 
       <section className="lesson-section-head"><div><p className="dash-kicker">Urutan aktivitas</p><h2>Lanjutkan Chapter ini</h2></div><span>Progress contoh, bukan bobot produksi</span></section>
       <section className="lesson-activity-grid" aria-label="Aktivitas Chapter">{data.activities.map((activity, index) => {

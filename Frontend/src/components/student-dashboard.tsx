@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StudentNavigation } from "@/components/student-navigation";
 import type { DashboardData, DashboardFeature } from "@/lib/dashboard-mock";
 
 const glyphs: Record<DashboardFeature["icon"] | "bell" | "book" | "home" | "journey" | "library" | "lock" | "menu" | "progress" | "settings", string> = {
@@ -8,11 +9,6 @@ const glyphs: Record<DashboardFeature["icon"] | "bell" | "book" | "home" | "jour
 function Glyph({ name }: { name: keyof typeof glyphs }) {
   return <span className="dash-glyph" aria-hidden="true">{glyphs[name]}</span>;
 }
-
-const navItems = [
-  { label: "Perpustakaan", icon: "library" as const },
-  { label: "Progres", icon: "progress" as const },
-];
 
 function FeatureCard({ feature, membership }: { feature: DashboardFeature; membership: DashboardData["membership"] }) {
   const locked = feature.state === "locked";
@@ -30,16 +26,11 @@ function FeatureCard({ feature, membership }: { feature: DashboardFeature; membe
 export function StudentDashboard({ data, previewEnabled }: { data: DashboardData; previewEnabled: boolean }) {
   const lockedCount = data.features.filter((feature) => feature.state === "locked").length;
   return (
-    <div className="dashboard-shell">
-      <aside className="dash-sidebar">
-        <Link className="dash-brand" href="/"><span aria-hidden="true">日</span><strong>HIRU <b>Academy</b></strong></Link>
-        <nav aria-label="Navigasi siswa"><span className="active"><Glyph name="home" />Dashboard</span><Link href={`/journey?membership=${data.membership}`}><Glyph name="journey" />Journey</Link>{navItems.map((item) => <span key={item.label}><Glyph name={item.icon} />{item.label}</span>)}</nav>
-        <div className="dash-sidebar-bottom"><span><Glyph name="settings" />Pengaturan</span><Link href="/">Kembali ke beranda</Link></div>
-      </aside>
+    <div className="dashboard-shell student-shell">
+      <StudentNavigation membership={data.membership} current="dashboard" />
 
       <div className="dash-main">
         <header className="dash-topbar">
-          <button type="button" aria-label="Buka navigasi" className="dash-menu"><Glyph name="menu" /></button>
           <div className="dash-top-actions"><button type="button" aria-label="Notifikasi"><Glyph name="bell" /></button><div className="dash-avatar">{data.user.initials}</div><div><strong>{data.user.displayName}</strong><span>{data.membershipLabel}</span></div></div>
         </header>
 

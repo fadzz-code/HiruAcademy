@@ -17,8 +17,14 @@ export function FlashcardSession({ cards, membership, level, chapter }: { cards:
 
   useEffect(() => {
     function handleKey(event: KeyboardEvent) {
-      if (event.key === "ArrowLeft") move(-1);
-      if (event.key === "ArrowRight") move(1);
+      if (event.key === "ArrowLeft") {
+        setIndex((value) => Math.max(0, value - 1));
+        setFlipped(false);
+      }
+      if (event.key === "ArrowRight") {
+        setIndex((value) => Math.min(cards.length - 1, value + 1));
+        setFlipped(false);
+      }
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);

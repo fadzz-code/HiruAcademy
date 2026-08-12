@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ChapterJourney } from "@/components/chapter-journey";
 import { JourneyShell } from "@/components/journey-shell";
 import { parseMembership } from "@/lib/dashboard-mock";
@@ -10,5 +11,6 @@ export default async function JourneyPage({ params, searchParams }: { params: Pr
   const [route, query] = await Promise.all([params, searchParams]);
   const membership = parseMembership(typeof query.membership === "string" ? query.membership : undefined);
   const level = findJourneyLevel(membership, route.level);
+  if (!level) notFound();
   return <JourneyShell membership={membership} current="journey"><ChapterJourney membership={membership} level={level} chapters={getJourneyChapters(membership, level)} /></JourneyShell>;
 }
