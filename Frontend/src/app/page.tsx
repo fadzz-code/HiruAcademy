@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 
 type IconName = "arrow" | "book" | "check" | "compass" | "layers" | "play" | "sparkle" | "target" | "users";
 
@@ -31,7 +32,7 @@ const learningFlow = [
 ];
 
 function Brand() {
-  return <a className="brand" href="#top" aria-label="Hiru Academy"><span className="brand-mark" aria-hidden="true">日</span><span>Hiru <b>Academy</b></span></a>;
+  return <a className="brand" href="#top" aria-label="Hiru Academy"><BrandLogo /></a>;
 }
 
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {

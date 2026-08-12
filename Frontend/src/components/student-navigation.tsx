@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
 type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint";
@@ -75,7 +76,7 @@ export function StudentNavigation({ membership, current }: { membership: Members
   const items = itemsFor(membership, current);
   const navigation = (
     <>
-      <Link className="student-nav-brand" href="/"><span aria-hidden="true">日</span><strong>HIRU <b>Academy</b></strong></Link>
+      <Link className="student-nav-brand" href="/" aria-label="HIRU Academy, kembali ke beranda"><BrandLogo /></Link>
       <nav aria-label="Navigasi siswa">{items.map((item) => {
         const stateClass = item.active ? "active" : item.entitlement;
         if (item.entitlement !== "locked" && item.implementation === "implemented" && item.href) return <Link className={`student-nav-item state-${stateClass}`} href={item.href} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "limited" && <small>Terbatas</small>}{item.entitlement === "readOnly" && <small>Baca saja</small>}</Link>;

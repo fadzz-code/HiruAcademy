@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function AuthShell({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: ReactNode }) {
   return (
     <main className="auth-page">
       <section className="auth-story" aria-label="Tentang pengalaman belajar HIRU Academy">
-        <Link className="auth-brand" href="/" aria-label="HIRU Academy, kembali ke beranda"><span aria-hidden="true">日</span><strong>HIRU <b>Academy</b></strong></Link>
+        <Link className="auth-brand" href="/" aria-label="HIRU Academy, kembali ke beranda"><BrandLogo /></Link>
         <div className="auth-story-copy">
           <p>Belajar. Bertumbuh. Melangkah.</p>
           <h2>Satu langkah lebih dekat dengan tujuan bahasa Jepangmu.</h2>
