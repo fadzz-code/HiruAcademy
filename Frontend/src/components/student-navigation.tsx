@@ -5,49 +5,58 @@ import { useEffect, useRef, useState } from "react";
 import type { Membership } from "@/lib/dashboard-mock";
 
 type CurrentArea = "dashboard" | "journey" | "learning";
-type NavState = "active" | "available" | "limited" | "locked";
-type NavItem = { label: string; glyph: string; href?: string; state: NavState };
+type Entitlement = "available" | "limited" | "readOnly" | "locked";
+type Implementation = "implemented" | "notImplemented";
+type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
+// TEMP FRONTEND MVP: remove notImplemented modal states as real feature routes are added.
+type ModalState = { feature: string; variant: "membershipLock" | "notImplemented" };
 
 function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
   const free = membership === "free";
+  const sensei = membership === "sensei";
   return [
-    { label: "Dashboard", glyph: "⌂", href: `/dashboard?membership=${membership}`, state: current === "dashboard" ? "active" : "available" },
-    { label: "Journey", glyph: "道", href: `/journey?membership=${membership}`, state: current === "journey" || current === "learning" ? "active" : "available" },
-    { label: "Perpustakaan", glyph: "冊", state: free ? "limited" : "available" },
-    { label: "Latihan", glyph: "練", state: free ? "limited" : "available" },
-    { label: "Try Out", glyph: "試", state: free ? "locked" : "available", href: free ? undefined : `/tryout?membership=${membership}` },
-    { label: "Community", glyph: "話", state: free ? "limited" : "available" },
-    { label: "Leaderboard", glyph: "↗", state: free ? "locked" : "available" },
-    { label: "Achievement", glyph: "✦", state: free ? "locked" : "available" },
-    { label: "Jadwal", glyph: "予", state: membership === "sensei" ? "available" : "locked" },
-    { label: "Replay", glyph: "▶", state: membership === "sensei" ? "available" : "locked" },
-    { label: "Tanya Sensei", glyph: "先", state: membership === "sensei" ? "available" : "locked" },
-    { label: "Mini Checkpoint", glyph: "問", state: membership === "sensei" ? "available" : "locked" },
+    { label: "Dashboard", glyph: "⌂", href: `/dashboard?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
+    { label: "Kelas Saya / Journey", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
+    { label: "Perpustakaan", glyph: "冊", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
+    { label: "Latihan Harian", glyph: "練", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
+    { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented" },
+    { label: "Community", glyph: "話", entitlement: free ? "readOnly" : "available", implementation: "notImplemented" },
+    { label: "Progress", glyph: "↗", entitlement: "available", implementation: "notImplemented" },
+    { label: "Achievement", glyph: "✦", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
+    { label: "Certificate", glyph: "✓", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
+    { label: "Jadwal", glyph: "予", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
+    { label: "Replay", glyph: "▶", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
+    { label: "Tanya Sensei", glyph: "先", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
+    { label: "Mini Checkpoint", glyph: "問", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
+    { label: "Notifications", glyph: "♢", entitlement: "available", implementation: "notImplemented" },
+    { label: "Profile", glyph: "人", entitlement: "available", implementation: "notImplemented" },
   ];
 }
 
 export function StudentNavigation({ membership, current }: { membership: Membership; current: CurrentArea }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [lockedFeature, setLockedFeature] = useState<string | null>(null);
+  const [modal, setModal] = useState<ModalState | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const dialogRef = useRef<HTMLElement | null>(null);
 
-  function openLocked(feature: string, trigger: HTMLButtonElement) {
+  function openModal(feature: string, variant: ModalState["variant"], trigger: HTMLButtonElement) {
     triggerRef.current = trigger;
-    setFeedback(feature);
-    setLockedFeature(feature);
-    window.setTimeout(() => setFeedback(null), 280);
+    if (variant === "membershipLock") {
+      setFeedback(feature);
+      window.setTimeout(() => setFeedback(null), 280);
+    }
+    setModal({ feature, variant });
   }
 
   function closeModal() {
-    setLockedFeature(null);
+    setModal(null);
     window.setTimeout(() => triggerRef.current?.focus(), 0);
   }
 
   useEffect(() => {
-    if (!lockedFeature) return;
+    if (!modal) return;
     closeRef.current?.focus();
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") closeModal();
@@ -61,13 +70,18 @@ export function StudentNavigation({ membership, current }: { membership: Members
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [lockedFeature]);
+  }, [modal]);
 
   const items = itemsFor(membership, current);
   const navigation = (
     <>
       <Link className="student-nav-brand" href="/"><span aria-hidden="true">日</span><strong>HIRU <b>Academy</b></strong></Link>
-      <nav aria-label="Navigasi siswa">{items.map((item) => item.href ? <Link className={`student-nav-item state-${item.state}`} href={item.href} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.state === "limited" && <small>Terbatas</small>}</Link> : <button className={`student-nav-item state-${item.state}${feedback === item.label ? " locked-feedback" : ""}`} type="button" onClick={(event) => openLocked(item.label, event.currentTarget)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}<i aria-hidden="true">⌑</i></button>)}</nav>
+      <nav aria-label="Navigasi siswa">{items.map((item) => {
+        const stateClass = item.active ? "active" : item.entitlement;
+        if (item.entitlement !== "locked" && item.implementation === "implemented" && item.href) return <Link className={`student-nav-item state-${stateClass}`} href={item.href} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "limited" && <small>Terbatas</small>}{item.entitlement === "readOnly" && <small>Baca saja</small>}</Link>;
+        const variant = item.entitlement === "locked" ? "membershipLock" : "notImplemented";
+        return <button className={`student-nav-item state-${stateClass}${feedback === item.label ? " locked-feedback" : ""}`} type="button" onClick={(event) => openModal(item.label, variant, event.currentTarget)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "locked" ? <i aria-hidden="true">⌑</i> : item.entitlement === "limited" ? <small>Terbatas</small> : item.entitlement === "readOnly" ? <small>Baca saja</small> : null}</button>;
+      })}</nav>
       <div className="student-nav-bottom"><span>{membership === "free" ? "Free Member" : membership === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"}</span><Link href="/">Kembali ke beranda</Link></div>
     </>
   );
@@ -77,7 +91,7 @@ export function StudentNavigation({ membership, current }: { membership: Members
       <aside className="student-nav-desktop">{navigation}</aside>
       <button className="student-mobile-trigger" type="button" onClick={() => setMobileOpen(true)} aria-label="Buka navigasi" aria-expanded={mobileOpen}>☰</button>
       {mobileOpen && <div className="student-mobile-nav"><button className="student-mobile-backdrop" type="button" aria-label="Tutup navigasi" onClick={() => setMobileOpen(false)} /><aside><button className="student-mobile-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Tutup navigasi">×</button>{navigation}</aside></div>}
-      {lockedFeature && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="locked-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup">×</button><span className="locked-modal-icon" aria-hidden="true">⌑</span><p>{lockedFeature}</p><h2 id="locked-title">Akses Terkunci</h2><div className="locked-modal-actions"><button type="button" onClick={closeModal}>Batal</button><Link href="/#program">Upgrade</Link></div></section></div>}
+      {modal && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="student-modal-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup">×</button><span className="locked-modal-icon" aria-hidden="true">{modal.variant === "membershipLock" ? "⌑" : "…"}</span><p>{modal.feature}</p><h2 id="student-modal-title">{modal.variant === "membershipLock" ? "Akses Terkunci" : "Fitur Belum Tersedia"}</h2>{modal.variant === "notImplemented" && <p className="locked-modal-message">Fitur ini belum tersedia di versi demo.</p>}<div className={`locked-modal-actions${modal.variant === "notImplemented" ? " single" : ""}`}><button type="button" onClick={closeModal}>Tutup</button>{modal.variant === "membershipLock" && <Link href="/#program" onClick={closeModal}>Upgrade</Link>}</div></section></div>}
     </>
   );
 }
