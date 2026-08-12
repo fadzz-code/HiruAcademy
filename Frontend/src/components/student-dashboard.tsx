@@ -10,8 +10,6 @@ function Glyph({ name }: { name: keyof typeof glyphs }) {
 }
 
 const navItems = [
-  { label: "Dashboard", icon: "home" as const, active: true },
-  { label: "Journey", icon: "journey" as const },
   { label: "Perpustakaan", icon: "library" as const },
   { label: "Progres", icon: "progress" as const },
 ];
@@ -34,7 +32,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
     <div className="dashboard-shell">
       <aside className="dash-sidebar">
         <Link className="dash-brand" href="/"><span aria-hidden="true">日</span><strong>HIRU <b>Academy</b></strong></Link>
-        <nav aria-label="Navigasi siswa">{navItems.map((item) => <span className={item.active ? "active" : ""} key={item.label}><Glyph name={item.icon} />{item.label}</span>)}</nav>
+        <nav aria-label="Navigasi siswa"><span className="active"><Glyph name="home" />Dashboard</span><Link href={`/journey?membership=${data.membership}`}><Glyph name="journey" />Journey</Link>{navItems.map((item) => <span key={item.label}><Glyph name={item.icon} />{item.label}</span>)}</nav>
         <div className="dash-sidebar-bottom"><span><Glyph name="settings" />Pengaturan</span><Link href="/">Kembali ke beranda</Link></div>
       </aside>
 
@@ -50,7 +48,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
           <section className="dash-welcome"><div><p className="dash-kicker">Dashboard siswa</p><h1>Halo, {data.user.displayName}</h1><p>Siap melanjutkan perjalanan bahasa Jepangmu?</p></div><div className={`membership-badge membership-${data.membership}`}><span>✦</span>{data.membershipLabel}</div></section>
 
           <section className="dash-overview">
-            <article className="continue-card"><div className="continue-copy"><span className="dash-chip"><Glyph name="book" />Lanjutkan perjalanan</span><p>{data.journey.levelLabel}</p><h2>{data.journey.chapterLabel}</h2><small>{data.journey.progressLabel}</small><span className="continue-button">{data.journey.nextActivity}<b aria-hidden="true">→</b></span></div><div className="continue-art" aria-hidden="true"><span className="sun-mini" /><span className="mountain-mini" /><span className="gate-mini"><i /><b /><em /><strong /></span><span className="kana-mini">進</span></div></article>
+            <article className="continue-card"><div className="continue-copy"><span className="dash-chip"><Glyph name="book" />Lanjutkan perjalanan</span><p>{data.journey.levelLabel}</p><h2>{data.journey.chapterLabel}</h2><small>{data.journey.progressLabel}</small><Link className="continue-button" href={`/journey?membership=${data.membership}`}>{data.journey.nextActivity}<b aria-hidden="true">→</b></Link></div><div className="continue-art" aria-hidden="true"><span className="sun-mini" /><span className="mountain-mini" /><span className="gate-mini"><i /><b /><em /><strong /></span><span className="kana-mini">進</span></div></article>
             <article className="journey-card"><div className="journey-card-head"><span>Journey aktif</span><Glyph name="journey" /></div><div className="journey-path"><i className="done">✓</i><span /><i className="current">日</i><span /><i>次</i></div><h3>Teruskan langkah berikutnya</h3><p>Status progress akan mengikuti aktivitas yang benar-benar selesai.</p></article>
           </section>
 
