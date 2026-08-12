@@ -3,7 +3,7 @@ import type { Membership } from "@/lib/dashboard-mock";
 export type AssessmentType = "checkpoint" | "tryout" | "mini-checkpoint";
 export type AssessmentOption = { id: string; label: string };
 export type AssessmentQuestion = { id: string; section: string; prompt: string; japanese?: { text: string; reading?: string }; options: AssessmentOption[]; correctOptionId: string; explanation: string };
-export type AssessmentConfig = { type: AssessmentType; title: string; context: string; timerEnabled: boolean; timerLabel: string; reviewEnabled: boolean; sampleLabel: string; questions: AssessmentQuestion[] };
+export type AssessmentConfig = { type: AssessmentType; title: string; context: string; timerEnabled: boolean; timerLabel: string; reviewEnabled: boolean; sampleLabel: string; questions: AssessmentQuestion[]; completionLabel?: string; submitLabel?: string; returnHref?: string; passingScore?: number };
 
 const questions: AssessmentQuestion[] = [
   { id: "q1", section: "Kosakata", prompt: "Pilih arti yang paling sesuai untuk kosakata berikut.", japanese: { text: "学ぶ", reading: "まなぶ" }, options: [{ id: "a", label: "belajar / mempelajari" }, { id: "b", label: "beristirahat" }, { id: "c", label: "berjalan" }, { id: "d", label: "mengajar" }], correctOptionId: "a", explanation: "学ぶ digunakan untuk menyatakan proses belajar atau mempelajari sesuatu." },

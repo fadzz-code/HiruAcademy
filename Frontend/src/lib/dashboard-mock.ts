@@ -17,6 +17,19 @@ export type DashboardData = {
   journey: { levelLabel: string; chapterLabel: string; nextActivity: string; progressLabel: string };
   features: DashboardFeature[];
   lms?: LmsDashboardFixture;
+  sensei?: SenseiDashboardFixture;
+};
+
+export type SenseiDashboardFixture = {
+  eyebrow: string;
+  heading: string;
+  description: string;
+  badges: string[];
+  continue: { label: string; title: string; description: string; primary: string; secondary: string; href: string };
+  quickSection: { eyebrow: string; heading: string; description: string };
+  quickActions: { title: string; detail: string; icon: DashboardFeature["icon"] | "journey" | "library"; href: string }[];
+  entitlementSection: { eyebrow: string; heading: string; description: string };
+  progress: { label: string; value: string }[];
 };
 
 export type LmsDashboardFixture = {
@@ -65,6 +78,32 @@ const memberships: Record<Membership, Omit<DashboardData, "membership" | "featur
 
 const labels: Record<FeatureState, string> = { active: "Aktif", limited: "Terbatas", readonly: "Baca saja", locked: "Terkunci" };
 
+const senseiFixture: SenseiDashboardFixture = {
+  eyebrow: "BELAJAR DENGAN SENSEI • COHORT AKTIF",
+  heading: "Selamat datang, Hilmi",
+  description: "Learning Journey, kelas live Sensei, replay, dan assessment kelas dalam satu dashboard.",
+  badges: ["LMS + Sensei", "Cohort aktif"],
+  continue: { label: "LANJUTKAN BELAJAR", title: "Chapter 4 — JLPT N4", description: "Progress materi tetap tersimpan terpisah dari kehadiran kelas dan hasil Mini Checkpoint.", primary: "Lanjutkan Belajar", secondary: "Pilih Level", href: "/journey/n4?membership=sensei" },
+  quickSection: { eyebrow: "AKSI CEPAT", heading: "Belajar dan kelas dalam satu alur", description: "Prioritas akses untuk aktivitas mandiri dan kelas live." },
+  quickActions: [
+    { title: "Lanjutkan", detail: "Chapter 4", icon: "journey", href: "/journey/n4?membership=sensei" },
+    { title: "Jadwal", detail: "Kelas berikutnya", icon: "journey", href: "/schedule?membership=sensei" },
+    { title: "Replay", detail: "Tonton ulang", icon: "replay", href: "/replay?membership=sensei" },
+    { title: "Tanya Sensei", detail: "Kirim pertanyaan", icon: "sensei", href: "/ask-sensei?membership=sensei" },
+    { title: "Flashcard", detail: "Semua deck", icon: "practice", href: "/learn/n4/chapter-4/flashcards?membership=sensei" },
+    { title: "Mini Checkpoint", detail: "Assessment kelas", icon: "checkpoint", href: "/mini-checkpoint?membership=sensei" },
+  ],
+  entitlementSection: { eyebrow: "STATUS ENTITLEMENT", heading: "Fitur dan hak aksesmu", description: "Semua fitur LMS terbuka ditambah fitur khusus Sensei dan cohort." },
+  progress: [
+    { label: "Learning Progress", value: "72%" },
+    { label: "Streak", value: "18 hari" },
+    { label: "Mini Checkpoint", value: "84 terakhir" },
+    { label: "Achievement", value: "10 badge" },
+    { label: "Chapter Aktif", value: "N4" },
+    { label: "Flashcard", value: "120 kartu" },
+  ],
+};
+
 const lmsFixture: LmsDashboardFixture = {
   eyebrow: "BELAJAR MANDIRI • 2 LEVEL AKTIF",
   heading: "Selamat datang, Hilmi",
@@ -102,9 +141,10 @@ export function getDashboardData(membership: Membership): DashboardData {
   return {
     membership,
     membershipLabel: config.membershipLabel,
-    user: membership === "lms" ? { displayName: "Hilmi", initials: "HI" } : config.user,
+    user: membership === "free" ? config.user : { displayName: "Hilmi", initials: "HI" },
     journey: config.journey,
     lms: membership === "lms" ? lmsFixture : undefined,
+    sensei: membership === "sensei" ? senseiFixture : undefined,
     features: Object.values(featureCatalog).map((feature) => {
       const state = config.states[feature.key] ?? "locked";
       return { ...feature, state, label: labels[state] };

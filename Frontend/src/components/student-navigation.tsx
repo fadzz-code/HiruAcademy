@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning";
+type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -24,10 +24,10 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
     { label: "Progress", glyph: "↗", entitlement: "available", implementation: "notImplemented" },
     { label: "Achievement", glyph: "✦", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
     { label: "Certificate", glyph: "✓", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
-    { label: "Jadwal", glyph: "予", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
-    { label: "Replay", glyph: "▶", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
-    { label: "Tanya Sensei", glyph: "先", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
-    { label: "Mini Checkpoint", glyph: "問", entitlement: sensei ? "available" : "locked", implementation: "notImplemented" },
+    { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "schedule" },
+    { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "replay" },
+    { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "ask-sensei" },
+    { label: "Mini Checkpoint", glyph: "問", href: `/mini-checkpoint?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "mini-checkpoint" },
     { label: "Notifications", glyph: "♢", entitlement: "available", implementation: "notImplemented" },
     { label: "Profile", glyph: "人", entitlement: "available", implementation: "notImplemented" },
   ];
