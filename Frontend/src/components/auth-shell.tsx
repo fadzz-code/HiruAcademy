@@ -10,7 +10,7 @@ export function AuthShell({ eyebrow, title, description, children }: { eyebrow: 
         <div className="auth-story-copy">
           <p>Belajar. Bertumbuh. Melangkah.</p>
           <h2>Satu langkah lebih dekat dengan tujuan bahasa Jepangmu.</h2>
-          <div className="auth-japanese"><ruby>一歩<rt>いっぽ</rt></ruby>ずつ、<ruby>前<rt>まえ</rt></ruby>へ。<small>Selangkah demi selangkah, terus maju.</small></div>
+          <div className="auth-japanese"><span lang="ja"><ruby>一歩<rt>いっぽ</rt></ruby>ずつ、<ruby>前<rt>まえ</rt></ruby>へ。</span><small>Selangkah demi selangkah, terus maju.</small></div>
         </div>
         <div className="auth-landscape" aria-hidden="true"><i className="auth-sun" /><i className="auth-cloud cloud-a" /><i className="auth-cloud cloud-b" /><span className="auth-torii"><i /><b /><em /><strong /></span><span className="auth-hill back" /><span className="auth-hill front" /></div>
       </section>
