@@ -19,19 +19,19 @@ function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconName }) 
 }
 
 const offers = [
-  { icon: "book" as const, title: "Belajar Mandiri", text: "Pelajari materi secara bertahap melalui video, modul, flashcard, latihan, dan perjalanan belajar yang terstruktur." },
-  { icon: "users" as const, title: "Belajar dengan Sensei", text: "Gabungkan pengalaman LMS dengan konteks kelas, jadwal, replay, dan ruang bertanya kepada Sensei." },
-  { icon: "target" as const, title: "Persiapan Terarah", text: "Kenali posisi belajarmu, lanjutkan materi yang relevan, dan pantau perkembangan menuju target bahasa Jepang." },
+  { icon: "book" as const, label: "CHAPTER 01", badge: "COBA GRATIS", title: "Free Member", description: "Chapter 1 gratis pada N1-N5, progress tersimpan, dan community read-only.", points: ["Chapter 1 gratis pada N1-N5", "Progress belajar tetap tersimpan", "Community tersedia read-only"] },
+  { icon: "users" as const, label: "CHAPTER 01", badge: "DIREKOMENDASIKAN", title: "Belajar Mandiri", description: "Journey penuh, latihan, try out, review, sertifikat, dan community write.", points: ["Journey dan latihan penuh", "Try Out dan review jawaban", "Community write dan sertifikat"] },
+  { icon: "target" as const, label: "CHAPTER 01", badge: "LMS + ZOOM", title: "Belajar dengan Sensei", description: "Semua fitur LMS ditambah cohort, jadwal Zoom, Sensei, dan replay.", points: ["Semua fitur Belajar Mandiri", "Cohort dan kelas bersama Sensei", "Replay dan Tanya Sensei"] },
 ];
 
-const highlights = [
-  "Satu perjalanan belajar yang jelas",
-  "Materi dan latihan dalam satu tempat",
-  "Akses sesuai kebutuhan belajarmu",
+const learningFlow = [
+  { icon: "compass" as const, title: "Placement Test", description: "Temukan level awal melalui soal bertahap dan rekomendasi program." },
+  { icon: "layers" as const, title: "Learning Journey", description: "Ikuti chapter, video, quiz modul, flashcard, audio, reading, dan checkpoint." },
+  { icon: "target" as const, title: "Try Out JLPT", description: "Kerjakan simulasi terstruktur, lihat hasil, lalu review jawaban." },
 ];
 
 function Brand() {
-  return <a className="brand" href="#top" aria-label="HIRU Academy, kembali ke atas"><span className="brand-mark" aria-hidden="true">日</span><span>HIRU <b>Academy</b></span></a>;
+  return <a className="brand" href="#top" aria-label="Hiru Academy"><span className="brand-mark" aria-hidden="true">日</span><span>Hiru <b>Academy</b></span></a>;
 }
 
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
@@ -41,66 +41,21 @@ function ArrowLink({ href, children, dark = false }: { href: string; children: R
 export default function Home() {
   return (
     <div id="top">
-      <header className="site-header">
-        <div className="container nav-wrap">
-          <Brand />
-          <nav className="desktop-nav" aria-label="Navigasi utama">
-            <a href="#program">Program</a><a href="#cara-belajar">Cara Belajar</a><a href="#placement">Placement Test</a><a href="#tentang">Tentang HIRU</a>
-          </nav>
-          <a className="nav-cta" href="/login">Masuk <Icon name="arrow" width="18" height="18" /></a>
-          <details className="mobile-menu"><summary aria-label="Buka menu"><span /><span /><span /></summary><nav aria-label="Navigasi seluler"><a href="#program">Program</a><a href="#cara-belajar">Cara Belajar</a><a href="#placement">Placement Test</a><a href="#tentang">Tentang HIRU</a></nav></details>
-        </div>
-      </header>
+      <header className="site-header"><div className="container nav-wrap"><Brand /><nav className="desktop-nav" aria-label="Navigasi utama"><a href="#program">Program</a><a href="/register">Coba Gratis</a><a href="#placement">Placement Test</a><a href="#tentang">Testimoni</a><a href="#">Blog</a></nav><a className="nav-cta" href="/login">Login <Icon name="arrow" width="18" height="18" /></a><details className="mobile-menu"><summary aria-label="Buka menu"><span /><span /><span /></summary><nav aria-label="Navigasi seluler"><a href="#program">Program</a><a href="/register">Coba Gratis</a><a href="#placement">Placement Test</a><a href="#tentang">Testimoni</a><a href="#">Blog</a><a href="/login">Login</a></nav></details></div></header>
 
       <main>
-        <section className="hero">
-          <div className="hero-orb hero-orb-one" /><div className="hero-orb hero-orb-two" />
-          <div className="container hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow"><Icon name="sparkle" width="17" height="17" /> Belajar bahasa Jepang lebih terarah</p>
-              <h1>Temukan ritme belajarmu, <span>tumbuh selangkah demi selangkah.</span></h1>
-              <p className="hero-lead">HIRU Academy menyatukan materi, latihan, dan perjalanan belajar agar kamu selalu tahu harus mulai dari mana dan melangkah ke mana.</p>
-              <div className="hero-actions"><ArrowLink href="#program">Jelajahi Program</ArrowLink><a className="text-link" href="#cara-belajar"><Icon name="play" width="21" height="21" /> Lihat cara belajar</a></div>
-              <ul className="hero-checks">{highlights.map((item) => <li key={item}><span><Icon name="check" width="15" height="15" /></span>{item}</li>)}</ul>
-            </div>
+        <section className="hero"><div className="hero-orb hero-orb-one" /><div className="hero-orb hero-orb-two" /><div className="container hero-grid"><div className="hero-copy"><p className="eyebrow"><Icon name="sparkle" width="17" height="17" /> PLATFORM BELAJAR BAHASA JEPANG #1</p><h1>Belajar Bahasa Jepang Terarah dari <span>Dasar sampai Siap JLPT</span></h1><p className="hero-lead">Placement test, learning journey, flashcard, latihan, try out, komunitas, dan kelas bersama Sensei tersedia dalam satu pengalaman belajar yang konsisten.</p><div className="hero-actions"><ArrowLink href="/register">Coba Gratis</ArrowLink><a className="text-link" href="#program"><Icon name="play" width="21" height="21" /> Lihat Program</a></div><ul className="hero-checks"><li><span><Icon name="check" width="15" height="15" /></span>Tanpa akun untuk mulai placement</li><li><span><Icon name="check" width="15" height="15" /></span>Hasil langsung dan rekomendasi level</li></ul></div><div className="hero-visual" aria-label="Ilustrasi perjalanan belajar bahasa Jepang"><div className="sun" aria-hidden="true" /><div className="cloud cloud-one" /><div className="cloud cloud-two" /><div className="learning-card card-kanji"><small>Hari ini</small><strong><ruby>学<rt>まな</rt></ruby>ぶ</strong><span>belajar</span></div><div className="learning-card card-progress"><span className="mini-icon"><Icon name="layers" width="19" height="19" /></span><div><small>Perjalananmu</small><strong>Terus bertumbuh</strong></div><div className="progress"><i /></div></div><div className="torii" aria-hidden="true"><i /><b /><span /><em /></div><div className="hill hill-back" /><div className="hill hill-front" /><div className="floating-note note-one">あ</div><div className="floating-note note-two">夢</div></div></div></section>
 
-            <div className="hero-visual" aria-label="Ilustrasi perjalanan belajar bahasa Jepang">
-              <div className="sun" aria-hidden="true" /><div className="cloud cloud-one" /><div className="cloud cloud-two" />
-              <div className="learning-card card-kanji"><small>Hari ini</small><strong><ruby>学<rt>まな</rt></ruby>ぶ</strong><span>belajar</span></div>
-              <div className="learning-card card-progress"><span className="mini-icon"><Icon name="layers" width="19" height="19" /></span><div><small>Perjalananmu</small><strong>Terus bertumbuh</strong></div><div className="progress"><i /></div></div>
-              <div className="torii" aria-hidden="true"><i /><b /><span /><em /></div>
-              <div className="hill hill-back" /><div className="hill hill-front" />
-              <div className="floating-note note-one">あ</div><div className="floating-note note-two">夢</div>
-            </div>
-          </div>
-        </section>
+        <section className="section" id="program"><div className="container"><div className="section-heading"><h2>Pilih cara belajar yang paling sesuai</h2><p>Pilih cara belajar, lalu tentukan level N1-N5 secara bebas. Harga dan akses mengikuti konfigurasi sistem.</p></div><div className="offer-grid">{offers.map((offer, index) => <article className="offer-card" key={offer.title}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={offer.icon} width="28" height="28" /></div><span className="card-number">{offer.label}</span><span className="offer-badge">{offer.badge}</span><h3>{offer.title}</h3><p>{offer.description}</p><ul className="offer-points">{offer.points.map((point) => <li key={point}>{point}</li>)}</ul><a href="/dashboard">Lanjutkan belajar →</a></article>)}</div></div></section>
 
-        <section className="section" id="program">
-          <div className="container">
-            <div className="section-heading"><p className="kicker">Pilihan cara belajar</p><h2>Belajar sesuai kebutuhanmu</h2><p>Mulai mengenal pengalaman HIRU, belajar mandiri, atau dapatkan konteks belajar bersama Sensei dalam satu keluarga produk yang konsisten.</p></div>
-            <div className="offer-grid">{offers.map((offer, index) => <article className="offer-card" key={offer.title}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={offer.icon} width="28" height="28" /></div><span className="card-number">0{index + 1}</span><h3>{offer.title}</h3><p>{offer.text}</p><a href="#mulai">Pelajari pilihan <Icon name="arrow" width="18" height="18" /></a></article>)}</div>
-          </div>
-        </section>
+        <section className="section soft-section" id="cara-belajar"><div className="container"><div className="section-heading"><h2>Satu alur belajar dari placement sampai sertifikat</h2><p>Setiap langkah dirancang agar pengguna selalu mengetahui progres, akses, dan tindakan berikutnya.</p></div><div className="offer-grid">{learningFlow.map((item, index) => <article className="offer-card" key={item.title}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={item.icon} width="28" height="28" /></div><span className="card-number">0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p><a href="#placement">Lanjutkan belajar →</a></article>)}</div></div></section>
 
-        <section className="section soft-section" id="cara-belajar">
-          <div className="container feature-grid">
-            <div className="feature-art" aria-hidden="true"><div className="book-stack"><span /><span /><span /></div><div className="study-window"><i>進</i><b>一歩ずつ</b></div><div className="plant"><i /><i /><b /></div></div>
-            <div className="feature-copy"><p className="kicker">Pengalaman belajar HIRU</p><h2>Satu tempat untuk belajar dengan lebih jelas</h2><p>Materi disusun agar aktivitas belajar terasa terhubung. Kamu dapat memahami konteks, berlatih, melihat perkembangan, lalu menentukan langkah berikutnya.</p><div className="feature-list"><div><span><Icon name="compass" width="22" height="22" /></span><p><b>Perjalanan terstruktur</b><small>Level, Chapter, dan aktivitas memberi arah yang mudah dipahami.</small></p></div><div><span><Icon name="layers" width="22" height="22" /></span><p><b>Aktivitas yang beragam</b><small>Video, modul, flashcard, audio, reading, dan latihan saling melengkapi.</small></p></div><div><span><Icon name="target" width="22" height="22" /></span><p><b>Progress yang bermakna</b><small>Perkembangan berasal dari penyelesaian aktivitas, bukan sekadar membuka halaman.</small></p></div></div></div>
-          </div>
-        </section>
+        <section className="section placement" id="placement"><div className="container placement-card"><div className="placement-icon"><Icon name="compass" width="48" height="48" /></div><div><h2>Belum tahu harus mulai dari level mana?</h2><p>Belum yakin levelmu? Gunakan Placement Test. Sudah punya target? Coba Chapter 1 gratis pada level pilihanmu.</p></div><ArrowLink href="/register" dark>Mulai Sekarang</ArrowLink></div></section>
 
-        <section className="section placement" id="placement">
-          <div className="container placement-card"><div className="placement-icon"><Icon name="compass" width="48" height="48" /></div><div><p className="kicker">Masih bingung mulai dari mana?</p><h2>Kenali titik awal belajarmu</h2><p>Placement Test membantu memberi gambaran kemampuan dan rekomendasi level agar pilihan programmu terasa lebih terarah.</p></div><ArrowLink href="#mulai" dark>Pelajari Placement Test</ArrowLink></div>
-        </section>
-
-        <section className="section proof" id="tentang">
-          <div className="container proof-grid"><div><p className="kicker">Belajar tanpa kehilangan arah</p><h2>Dibuat untuk menemani proses, bukan menambah beban.</h2></div><blockquote><span aria-hidden="true">“</span><p>HIRU Academy dirancang sebagai pengalaman belajar yang modern, hangat, dan terstruktur—agar tantangan belajar bahasa Jepang terasa lebih mudah dijalani.</p><footer>Prinsip pengalaman HIRU Academy</footer></blockquote></div>
-        </section>
-
-        <section className="final-cta" id="mulai"><div className="container"><div className="cta-panel"><div className="cta-pattern" aria-hidden="true">あ <span>日</span> 語</div><p className="kicker">Mulai perjalananmu</p><h2>Langkah kecil hari ini bisa membuka jalan yang lebih besar.</h2><p>Jelajahi pilihan belajar HIRU Academy dan temukan pengalaman yang sesuai dengan tujuanmu.</p><ArrowLink href="/register">Buat Akun Belajar</ArrowLink></div></div></section>
+        <section className="final-cta" id="tentang"><div className="container"><div className="cta-panel"><div className="cta-pattern" aria-hidden="true">あ <span>日</span> 語</div><h2>Belum tahu harus mulai dari level mana?</h2><p>Belum yakin levelmu? Gunakan Placement Test. Sudah punya target? Coba Chapter 1 gratis pada level pilihanmu.</p><ArrowLink href="/register">Mulai Sekarang</ArrowLink></div></div></section>
       </main>
 
-      <footer className="footer"><div className="container footer-grid"><div><Brand /><p>Platform belajar bahasa Jepang yang membantu setiap langkah terasa lebih terarah.</p></div><nav aria-label="Navigasi footer"><a href="#program">Program</a><a href="#cara-belajar">Cara Belajar</a><a href="#placement">Placement Test</a></nav><div className="footer-note"><span>HIRU Academy</span><small>Belajar. Bertumbuh. Melangkah.</small></div></div><div className="container copyright">© {new Date().getFullYear()} HIRU Academy.</div></footer>
+      <footer className="footer"><div className="container footer-grid"><div><Brand /></div><nav aria-label="Navigasi footer"><a href="#program">Program</a><a href="#placement">Placement Test</a><a href="#tentang">Testimoni</a><a href="#">Blog</a><a href="#">Kebijakan Privasi</a></nav><div className="footer-note"><span>Hiru Academy</span></div></div><div className="container copyright">© 2026 Hiru Academy. Belajar Jepang dengan arah yang jelas.</div></footer>
     </div>
   );
 }

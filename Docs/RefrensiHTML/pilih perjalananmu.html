@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Hiru Academy - Journey Level Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#1e1b17",
+                        "on-primary-container": "#5a2a00",
+                        "tertiary-fixed-dim": "#ccc5be",
+                        "surface-container-low": "#f0f3ff",
+                        "background": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#dde1f8",
+                        "inverse-surface": "#2a313d",
+                        "surface-variant": "#dce2f3",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#5f6477",
+                        "primary-fixed-dim": "#ffb786",
+                        "on-secondary-fixed": "#161b2b",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#954900",
+                        "primary-container": "#f48220",
+                        "on-background": "#151c27",
+                        "surface-bright": "#f9f9ff",
+                        "on-surface": "#151c27",
+                        "on-tertiary-fixed-variant": "#4a4641",
+                        "secondary-fixed-dim": "#c1c6db",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#723600",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#ddc1b0",
+                        "tertiary": "#625e58",
+                        "surface-container-high": "#e2e8f8",
+                        "surface-container-highest": "#dce2f3",
+                        "tertiary-container": "#a59f98",
+                        "primary-fixed": "#ffdcc6",
+                        "outline": "#8a7264",
+                        "primary": "#954900",
+                        "on-tertiary-container": "#3a3731",
+                        "on-error": "#ffffff",
+                        "surface-container": "#e7eefe",
+                        "secondary": "#595e70",
+                        "on-primary-fixed": "#311400",
+                        "inverse-primary": "#ffb786",
+                        "surface": "#f9f9ff",
+                        "inverse-on-surface": "#ebf1ff",
+                        "tertiary-fixed": "#e9e1d9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#414658",
+                        "secondary-fixed": "#dde1f8",
+                        "surface-dim": "#d3daea",
+                        "on-surface-variant": "#564336"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-padding": "24px",
+                        "base": "8px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "japanese-ruby": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "japanese-ruby": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hover-shadow:hover {
+            box-shadow: 0px 10px 20px rgba(244, 130, 32, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen font-body-md text-body-md">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 left-0 top-0 bg-surface-container-low border-r border-outline-variant p-stack-sm sticky top-0 flex-shrink-0 z-10">
+<div class="px-4 py-4 mb-stack-md">
+<h1 class="text-headline-md font-headline-md font-black text-primary">Hiru Academy</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Belajar Bahasa Jepang</p>
+</div>
+<nav class="flex-1 flex flex-col gap-base">
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-base bg-secondary text-on-secondary rounded-lg px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Kursus Saya</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Jadwal</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span>Progres</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+<span>Sertifikat</span>
+</a>
+</nav>
+<div class="mt-auto pt-stack-md border-t border-outline-variant flex flex-col gap-base">
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Pengaturan</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Keluar</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-container-padding py-stack-lg md:py-12 overflow-y-auto">
+<!-- Header Section -->
+<header class="mb-stack-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<div>
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-2">Pilih Perjalanan Belajarmu</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Lanjutkan petualangan belajarmu. Kuasai tata bahasa, kanji, dan percakapan untuk mencapai tujuanmu.</p>
+</div>
+<button class="bg-primary-container text-on-primary font-label-sm text-label-sm px-6 py-3 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap self-start md:self-auto">
+                    Mulai Belajar
+                </button>
+</div>
+</header>
+<!-- Bento Grid Layout for Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Open Card: Dasar Bahasa Jepang -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col hover-shadow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center text-on-secondary shadow-sm">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+</div>
+<span class="bg-surface-container-high text-primary-fixed-dim font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant">Open</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-primary transition-colors">Dasar Bahasa Jepang</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Pondasi penting untuk pemula: Hiragana, Katakana, dan salam dasar.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-on-surface-variant mb-1">
+<span>Progress</span>
+<span>20/20 Bab</span>
+</div>
+<div class="w-full h-2 bg-primary-container/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-full rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-secondary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Ulas Kembali
+                </button>
+</div>
+<!-- Open Card: N5 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col hover-shadow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-primary-container rounded-xl flex items-center justify-center text-on-primary shadow-sm">
+<span class="font-bold text-lg">N5</span>
+</div>
+<span class="bg-surface-container-high text-primary-fixed-dim font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant">Open</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-primary transition-colors">JLPT N5</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Kosakata dasar, kanji awal, dan struktur kalimat sederhana.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-on-surface-variant mb-1">
+<span>Progress</span>
+<span>15/30 Bab</span>
+</div>
+<div class="w-full h-2 bg-primary-container/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-1/2 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    Lanjutkan Belajar
+                </button>
+</div>
+<!-- Open Card: N4 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col hover-shadow transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container-high border border-outline-variant rounded-xl flex items-center justify-center text-primary-container shadow-sm">
+<span class="font-bold text-lg">N4</span>
+</div>
+<span class="bg-surface-container-high text-primary-fixed-dim font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant">Open</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-primary transition-colors">JLPT N4</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Percakapan sehari-hari lanjutan dan pemahaman bacaan ringan.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-on-surface-variant mb-1">
+<span>Progress</span>
+<span>0/35 Bab</span>
+</div>
+<div class="w-full h-2 bg-primary-container/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-0 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-surface-container text-on-surface font-label-sm text-label-sm py-3 rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
+                    Mulai Belajar
+                </button>
+</div>
+<!-- Locked Card: N3 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col relative overflow-hidden opacity-75">
+<div class="absolute inset-0 bg-surface-container-low/40 backdrop-blur-[1px] z-10 flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 bg-inverse-surface rounded-full flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined" data-icon="lock" data-weight="fill">lock</span>
+</div>
+</div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-secondary shadow-sm">
+<span class="font-bold text-lg">N3</span>
+</div>
+<span class="bg-surface-container-high text-secondary font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant flex items-center gap-1">
+                        Locked
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-secondary mb-2">JLPT N3</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">Pemahaman bahasa Jepang tingkat menengah untuk kehidupan sehari-hari.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-secondary mb-1">
+<span>Progress</span>
+<span>0/40 Bab</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-0 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-inverse-surface text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity z-20 relative">
+                    Beli Akses
+                </button>
+</div>
+<!-- Locked Card: N2 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col relative overflow-hidden opacity-75">
+<div class="absolute inset-0 bg-surface-container-low/40 backdrop-blur-[1px] z-10 flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 bg-inverse-surface rounded-full flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined" data-icon="lock" data-weight="fill">lock</span>
+</div>
+</div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-secondary shadow-sm">
+<span class="font-bold text-lg">N2</span>
+</div>
+<span class="bg-surface-container-high text-secondary font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant flex items-center gap-1">
+                        Locked
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-secondary mb-2">JLPT N2</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">Tingkat lanjut: membaca artikel umum dan memahami percakapan alami.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-secondary mb-1">
+<span>Progress</span>
+<span>0/50 Bab</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-0 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-inverse-surface text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity z-20 relative">
+                    Beli Akses
+                </button>
+</div>
+<!-- Locked Card: SSW -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col relative overflow-hidden opacity-75">
+<div class="absolute inset-0 bg-surface-container-low/40 backdrop-blur-[1px] z-10 flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 bg-inverse-surface rounded-full flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined" data-icon="lock" data-weight="fill">lock</span>
+</div>
+</div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+</div>
+<span class="bg-surface-container-high text-secondary font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant flex items-center gap-1">
+                        Locked
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-secondary mb-2">SSW Pengolahan Makanan</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">Persiapan tes keterampilan khusus bidang industri makanan.</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-secondary mb-1">
+<span>Progress</span>
+<span>0/12 Bab</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-0 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-inverse-surface text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity z-20 relative">
+                    Beli Akses
+                </button>
+</div>
+<!-- Locked Card: Interview -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 flex flex-col relative overflow-hidden opacity-75">
+<div class="absolute inset-0 bg-surface-container-low/40 backdrop-blur-[1px] z-10 flex items-center justify-center pointer-events-none">
+<div class="w-16 h-16 bg-inverse-surface rounded-full flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined" data-icon="lock" data-weight="fill">lock</span>
+</div>
+</div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" data-icon="interpreter_mode">interpreter_mode</span>
+</div>
+<span class="bg-surface-container-high text-secondary font-japanese-ruby text-japanese-ruby px-3 py-1 rounded-full border border-outline-variant flex items-center gap-1">
+                        Locked
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-secondary mb-2">Persiapan Interview</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">Latihan wawancara kerja dengan perusahaan Jepang (Mensetsu).</p>
+<div class="mb-4">
+<div class="flex justify-between font-japanese-ruby text-japanese-ruby text-secondary mb-1">
+<span>Progress</span>
+<span>0/8 Bab</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-0 rounded-full"></div>
+</div>
+</div>
+<button class="w-full bg-inverse-surface text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 transition-opacity z-20 relative">
+                    Beli Akses
+                </button>
+</div>
+</div>
+</main>
+</body></html>

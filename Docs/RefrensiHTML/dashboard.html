@@ -1,0 +1,461 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Dashboard Siswa - Hiru Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#1e1b17",
+                      "on-primary-container": "#5a2a00",
+                      "tertiary-fixed-dim": "#ccc5be",
+                      "surface-container-low": "#f0f3ff",
+                      "background": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "secondary-container": "#dde1f8",
+                      "inverse-surface": "#2a313d",
+                      "surface-variant": "#dce2f3",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#5f6477",
+                      "primary-fixed-dim": "#ffb786",
+                      "on-secondary-fixed": "#161b2b",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#954900",
+                      "primary-container": "#f48220",
+                      "on-background": "#151c27",
+                      "surface-bright": "#f9f9ff",
+                      "on-surface": "#151c27",
+                      "on-tertiary-fixed-variant": "#4a4641",
+                      "secondary-fixed-dim": "#c1c6db",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#723600",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#ddc1b0",
+                      "tertiary": "#625e58",
+                      "surface-container-high": "#e2e8f8",
+                      "surface-container-highest": "#dce2f3",
+                      "tertiary-container": "#a59f98",
+                      "primary-fixed": "#ffdcc6",
+                      "outline": "#8a7264",
+                      "primary": "#954900",
+                      "on-tertiary-container": "#3a3731",
+                      "on-error": "#ffffff",
+                      "surface-container": "#e7eefe",
+                      "secondary": "#595e70",
+                      "on-primary-fixed": "#311400",
+                      "inverse-primary": "#ffb786",
+                      "surface": "#f9f9ff",
+                      "inverse-on-surface": "#ebf1ff",
+                      "tertiary-fixed": "#e9e1d9",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed-variant": "#414658",
+                      "secondary-fixed": "#dde1f8",
+                      "surface-dim": "#d3daea",
+                      "on-surface-variant": "#564336"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-padding": "24px",
+                      "base": "8px",
+                      "stack-md": "24px",
+                      "stack-sm": "12px",
+                      "stack-lg": "48px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "japanese-ruby": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "japanese-ruby": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .clay-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
+        }
+        .hover-card:hover {
+            box-shadow: 0px 10px 20px rgba(244, 130, 32, 0.08);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Custom Scrollbar for better UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f3ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dde1f8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c1c6db;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant h-screen w-64 left-0 top-0 flex-col h-full p-stack-sm flex-shrink-0">
+<div class="mb-stack-lg px-4 pt-4">
+<h1 class="text-headline-md font-headline-md font-black text-primary">Hiru Academy</h1>
+<p class="font-body-md text-body-md text-secondary">Belajar Bahasa Jepang</p>
+</div>
+<ul class="flex flex-col gap-base flex-1">
+<!-- Active Tab: Dashboard -->
+<li>
+<a class="flex items-center gap-base bg-secondary text-on-secondary rounded-lg px-4 py-2 font-body-md text-body-md transition-all" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<!-- Inactive Tabs -->
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+                    Kursus Saya
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+                    Jadwal
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+                    Progres
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">verified</span>
+                    Sertifikat
+                </a>
+</li>
+</ul>
+<div class="mt-auto mb-stack-md px-4">
+<button class="w-full bg-primary-container text-on-primary font-label-sm text-label-sm py-3 rounded-lg hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                Mulai Belajar
+            </button>
+</div>
+<ul class="flex flex-col gap-base border-t border-outline-variant pt-stack-sm">
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Pengaturan
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    Keluar
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-container-padding py-4 bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-10 flex-shrink-0">
+<!-- Mobile Menu Toggle (Visible only on md) -->
+<button class="md:hidden text-on-surface p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex-1"></div> <!-- Spacer -->
+<!-- User Profile & Actions -->
+<div class="flex items-center gap-container-padding">
+<button class="relative text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2.5 h-2.5 bg-primary-container rounded-full border-2 border-surface-container-lowest"></span>
+</button>
+<div class="flex items-center gap-stack-sm cursor-pointer hover:opacity-80 transition-opacity">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-variant">
+<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="A bright, cheerful 3D avatar of a young male student named Hilmi. He has short neat dark hair, wearing casual modern clothes, against a soft warm orange background. The style is cute claymorphism, highly detailed, soft lighting, matching a modern edtech platform aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuGEMrpTSnw-xsjjaMzZ4f4ho9ZYrJP6A7ZX51Pz8BZJKi1xfRXj_gkiIfd8fgk9mCWcabp-Tdj_Y7NcCcmjVIj2D9ADPaL7jxjgf62jFEit-p6kRWw7d9Nty3Ni9H6khNoJdtmWmTeULZFh8zXB2d0Rytxkh6B6s3NjMIAhLBhaV9yq-HrGuvWW_TF-5KZHKQKnHKkPkxyTlOy1zL1jYlzcH9qjn9Fl_M5i3In_hmlHZHVoTGatjc">
+</div>
+<div class="hidden sm:block">
+<p class="font-label-sm text-label-sm text-on-surface">Hilmi</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary">Siswa N4</p>
+</div>
+<span class="material-symbols-outlined text-secondary text-sm">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-container-padding">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-stack-md">
+<!-- Main Column (Left) -->
+<div class="flex-1 flex flex-col gap-stack-md">
+<!-- Greeting & Student Info Header -->
+<section class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-stack-sm mb-base">
+<div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Halo, Hilmi <span class="text-primary-container">👋</span></h2>
+<p class="font-body-lg text-body-lg text-secondary mt-1">Siap untuk melanjutkan perjalanan bahasa Jepangmu hari ini?</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<!-- Membership Badge -->
+<div class="flex items-center gap-1 bg-gradient-to-r from-primary-fixed to-inverse-primary px-3 py-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-on-primary-fixed text-sm">stars</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed">LMS プラス</span>
+</div>
+<!-- Level Badge -->
+<div class="bg-secondary-container px-3 py-1.5 rounded-full border border-secondary-fixed-dim">
+<span class="font-label-sm text-label-sm text-on-secondary-container">N4</span>
+</div>
+<!-- Target Badge -->
+<div class="bg-surface-variant px-3 py-1.5 rounded-full border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">flag</span> Target JLPT: Des 2026
+                                </span>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Top Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-sm">
+<!-- Lanjutkan Journey Hero Card (Takes 2 columns) -->
+<div class="md:col-span-2 bg-surface-container-lowest rounded-[24px] p-container-padding border border-outline-variant relative overflow-hidden clay-card flex flex-col justify-between min-h-[220px]">
+<!-- Decorative BG Element -->
+<div class="absolute -right-10 -bottom-10 w-64 h-64 bg-primary-fixed rounded-full opacity-20 blur-3xl pointer-events-none"></div>
+<div class="relative z-10">
+<div class="bg-surface-container-high w-fit px-3 py-1 rounded-md mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">play_circle</span>
+<span class="font-japanese-ruby text-japanese-ruby text-secondary uppercase tracking-wider">Terakhir Belajar</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Bunpou Bab 12: Kata Kerja Te-form</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-md">Mari selesaikan latihan pola kalimat -te kudasai untuk meminta bantuan dengan sopan.</p>
+</div>
+<div class="relative z-10 flex items-center gap-stack-md">
+<button class="bg-primary-container text-on-primary font-label-sm text-label-sm px-6 py-3 rounded-xl hover:bg-surface-tint active:scale-95 transition-all shadow-md flex items-center gap-2">
+                                    Lanjutkan Belajar
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<span class="font-body-md text-body-md text-secondary">Tersisa 15 menit</span>
+</div>
+</div>
+<!-- Progress Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-container-padding border border-outline-variant flex flex-col items-center justify-center text-center clay-card">
+<h4 class="font-label-sm text-label-sm text-secondary w-full text-left mb-4">Progres N4</h4>
+<!-- Circular Progress Simulation -->
+<div class="relative w-32 h-32 mb-4">
+<!-- Track -->
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<circle class="stroke-current text-secondary-container" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<!-- Progress (approx 65%) -->
+<circle class="stroke-current text-primary-container" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="35" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-md text-headline-md text-on-surface leading-none">65%</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Kamu telah menyelesaikan 26 dari 40 modul.</p>
+</div>
+</div>
+<!-- Quick Menu Grid -->
+<section class="mt-4">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Menu Cepat</h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-stack-sm">
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">route</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Journey</span>
+</a>
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">local_library</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Perpustakaan</span>
+</a>
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">edit_note</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Latihan</span>
+</a>
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">quiz</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Try Out</span>
+</a>
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">forum</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Komunitas</span>
+</a>
+<a class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant flex flex-col items-center text-center gap-3 hover-card" href="#">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">handshake</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Affiliate</span>
+</a>
+</div>
+</section>
+</div>
+<!-- Secondary Column (Right Sidebar equivalent for content) -->
+<aside class="w-full lg:w-80 flex flex-col gap-stack-sm shrink-0">
+<!-- Announcement Card -->
+<div class="bg-inverse-surface rounded-[24px] p-5 text-on-tertiary relative overflow-hidden">
+<!-- Abstract Shape bg -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-container rounded-full opacity-30 blur-2xl"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary-fixed">campaign</span>
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider">Pengumuman</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-2 text-on-tertiary">Try Out JLPT N4 Nasional</h4>
+<p class="font-body-md text-body-md text-tertiary-fixed-dim mb-4 text-sm">Persiapkan dirimu untuk ujian simulasi bulan depan. Pendaftaran gratis untuk member LMS プラス.</p>
+<button class="w-full bg-transparent border border-outline text-on-tertiary font-label-sm text-label-sm py-2 rounded-lg hover:bg-surface-tint hover:border-surface-tint transition-colors">
+                            Lihat Detail
+                        </button>
+</div>
+<!-- Leaderboard Preview -->
+<div class="bg-surface-container-lowest rounded-[24px] p-5 border border-outline-variant clay-card flex-1">
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold">Papan Peringkat</h4>
+<a class="text-primary-container hover:text-surface-tint text-sm font-label-sm flex items-center" href="#">Lihat Semua <span class="material-symbols-outlined text-sm">chevron_right</span></a>
+</div>
+<ul class="flex flex-col gap-3">
+<!-- Rank 1 -->
+<li class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-low border border-surface-variant">
+<div class="w-6 h-6 flex items-center justify-center font-bold text-primary-container bg-primary-fixed rounded-full text-xs">1</div>
+<img alt="User 1" class="w-8 h-8 rounded-full object-cover" data-alt="A small circular avatar of a female student with glasses, smiling, minimal cute illustration style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVHvgdCYT1P0W1Iyhp3XOzl-uV9Z9m4uowqtNnbVmM54U-510b8zpkDgPzqd_Ajxdru4tKOY8ep6ChyzXrmUqfzDgEfXJbQREOvjGAgtLUdG6JB6P-gBsHuuPMq5kn7yNFQyttNdkvQV7x3Yct9S1NK7_Z-G1UT-VhEgsXkD2CJ6xDmmtkSf9a4V80H-PatXbOjPThKebHGQvAobHGgAAfMuONgCK9oBygM9HYuUnT4NqrwBZf4G56">
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface text-sm">Siti Aisyah</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary text-xs">12,450 XP</p>
+</div>
+<span class="material-symbols-outlined text-primary-container text-sm">local_fire_department</span>
+</li>
+<!-- Rank 2 -->
+<li class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 flex items-center justify-center font-bold text-secondary bg-surface-variant rounded-full text-xs">2</div>
+<img alt="User 2" class="w-8 h-8 rounded-full object-cover" data-alt="A small circular avatar of a male student wearing a cap, minimal cute illustration style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkhvUT4K8cnXzwUlrl0749JRdXBNh3n7iw4oPcc7Eq9kAQ0N7c9T8pxQlQQyyPfPdPJCLID6PAgLL2eOWRALh2M-Dbr9r4yB7GEYNQdE5xNsi08K_jvZHJc5CYwyHuBF0w2V8ABMklnXI1XW6xFOSqdCG-Bd6HX8pH3NczyHorsvdPowa3D2fPOdbtX3igWkSmHchLSW6mo8mjQ3oIIg5q1tqxXCBL-9UoSLmwrGKDGHJZwZcmlpzj">
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface text-sm">Budi Santoso</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary text-xs">11,200 XP</p>
+</div>
+</li>
+<!-- Rank 3 -->
+<li class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 flex items-center justify-center font-bold text-secondary bg-surface-variant rounded-full text-xs">3</div>
+<img alt="User 3" class="w-8 h-8 rounded-full object-cover" data-alt="A small circular avatar of a female student with short hair, minimal cute illustration style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaUfv77W3OKBvvTgfL7UXhUCdau7JlPZ5Tu74Eh3LDfqme2UDyHBanGwCtC5Vv5rmfYA46slxrg8HsqmAqBiSeH_Hd6EdbicQ8JwOxLPkS2x_znsxfT-HQQ9Pmck253X701mFjW3IH2r_Puyq_SLnTlJVOwaalBSLB9AKAiKN90KfQrEdMX5aC-YTBLu-Tob9Thw-cfH9FN8Kc7-yvorK_e35zUULTK2yGTPXBk7iPPYob85q5J09s">
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface text-sm">Rina Wati</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary text-xs">10,850 XP</p>
+</div>
+</li>
+<!-- Rank 4 -->
+<li class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="w-6 h-6 flex items-center justify-center font-bold text-secondary bg-transparent rounded-full text-xs">4</div>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-xs">DI</div>
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface text-sm">Dian Indra</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary text-xs">9,600 XP</p>
+</div>
+</li>
+<!-- Rank 5 (Current User highlighted subtly) -->
+<li class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low transition-colors relative before:content-[''] before:absolute before:left-0 before:top-1 before:bottom-1 before:w-1 before:bg-primary-container before:rounded-r-full">
+<div class="w-6 h-6 flex items-center justify-center font-bold text-secondary bg-transparent rounded-full text-xs ml-1">5</div>
+<img alt="Hilmi" class="w-8 h-8 rounded-full object-cover border border-primary-container" data-alt="A small circular avatar of Hilmi, same as main profile but smaller." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF6MficXONAS8Uy78peDj8I0th6JKcluTNN_JKbqETLBoBc_k6eEwizuYrSTVnU2uPtJGxHwGHKnRmkszNFlnG2ofYzQkFubQNK7413uhcf-XAFTpIJ6WEiHbReTKzKI9Jw60Mbfl8dNde-lOPlcGrMmUEGl36z8tLD3fQoBilEwj3-_2qQzS3dsFuxxphPWPvkrq-tv52ybfpBATBuVsHYZIpLuRHqR_Ok6NNItzXVGnVClmeKVSP">
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface text-sm font-bold">Hilmi (Kamu)</p>
+<p class="font-japanese-ruby text-japanese-ruby text-secondary text-xs">9,120 XP</p>
+</div>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+<!-- Bottom padding for scroll -->
+<div class="h-stack-lg"></div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hasil Try Out - Hiru Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#3a3731",
+                    "on-secondary-fixed": "#161b2b",
+                    "inverse-surface": "#2a313d",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#d3daea",
+                    "surface-container-highest": "#dce2f3",
+                    "inverse-on-surface": "#ebf1ff",
+                    "primary-container": "#f48220",
+                    "tertiary-fixed": "#e9e1d9",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#e7eefe",
+                    "inverse-primary": "#ffb786",
+                    "on-tertiary-fixed": "#1e1b17",
+                    "surface-tint": "#954900",
+                    "on-surface-variant": "#564336",
+                    "on-error": "#ffffff",
+                    "primary": "#954900",
+                    "on-primary-fixed-variant": "#723600",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary-fixed": "#311400",
+                    "on-secondary-fixed-variant": "#414658",
+                    "surface-variant": "#dce2f3",
+                    "surface-container-low": "#f0f3ff",
+                    "background": "#f9f9ff",
+                    "outline": "#8a7264",
+                    "tertiary-fixed-dim": "#ccc5be",
+                    "secondary-container": "#dde1f8",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#5a2a00",
+                    "surface": "#f9f9ff",
+                    "secondary-fixed-dim": "#c1c6db",
+                    "tertiary-container": "#a59f98",
+                    "surface-container-high": "#e2e8f8",
+                    "secondary": "#595e70",
+                    "on-secondary-container": "#5f6477",
+                    "tertiary": "#625e58",
+                    "primary-fixed-dim": "#ffb786",
+                    "on-background": "#151c27",
+                    "secondary-fixed": "#dde1f8",
+                    "outline-variant": "#ddc1b0",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#ffdcc6",
+                    "on-surface": "#151c27",
+                    "on-tertiary-fixed-variant": "#4a4641",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "12px",
+                    "stack-md": "24px",
+                    "base": "8px",
+                    "stack-lg": "48px",
+                    "container-padding": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "japanese-ruby": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "label-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "japanese-ruby": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#dce2f3 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .clay-card {
+            box-shadow: 8px 8px 16px #e2e8f8, -8px -8px 16px #ffffff;
+        }
+        .clay-btn-orange {
+            background: linear-gradient(145deg, #f48220, #db751d);
+            box-shadow:  5px 5px 10px #e2e8f8, -5px -5px 10px #ffffff;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .clay-btn-orange:hover {
+            box-shadow:  inset 5px 5px 10px #c3681a, inset -5px -5px 10px #ff9c26;
+        }
+        .clay-btn-outline {
+            background: transparent;
+            border: 2px solid #595e70;
+            color: #595e70;
+            transition: all 0.2s ease;
+        }
+        .clay-btn-outline:hover {
+            background: #595e70;
+            color: white;
+            box-shadow:  5px 5px 10px #e2e8f8, -5px -5px 10px #ffffff;
+        }
+        .circular-chart {
+            display: block;
+            margin: 0 auto;
+            max-width: 80%;
+            max-height: 250px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: #f0f3ff;
+            stroke-width: 3.8;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            animation: progress 1s ease-out forwards;
+        }
+        @keyframes progress {
+            0% {
+                stroke-dasharray: 0 100;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md bg-pattern min-h-screen flex">
+<!-- SideNavBar (WEB) -->
+<aside class="hidden md:flex flex-col h-screen w-64 left-0 top-0 bg-surface-container-low border-r border-outline-variant p-stack-sm fixed z-40">
+<div class="mb-stack-lg px-4 pt-4">
+<h1 class="text-headline-md font-headline-md font-black text-primary">Hiru Academy</h1>
+<p class="font-japanese-ruby text-japanese-ruby text-on-surface-variant mt-1">Belajar Bahasa Jepang</p>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-base bg-secondary text-on-secondary rounded-lg px-4 py-2" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Kursus Saya</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-sm text-label-sm">Jadwal</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-sm text-label-sm">Progres</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-sm text-label-sm">Sertifikat</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-2">
+<button class="bg-primary-container text-white font-label-sm text-label-sm py-3 rounded-lg mb-4 w-full clay-btn-orange">
+                Mulai Belajar
+            </button>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Pengaturan</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 hover:bg-surface-variant hover:text-on-surface-variant transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Keluar</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 relative min-h-screen pb-stack-lg">
+<!-- Mobile Header (Hidden on Web) -->
+<header class="md:hidden flex justify-between items-center bg-surface-container-lowest px-container-padding py-4 sticky top-0 z-30 shadow-sm border-b border-outline-variant">
+<div>
+<h1 class="text-headline-md font-headline-md font-extrabold text-primary">Hiru Academy</h1>
+</div>
+<button class="text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<div class="px-container-padding py-stack-md max-w-7xl mx-auto mt-stack-md">
+<!-- Page Title & Actions Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-stack-sm mb-stack-lg">
+<div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background">Hasil Try Out N4 - Simulasi 1</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Selesai pada: 24 Okt 2023, 10:30 WIB</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-3 rounded-lg font-label-sm text-label-sm clay-btn-outline flex items-center gap-2">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Kembali ke Dashboard
+                    </button>
+<button class="px-6 py-3 rounded-lg font-label-sm text-label-sm clay-btn-orange flex items-center gap-2">
+<span class="material-symbols-outlined">rate_review</span>
+                        Review Jawaban
+                    </button>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-stack-lg">
+<!-- Hero Score Card -->
+<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-stack-md border border-surface-container-highest clay-card flex flex-col items-center justify-center text-center">
+<h3 class="font-headline-md text-headline-md text-on-background mb-4">Total Skor</h3>
+<div class="relative w-48 h-48 mb-4">
+<svg class="circular-chart text-primary-container" viewbox="0 0 36 36">
+<path class="circle-bg" d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+<path class="circle" d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831" stroke="currentColor" stroke-dasharray="85, 100"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-display-lg text-primary-container">153</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">/ 180</span>
+</div>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full mt-2">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-sm text-label-sm text-on-background">Lulus (Goukaku)</span>
+</div>
+</div>
+<!-- Breakdown & Summary -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<!-- Quick Stats Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+<div class="bg-surface-container-lowest rounded-xl p-stack-sm border border-surface-container-highest flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="font-japanese-ruby text-japanese-ruby text-on-surface-variant">Waktu Digunakan</p>
+<p class="font-headline-md text-headline-md text-on-background">110 <span class="text-body-md font-body-md">Menit</span></p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-stack-sm border border-surface-container-highest flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="font-japanese-ruby text-japanese-ruby text-on-surface-variant">Total Jawaban Benar</p>
+<p class="font-headline-md text-headline-md text-on-background">85 <span class="text-body-md font-body-md text-on-surface-variant">/ 100</span></p>
+</div>
+</div>
+</div>
+<!-- Section Breakdown -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md border border-surface-container-highest flex-1">
+<h3 class="font-headline-md text-headline-md text-on-background mb-stack-sm">Detail per Bagian</h3>
+<div class="space-y-6">
+<!-- Kanji & Kosakata -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-background">Kanji &amp; Kosakata (Moji Goi)</span>
+<span class="font-label-sm text-label-sm text-primary-container">45/60</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2.5">
+<div class="bg-primary-container h-2.5 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<!-- Grammar -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-background">Tata Bahasa &amp; Membaca (Bunpou &amp; Dokkai)</span>
+<span class="font-label-sm text-label-sm text-primary-container">52/60</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2.5">
+<div class="bg-primary-container h-2.5 rounded-full" style="width: 86%"></div>
+</div>
+</div>
+<!-- Listening -->
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-background">Mendengar (Choukai)</span>
+<span class="font-label-sm text-label-sm text-primary-container">56/60</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2.5">
+<div class="bg-primary-container h-2.5 rounded-full" style="width: 93%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recommendation Card -->
+<div class="bg-inverse-surface text-on-tertiary rounded-xl p-stack-md relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full blur-3xl opacity-20 -mr-20 -mt-20"></div>
+<div class="relative z-10 flex flex-col md:flex-row gap-stack-md items-start md:items-center">
+<div class="w-16 h-16 rounded-full bg-surface-tint flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white" style="font-size: 32px; font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-white mb-2">Rekomendasi Belajar</h3>
+<p class="font-body-lg text-body-lg text-surface-container-high">
+                            Kerja bagus! Nilai Choukai (Mendengar) kamu sangat baik. Namun, untuk Moji Goi, <strong class="text-inverse-primary">kamu perlu mengulang materi Kanji Chapter 2 dan Latihan Partikel に.</strong> Fokus pada area ini untuk simulasi berikutnya.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-lowest border-t border-outline-variant flex justify-around py-3 px-4 z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-[10px] font-medium mt-1">Kursus</span>
+</a>
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-medium mt-1">Jadwal</span>
+</a>
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium mt-1">Profil</span>
+</a>
+</nav>
+</body></html>

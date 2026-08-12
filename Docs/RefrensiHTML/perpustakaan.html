@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perpustakaan Materi - Hiru Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#3a3731",
+                        "on-secondary-fixed": "#161b2b",
+                        "inverse-surface": "#2a313d",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d3daea",
+                        "surface-container-highest": "#dce2f3",
+                        "inverse-on-surface": "#ebf1ff",
+                        "primary-container": "#f48220",
+                        "tertiary-fixed": "#e9e1d9",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#e7eefe",
+                        "inverse-primary": "#ffb786",
+                        "on-tertiary-fixed": "#1e1b17",
+                        "surface-tint": "#954900",
+                        "on-surface-variant": "#564336",
+                        "on-error": "#ffffff",
+                        "primary": "#954900",
+                        "on-primary-fixed-variant": "#723600",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-fixed": "#311400",
+                        "on-secondary-fixed-variant": "#414658",
+                        "surface-variant": "#dce2f3",
+                        "surface-container-low": "#f0f3ff",
+                        "background": "#FFF7EF", /* Light Warm background */
+                        "outline": "#8a7264",
+                        "tertiary-fixed-dim": "#ccc5be",
+                        "secondary-container": "#dde1f8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5a2a00",
+                        "surface": "#FFFFFF", /* Cards Pure White */
+                        "secondary-fixed-dim": "#c1c6db",
+                        "tertiary-container": "#a59f98",
+                        "surface-container-high": "#e2e8f8",
+                        "secondary": "#2E3344", /* Secondary Solid Navy */
+                        "on-secondary-container": "#5f6477",
+                        "tertiary": "#625e58",
+                        "primary-fixed-dim": "#ffb786",
+                        "on-background": "#151c27",
+                        "secondary-fixed": "#dde1f8",
+                        "outline-variant": "#E8E8E8", /* 1px soft border */
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#ffdcc6",
+                        "on-surface": "#151c27",
+                        "on-tertiary-fixed-variant": "#4a4641",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "base": "8px",
+                        "stack-lg": "48px",
+                        "container-padding": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "japanese-ruby": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "japanese-ruby": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    },
+                    "boxShadow": {
+                        "soft": "0px 10px 20px rgba(244, 130, 32, 0.08)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom Scrollbar for chips container */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden min-h-screen flex">
+<!-- SideNavBar (Desktop) / BottomNavBar (Mobile) Shell Logic -->
+<!-- Mobile Bottom Navigation Shell (md:hidden) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low border-t border-outline-variant z-50 px-container-padding py-2 flex justify-between items-center shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-label-sm text-label-sm text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 bg-secondary text-on-secondary p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined filled text-[24px]">menu_book</span>
+<span class="font-label-sm text-label-sm text-[10px]">Kursus Saya</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+<span class="font-label-sm text-label-sm text-[10px]">Jadwal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">leaderboard</span>
+<span class="font-label-sm text-label-sm text-[10px]">Progres</span>
+</a>
+</nav>
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 left-0 top-0 bg-surface-container-low dark:bg-surface-dim text-primary font-body-md text-body-md border-r border-outline-variant p-stack-sm sticky top-0 shrink-0 shadow-sm z-40">
+<!-- Header -->
+<div class="mb-stack-md px-4 pt-4">
+<h1 class="text-headline-md font-headline-md font-black text-primary">Hiru Academy</h1>
+<p class="text-japanese-ruby font-japanese-ruby text-on-surface-variant mt-1">Belajar Bahasa Jepang</p>
+</div>
+<!-- CTA -->
+<div class="px-4 mb-stack-md">
+<button class="w-full bg-primary-container text-on-primary rounded-lg py-3 px-4 font-label-sm text-label-sm flex items-center justify-center gap-2 hover:shadow-soft transition-shadow shadow-sm active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+                Mulai Belajar
+            </button>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Active State: using Intent Fallback (Kursus Saya represents material/library intent best from available options) -->
+<a class="flex items-center gap-base bg-secondary text-on-secondary rounded-lg px-4 py-3 hover:bg-secondary/90 transition-all active:opacity-80 shadow-sm" href="#">
+<span class="material-symbols-outlined filled text-[24px]">menu_book</span>
+<span class="font-bold">Kursus Saya</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+<span>Jadwal</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">leaderboard</span>
+<span>Progres</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-3 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+<span>Sertifikat</span>
+</a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto border-t border-outline-variant pt-stack-sm flex flex-col gap-1">
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm">Pengaturan</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant px-4 py-2 rounded-lg hover:bg-surface-variant hover:text-on-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm">Keluar</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-h-screen pb-24 md:pb-0">
+<!-- Top Header with Profile -->
+<header class="bg-surface/80 backdrop-blur-md sticky top-0 z-30 px-container-padding py-4 border-b border-outline-variant/50 flex justify-between items-center w-full">
+<div class="flex items-center gap-3">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-on-surface p-2 -ml-2 rounded-lg hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-headline-md font-headline-md text-secondary hidden sm:block">Perpustakaan Materi</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary-container rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<div class="text-right hidden sm:block">
+<p class="font-label-sm text-label-sm text-secondary">Ahmad Fauzi</p>
+<p class="font-japanese-ruby text-japanese-ruby text-on-surface-variant">Level N4</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-primary-container overflow-hidden shrink-0 shadow-sm relative group cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a young Indonesian male student with short dark hair, smiling gently. He is wearing a casual, modern, light-colored shirt. The background is a soft, out-of-focus bright, modern light-mode room, reflecting the clean, white-dominant aesthetic of the edtech platform. The lighting is soft and flattering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlsmoBseRhWn1c31jiQHdAYM-mBSB2Bva3_kniwd3skCZ5eKiprotMZ2uYyBZI6yIv5kfMaZJgy9KJK_Ko69DvgY2LNOWWngO5g_DptIzVyXt2oBGsO6S6_2KE4TdmmRUFES_j__a-bNW63eVIeVm9h0P9NvD88mJJFmOOzx4kkzA0vSPVuNVVVGIrVGf1ZdM2B_Jh0YnjxpHRbWuBVlhEqpr9Es8xj-Cc3EDBi13LlMGTjs9AJsYF"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-container-padding max-w-7xl mx-auto w-full flex flex-col gap-stack-lg">
+<!-- Mobile Title -->
+<h2 class="text-display-lg-mobile font-display-lg-mobile text-secondary block sm:hidden">Perpustakaan Materi</h2>
+<!-- Search and Filter Section -->
+<section class="flex flex-col gap-stack-md bg-surface p-6 rounded-[24px] border border-outline-variant shadow-sm relative overflow-hidden">
+<!-- Decorative Claymorphism Blob background hint -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Search Bar -->
+<div class="relative w-full max-w-2xl">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full pl-12 pr-4 py-4 bg-background border border-outline-variant rounded-xl text-body-lg font-body-lg text-on-surface placeholder:text-tertiary focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all shadow-inner outline-none" placeholder="Cari materi, tata bahasa, atau kosakata..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex flex-col gap-4">
+<!-- Level Chips -->
+<div class="flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0 w-16">Level:</span>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 w-full">
+<button class="px-4 py-1.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm shrink-0 shadow-sm border border-secondary transition-all">Semua</button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all">Dasar</button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all">N5</button>
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm shrink-0 border border-primary-container shadow-sm transition-all relative">N4 <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full border border-surface"></span></button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all opacity-70">N3</button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all opacity-50">N2</button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all">SSW</button>
+<button class="px-4 py-1.5 rounded-full bg-background text-secondary font-label-sm text-label-sm shrink-0 border border-outline-variant hover:border-secondary transition-all">Interview</button>
+</div>
+</div>
+<!-- Category Tabs -->
+<div class="flex items-center gap-3 border-t border-outline-variant pt-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0 w-16">Kategori:</span>
+<div class="flex gap-6 overflow-x-auto hide-scrollbar w-full border-b border-outline-variant/30">
+<button class="pb-2 font-label-sm text-label-sm text-primary-container border-b-2 border-primary-container shrink-0 px-1">Semua</button>
+<button class="pb-2 font-label-sm text-label-sm text-on-surface-variant hover:text-secondary shrink-0 px-1 transition-colors">Tata Bahasa</button>
+<button class="pb-2 font-label-sm text-label-sm text-on-surface-variant hover:text-secondary shrink-0 px-1 transition-colors">Kanji</button>
+<button class="pb-2 font-label-sm text-label-sm text-on-surface-variant hover:text-secondary shrink-0 px-1 transition-colors">Kosakata</button>
+<button class="pb-2 font-label-sm text-label-sm text-on-surface-variant hover:text-secondary shrink-0 px-1 transition-colors">Audio</button>
+<button class="pb-2 font-label-sm text-label-sm text-on-surface-variant hover:text-secondary shrink-0 px-1 transition-colors">Reading</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Material Grid -->
+<section>
+<div class="flex justify-between items-end mb-stack-md">
+<h3 class="text-headline-md font-headline-md text-secondary">Rekomendasi N4</h3>
+<span class="text-japanese-ruby font-japanese-ruby text-on-surface-variant">Menampilkan 12 materi</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1: Unlocked, Focus on Kanji -->
+<article class="bg-surface rounded-2xl border border-outline-variant overflow-hidden flex flex-col hover:shadow-soft transition-all duration-300 group cursor-pointer relative transform hover:-translate-y-1">
+<!-- Thumbnail Area -->
+<div class="h-40 bg-surface-container-low relative p-4 flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-highest to-surface-container-low opacity-50"></div>
+<!-- Claymorphism Japanese Character illustration placeholder -->
+<div class="w-24 h-24 bg-surface rounded-xl shadow-[inset_0_-4px_6px_rgba(0,0,0,0.05),0_4px_10px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center justify-center relative z-10 transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
+<span class="text-display-lg font-display-lg text-primary-container">漢</span>
+</div>
+<div class="absolute top-3 left-3 bg-secondary text-on-secondary px-2 py-1 rounded-lg font-japanese-ruby text-japanese-ruby shadow-sm flex items-center gap-1 z-20">
+<span class="material-symbols-outlined text-[14px]">edit_document</span> Kanji
+                            </div>
+</div>
+<!-- Content Area -->
+<div class="p-5 flex-1 flex flex-col">
+<h4 class="text-body-lg font-body-lg font-bold text-secondary mb-2 line-clamp-2">Kanji N4: Keadaan &amp; Sifat</h4>
+<p class="text-japanese-ruby font-japanese-ruby text-on-surface-variant mb-4 line-clamp-2">Pelajari 50 kanji esensial yang sering muncul dalam ujian JLPT N4 bagian kosakata.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">layers</span>
+<span class="text-japanese-ruby font-japanese-ruby">12 Modul</span>
+</div>
+<button class="bg-primary-container text-on-primary px-4 py-2 rounded-lg font-label-sm text-label-sm shadow-sm hover:bg-primary transition-colors active:scale-95 flex items-center gap-1">
+                                    Buka
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Progress Bar (started) -->
+<div class="h-1.5 w-full bg-primary-container/10 absolute bottom-0 left-0">
+<div class="h-full bg-primary-container w-[45%] rounded-r-full"></div>
+</div>
+</article>
+<!-- Card 2: Unlocked, Focus on Grammar -->
+<article class="bg-surface rounded-2xl border border-outline-variant overflow-hidden flex flex-col hover:shadow-soft transition-all duration-300 group cursor-pointer relative transform hover:-translate-y-1">
+<!-- Thumbnail Area -->
+<div class="h-40 bg-surface-container-low relative p-4 flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-highest to-surface-container-low opacity-50"></div>
+<div class="w-24 h-24 bg-surface rounded-xl shadow-[inset_0_-4px_6px_rgba(0,0,0,0.05),0_4px_10px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center justify-center relative z-10 transform rotate-2 group-hover:rotate-0 transition-transform duration-300 text-secondary">
+<span class="material-symbols-outlined text-[48px]">chrome_reader_mode</span>
+</div>
+<div class="absolute top-3 left-3 bg-secondary text-on-secondary px-2 py-1 rounded-lg font-japanese-ruby text-japanese-ruby shadow-sm flex items-center gap-1 z-20">
+<span class="material-symbols-outlined text-[14px]">format_list_bulleted</span> Tata Bahasa
+                            </div>
+</div>
+<!-- Content Area -->
+<div class="p-5 flex-1 flex flex-col">
+<h4 class="text-body-lg font-body-lg font-bold text-secondary mb-2 line-clamp-2">Pola Kalimat Pengandaian (~ba, ~tara, ~nara)</h4>
+<p class="text-japanese-ruby font-japanese-ruby text-on-surface-variant mb-4 line-clamp-2">Pahami perbedaan nuansa dan penggunaan pola pengandaian dalam percakapan sehari-hari.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">layers</span>
+<span class="text-japanese-ruby font-japanese-ruby">8 Modul</span>
+</div>
+<button class="bg-primary-container text-on-primary px-4 py-2 rounded-lg font-label-sm text-label-sm shadow-sm hover:bg-primary transition-colors active:scale-95 flex items-center gap-1">
+                                    Buka
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Progress Bar (New/Empty) -->
+<div class="h-1.5 w-full bg-primary-container/10 absolute bottom-0 left-0"></div>
+</article>
+<!-- Card 3: Locked Premium Content -->
+<article class="bg-surface rounded-2xl border border-outline-variant overflow-hidden flex flex-col group relative opacity-90">
+<!-- Lock Overlay -->
+<div class="absolute inset-0 bg-surface/40 backdrop-blur-[2px] z-30 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl">
+<div class="w-12 h-12 bg-surface rounded-full flex items-center justify-center shadow-soft mb-3 border border-outline-variant text-secondary">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<p class="font-label-sm text-label-sm text-secondary mb-3">Materi ini khusus member Premium.</p>
+<button class="bg-secondary text-on-secondary px-5 py-2 rounded-lg font-label-sm text-label-sm shadow-sm hover:bg-on-background transition-colors active:scale-95">
+                                Upgrade Sekarang
+                            </button>
+</div>
+<!-- Thumbnail Area -->
+<div class="h-40 bg-background relative p-4 flex items-center justify-center overflow-hidden grayscale-[30%]">
+<!-- Premium Badge -->
+<div class="absolute top-3 right-3 bg-gradient-to-r from-primary-container to-inverse-primary text-on-primary px-2 py-1 rounded-xl font-japanese-ruby text-japanese-ruby shadow-sm flex items-center gap-1 z-20">
+<span class="material-symbols-outlined text-[14px]">star</span> Premium
+                            </div>
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjgiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNMCAwbDhfOFpNOCAwTDBfOFoiIHN0cm9rZT0iI2U4ZThlOCIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9zdmc+')] opacity-20"></div>
+<div class="w-24 h-24 bg-surface rounded-xl shadow-[inset_0_-4px_6px_rgba(0,0,0,0.05),0_4px_10px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center justify-center relative z-10 text-secondary">
+<span class="material-symbols-outlined text-[48px]">headphones</span>
+</div>
+<div class="absolute top-3 left-3 bg-secondary text-on-secondary px-2 py-1 rounded-lg font-japanese-ruby text-japanese-ruby shadow-sm flex items-center gap-1 z-20">
+<span class="material-symbols-outlined text-[14px]">volume_up</span> Audio
+                            </div>
+</div>
+<!-- Content Area -->
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary">lock</span>
+<h4 class="text-body-lg font-body-lg font-bold text-tertiary line-clamp-1">Simulasi Choukai N4 Latihan 1</h4>
+</div>
+<p class="text-japanese-ruby font-japanese-ruby text-tertiary mb-4 line-clamp-2">Latihan mendengarkan format JLPT lengkap dengan script dan pembahasan rinci dari Sensei.</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">layers</span>
+<span class="text-japanese-ruby font-japanese-ruby">24 Audio</span>
+</div>
+<button class="bg-surface text-secondary border border-outline-variant px-4 py-2 rounded-lg font-label-sm text-label-sm shadow-sm flex items-center gap-1 pointer-events-none">
+                                    Terkunci
+                                </button>
+</div>
+</div>
+</article>
+</div>
+</section>
+</div>
+</main>
+</body></html>

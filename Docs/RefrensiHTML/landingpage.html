@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Hiru Academy - Belajar Bahasa Jepang</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8a7264",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-container": "#3a3731",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-container-high": "#e2e8f8",
+                        "on-primary-fixed": "#311400",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#595e70",
+                        "tertiary-container": "#a59f98",
+                        "on-primary-fixed-variant": "#723600",
+                        "secondary-fixed-dim": "#c1c6db",
+                        "inverse-primary": "#ffb786",
+                        "surface": "#f9f9ff",
+                        "surface-container": "#e7eefe",
+                        "surface-container-highest": "#dce2f3",
+                        "surface-dim": "#d3daea",
+                        "inverse-surface": "#2a313d",
+                        "primary": "#954900",
+                        "primary-fixed-dim": "#ffb786",
+                        "on-surface": "#151c27",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#5a2a00",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#161b2b",
+                        "on-secondary-fixed-variant": "#414658",
+                        "tertiary": "#625e58",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#4a4641",
+                        "secondary-fixed": "#dde1f8",
+                        "on-secondary-container": "#5f6477",
+                        "primary-container": "#f48220",
+                        "tertiary-fixed-dim": "#ccc5be",
+                        "on-tertiary-fixed": "#1e1b17",
+                        "outline-variant": "#ddc1b0",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#954900",
+                        "tertiary-fixed": "#e9e1d9",
+                        "on-surface-variant": "#564336",
+                        "primary-fixed": "#ffdcc6",
+                        "on-background": "#151c27",
+                        "background": "#f9f9ff",
+                        "secondary-container": "#dde1f8",
+                        "surface-variant": "#dce2f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "container-padding": "24px",
+                        "stack-lg": "48px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "japanese-ruby": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "japanese-ruby": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-sm": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FFF7EF; }
+        .clay-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #E8E8E8;
+            transition: all 0.3s ease;
+        }
+        .clay-card:hover {
+            box-shadow: 0px 10px 20px rgba(244, 130, 32, 0.08);
+            transform: translateY(-4px);
+        }
+        .japanese-well {
+            background-color: #f9f9ff;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        ruby { ruby-align: center; }
+        rt { font-size: 0.6em; color: #5f6477; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-white">
+<!-- Top Navigation Bar -->
+<nav class="sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant shadow-sm w-full">
+<div class="flex justify-between items-center w-full px-container-padding py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2 cursor-pointer">
+<img alt="Hiru Academy Logo" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuwnd3Ln7rsLxhCqXmjhA36uw-1-yn7q-LsojwIFQdsoF2QTHyoLuDP-gxJWlBJvDqyMdhWYyfDI2ypB2ug09ZFnfg8083IdBZDoi8TFd7WeYyEk_7xENuU29gperd34FP6YrqWn6kx3C0w0kLl00qtjBUqwkqrhX78KNLCsKVSETHYZUVDxLa9MaIUSDcOmPEl_wa2AWLwjoLzhBIMtlfdBpqC5l9Lmrq59CAd0Cvq_y24G-WPrEGuc90">
+<span class="text-headline-md font-headline-md font-extrabold text-primary">Hiru Academy</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-200" href="#">Program</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors duration-200" href="#">Coba Gratis</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-200" href="#">Placement Test</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-200" href="#">Testimoni</a>
+<a class="text-secondary font-medium hover:text-primary transition-colors duration-200" href="#">Blog</a>
+</div>
+<div class="hidden md:flex items-center gap-4">
+<button class="px-6 py-2 rounded-lg font-label-sm border-2 border-inverse-surface text-inverse-surface hover:bg-inverse-surface hover:text-white transition-colors">Login</button>
+</div>
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="bg-surface-container-lowest relative overflow-hidden pt-12 pb-24 md:pt-24 md:pb-32 px-container-padding">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-stack-lg items-center relative z-10">
+<div class="flex flex-col gap-6 text-center lg:text-left">
+<div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full w-fit mx-auto lg:mx-0">
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-sm text-on-surface-variant">Platform Belajar Bahasa Jepang #1</span>
+</div>
+<h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-on-surface">
+                    Belajar Bahasa Jepang Terarah dari <span class="text-primary-container relative inline-block">Dasar<svg class="absolute -bottom-2 left-0 w-full" preserveAspectRatio="none" viewBox="0 0 100 10"><path d="M0,5 Q50,10 100,5" fill="none" stroke="#f48220" stroke-width="4"></path></svg></span> sampai Siap JLPT
+                </h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mx-auto lg:mx-0">
+                    Kuasai bahasa Jepang lebih cepat dengan LMS interaktif, flashcards cerdas, latihan harian, dan simulasi Try Out lengkap dalam satu platform.
+                </p>
+<div class="japanese-well mt-4 inline-block w-fit mx-auto lg:mx-0 shadow-sm">
+<p class="text-body-md font-body-md text-on-surface">
+<ruby>け<rt></rt></ruby><ruby>が<rt></rt></ruby>は <ruby>完全<rt>かんぜん</rt></ruby>に <ruby>治<rt>なお</rt></ruby>りました。
+                    </p>
+<p class="text-sm text-on-surface-variant mt-1 italic">Lukanya sudah sembuh total.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-4 justify-center lg:justify-start">
+<button class="bg-primary-container text-white px-8 py-4 rounded-xl font-label-sm hover:bg-opacity-90 transition-all shadow-lg shadow-primary-container/30 flex items-center justify-center gap-2 group">
+                        Coba Gratis
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="bg-inverse-surface text-white px-8 py-4 rounded-xl font-label-sm hover:bg-opacity-90 transition-all shadow-md flex items-center justify-center gap-2">
+                        Ikuti Placement Test
+                        <span class="material-symbols-outlined">quiz</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mt-8 justify-center lg:justify-start text-sm text-on-surface-variant">
+<div class="flex -space-x-3">
+<img class="w-10 h-10 rounded-full border-2 border-white object-cover" data-alt="A smiling Indonesian student studying Japanese on a laptop in a bright modern cafe, warm lighting, soft focus background, high quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeaTRt54a-9JeHxC6SbQ65w-3d4CBgWcKIyJuBbEHGqF6lqDtBTcV4ULjRze9TbEJjbjoVZU7-suPLi-NehcsWvkQ1JIL4CgxPkq-Vcg_V7A0jekA9gHxDLGeskYjfdpUTxhwD8V8rBLzwv5lIRUTgb3IVYyY1TbEdFZ9yNY0BI7DQcA0zQTqItmlODrwJvhK3OaGbi2CdyvA2c_Ozil7ycAZoLBdpzaFA_-wDH5LhV_QD8exlit4s">
+<img class="w-10 h-10 rounded-full border-2 border-white object-cover" data-alt="A focused young professional taking notes while looking at a tablet showing Japanese characters, minimalist office setting, natural light, clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEjhYciVOqGq58HNyrVeLEo7S4NscqAPCv802UlyXkEH7nqL9I1VLfL0n36Euo49GuIainsTLjnFDC5VYzd-nYmQzcgt-H8fKCK4f08dd0WNN-4v6vq_LZaT19S9e3yxZc31JGn5bh_wIZPFari_GdnRxzYxOIbsXDH-h0HbCwADsHl-FRy9sG7ALFse2SDJ6Ri1f_gRSJ9AwuEy8euUPFnXmckbQksHa5E01WtYIgOP0Wt6YZ5pcT">
+<img class="w-10 h-10 rounded-full border-2 border-white object-cover" data-alt="A cheerful student wearing headphones looking at a smartphone screen with an e-learning app, bright and airy modern library environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzLja2wRVKoKjRU2ZPevBlmro-psl_RIuraoIitkZkfa26LAqG0VMBBWZzwFha4_3WgRDmsxAdTAvs4FuYfex9htDjjyBLZxmIfkVrh1zVZkg5kJvdqBeWJvu53OZtS3eGuXlV1REOE0LruUWRY4Lo5j4JI3vi7C3iyMqlJlNGqK782iyEpBxzGO_NaaEtnXoA8wB66Re8g--mz-4cUZpihIqcVkGYYZPMOqp7WSGo5FPT8lJ4WOBE">
+</div>
+<p><span class="font-bold text-on-surface">10,000+</span> siswa telah bergabung</p>
+</div>
+</div>
+<div class="relative h-[400px] md:h-[600px] w-full flex justify-center items-center">
+<!-- Abstract blobs behind mascot -->
+<div class="absolute inset-0 bg-gradient-to-tr from-primary-fixed-dim/20 to-surface-container-low rounded-full blur-3xl opacity-60"></div>
+<!-- Mascot Image Placeholder -->
+<img class="relative z-10 w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" data-alt="A 3D claymorphism style cute fox mascot wearing a traditional Japanese headband (hachimaki), holding two small whiteboards with the Japanese hiragana characters 'A' (あ) and 'I' (い) written on them. The mascot is friendly, bright orange, with a soft tactile clay texture, set against a pristine white studio background with soft ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFpC8AO03nR9sMbMt8gsN1Do8xJ4slCjZrziQKMlnMxdUDdT_X3UPMOmj3C1ZMmrh4gMHJ2uU2SYTPM726lO2FC1s2AUbKn81p1KKVcoKW5E1nIYXHZstDSjROnJqYve_P2W-CRRgOdssl1S9AmAYVkKgcleVFqVnaqqOrjncraJT31YUqok5dE43lZq5o3NZLQ0HjRZrdR9L8t1zVhE6m9WucAXvx94DAfPq0KelCYGO83tnt5WBn">
+</div>
+</div>
+</header>
+<!-- Program Section -->
+<section class="py-24 px-container-padding bg-background relative">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<span class="text-primary-container font-label-sm uppercase tracking-wider">Kurikulum Terstruktur</span>
+<h2 class="text-headline-md md:text-display-lg-mobile font-display-lg-mobile text-on-surface mt-2 mb-4">Program Belajar Sesuai Targetmu</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Mulai dari nol hingga fasih. Pilih program yang sesuai dengan tingkat kemampuan dan tujuan belajarmu.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">cruelty_free</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Dasar Bahasa Jepang</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Pengenalan Hiragana, Katakana, dan tata bahasa dasar untuk pemula mutlak.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Pemula</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Alphabet</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 2 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="text-xl font-bold">N5</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">JLPT N5</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Kuasai dasar bahasa Jepang untuk komunikasi sehari-hari dan lulus ujian N5.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Kanji 100</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Vocab 800</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 3 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="text-xl font-bold">N4</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">JLPT N4</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Pahami percakapan sehari-hari lebih lambat dan baca materi dasar.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Kanji 300</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Vocab 1500</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 4 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="text-xl font-bold">N3</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">JLPT N3</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Jembatan menuju tingkat mahir. Pahami artikel koran dan percakapan natural.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Menengah</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Intermediate</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 5 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="text-xl font-bold">N2</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">JLPT N2</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Tingkat bisnis. Pahami topik luas dan ikuti percakapan dengan kecepatan natural.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Bisnis</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Mahir</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 6 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">work</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">SSW (Tokutei Ginou)</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Persiapan bahasa Jepang khusus untuk bekerja di sektor tertentu di Jepang.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Kerja</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Spesifik</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+<!-- Card 7 -->
+<div class="clay-card p-6 flex flex-col h-full relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-surface-container-high rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center text-primary-container mb-6">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">mic</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Interview &amp; Kaiwa</h3>
+<p class="text-body-md text-on-surface-variant mb-6 flex-grow">Fokus berlatih speaking untuk wawancara kerja dan percakapan sehari-hari.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-medium">Speaking</span>
+<span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-xs font-medium">Wawancara</span>
+</div>
+<button class="w-full py-3 border-2 border-primary-container text-primary-container rounded-xl font-label-sm hover:bg-primary-container hover:text-white transition-colors">Lihat Silabus</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing / Membership Preview -->
+<section class="py-24 px-container-padding bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<span class="text-primary-container font-label-sm uppercase tracking-wider">Investasi Belajar</span>
+<h2 class="text-headline-md md:text-display-lg-mobile font-display-lg-mobile text-on-surface mt-2 mb-4">Pilih Paket Belajarmu</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Fleksibel sesuai kebutuhan. Mulai gratis dan upgrade kapan saja.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
+<!-- Free Plan -->
+<div class="clay-card p-8 flex flex-col h-full bg-surface-bright">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Free Trial</h3>
+<p class="text-body-md text-on-surface-variant mb-6">Mulai langkah pertamamu gratis.</p>
+<div class="mb-8">
+<span class="text-4xl font-extrabold text-on-surface">Rp 0</span>
+<span class="text-on-surface-variant">/selamanya</span>
+</div>
+<ul class="flex flex-col gap-4 mb-8 flex-grow text-body-md">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Akses 3 Modul Pertama N5</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Flashcard Basic (Hiragana/Katakana)</span>
+</li>
+<li class="flex items-start gap-3 text-on-surface-variant opacity-50">
+<span class="material-symbols-outlined">cancel</span>
+<span>Try Out JLPT</span>
+</li>
+</ul>
+<button class="w-full py-3 bg-surface-container text-on-surface font-label-sm rounded-xl hover:bg-surface-container-high transition-colors">Daftar Gratis</button>
+</div>
+<!-- LMS Plus (Popular) -->
+<div class="clay-card p-8 flex flex-col h-full border-2 border-primary-container transform md:-translate-y-4 shadow-xl shadow-primary-container/10 relative">
+<div class="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-primary-container text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Paling Populer</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">LMS プラス (Plus)</h3>
+<p class="text-body-md text-on-surface-variant mb-6">Belajar mandiri + bimbingan Sensei.</p>
+<div class="mb-8">
+<span class="text-4xl font-extrabold text-on-surface">Rp 299k</span>
+<span class="text-on-surface-variant">/bulan</span>
+</div>
+<ul class="flex flex-col gap-4 mb-8 flex-grow text-body-md">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span class="font-bold">Semua fitur LMS のみ</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Sesi Q&amp;A Live Mingguan</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Koreksi Tugas Writing &amp; Speaking</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Sertifikat Penyelesaian</span>
+</li>
+</ul>
+<button class="w-full py-4 bg-primary-container text-white font-label-sm rounded-xl hover:bg-opacity-90 transition-all shadow-md shadow-primary-container/20">Berlangganan Plus</button>
+</div>
+<!-- LMS Only -->
+<div class="clay-card p-8 flex flex-col h-full bg-surface-bright">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">LMS のみ (Only)</h3>
+<p class="text-body-md text-on-surface-variant mb-6">Belajar mandiri kecepatan sendiri.</p>
+<div class="mb-8">
+<span class="text-4xl font-extrabold text-on-surface">Rp 149k</span>
+<span class="text-on-surface-variant">/bulan</span>
+</div>
+<ul class="flex flex-col gap-4 mb-8 flex-grow text-body-md">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Akses Penuh Semua Modul &amp; Level</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Unlimited Flashcards &amp; Quiz</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span>Simulasi Try Out JLPT Lengkap</span>
+</li>
+</ul>
+<button class="w-full py-3 bg-inverse-surface text-white font-label-sm rounded-xl hover:bg-opacity-90 transition-colors">Pilih LMS Only</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 px-container-padding bg-background">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-headline-md md:text-display-lg-mobile font-display-lg-mobile text-on-surface mb-4">Cerita Sukses Mereka</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Bergabunglah dengan ribuan siswa yang telah mencapai target mereka bersama Hiru Academy.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="clay-card p-8 relative">
+<span class="material-symbols-outlined text-primary-container/20 text-6xl absolute top-4 right-4" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<img class="w-16 h-16 rounded-full object-cover" data-alt="A portrait of a happy young Indonesian woman, wearing smart casual clothes, smiling warmly at the camera, clean white background, professional headshot lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBAPEMWdJI10HBV2MelKSYCUNtEVCyxZNqC-ge_r9RWCtIaUuLZRVb1ysU247i5jU9xxx3hVbsvTPt12ORfNr0LrPBWm-I5epkSpqHJ2yrQZzObMXxHR1MQCqtrMjqmlfbYwk-wT0YTZW_FfGbXcKM_c1O_u1IxWkpHRq8VaJwbp8D647aR-5pC21mkJvcjrVQs8POP783GF1fJMTTuDU7SKolwqtmIj-4RcURKtJtjt69zl19HA3P">
+<div>
+<h4 class="font-bold text-on-surface">Rina S.</h4>
+<p class="text-sm text-on-surface-variant">Lulus JLPT N3</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant italic relative z-10">"Platformnya sangat interaktif! Flashcard dan latihan soalnya benar-benar membantu saya mengingat Kanji dengan cepat. Berkat Hiru Academy, saya lulus N3 dalam sekali coba!"</p>
+</div>
+<!-- Testimonial 2 -->
+<div class="clay-card p-8 relative">
+<span class="material-symbols-outlined text-primary-container/20 text-6xl absolute top-4 right-4" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<img class="w-16 h-16 rounded-full object-cover" data-alt="A portrait of a confident Indonesian male student, looking slightly off-camera with a gentle smile, bright studio lighting, soft blue background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlGWVH45cdnOiT-6UrkQgFuoLgeQqs2C5Z7-EXfD916LhvxOLC4DkkVYYdCd0elkCbMJpaBITfx55mb3Z1UHfqcQ6ZD_3wxGI_z-BgEhg4YqVbfirmdRW-vBhcpOePm3UyQMtU8fydX8oPGQ2jFnLV0EuGHiBBq3BK7pFnOXHs4hqJ-6Krvo2Kj1BIA5PkZ2UFVVy85MCzFUiqw8D8ecinxB1Ajm_uXNolXlIMWJ3_ZmksHT46l8qF">
+<div>
+<h4 class="font-bold text-on-surface">Budi T.</h4>
+<p class="text-sm text-on-surface-variant">Program SSW</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant italic relative z-10">"Materi SSW sangat relevan dengan kebutuhan kerja di Jepang. Simulasi interviewnya membuat saya jauh lebih percaya diri saat wawancara dengan perusahaan Jepang."</p>
+</div>
+<!-- Testimonial 3 -->
+<div class="clay-card p-8 relative">
+<span class="material-symbols-outlined text-primary-container/20 text-6xl absolute top-4 right-4" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<div class="flex items-center gap-4 mb-6 relative z-10">
+<img class="w-16 h-16 rounded-full object-cover" data-alt="A portrait of an expressive young woman wearing glasses, smiling brightly, modern lifestyle portrait, warm lighting, blurred background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6pwu-JmqNOPPhAIzZo7EKNtjY4RBEzksDFg5hHRTgQTgw7pm_lcnBXKr6dMmCg2fOkEuYdCqxAoPuW3nXJxpuwp1gJ0bLB0tv2gCByPKVMWISUvsVcEmDWXFg2MNekY63yG_wLX5ubnfkGsx9NgrTbFo9VzjnGa40M6P8JuJlr2hVAwW8Dd3hE2CRS6Hezxt7cYh17k6AaW5OpqZ8RrO7Kq1eyzx3JgYGI8aDBeNbvQBe5kTk4xPT">
+<div>
+<h4 class="font-bold text-on-surface">Ayu W.</h4>
+<p class="text-sm text-on-surface-variant">Dasar Bahasa Jepang</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant italic relative z-10">"Awalnya saya takut belajar bahasa Jepang karena hurufnya aneh. Tapi UI Hiru Academy sangat ramah pemula, warnanya bikin betah belajar lama-lama. Senseinya juga super responsif."</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-inverse-surface dark:bg-surface-dim text-on-primary">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-container-padding py-stack-lg max-w-7xl mx-auto gap-gutter">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="flex items-center gap-2">
+<img alt="Hiru Academy Logo" class="h-8 w-8 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida/AP1WRLuwnd3Ln7rsLxhCqXmjhA36uw-1-yn7q-LsojwIFQdsoF2QTHyoLuDP-gxJWlBJvDqyMdhWYyfDI2ypB2ug09ZFnfg8083IdBZDoi8TFd7WeYyEk_7xENuU29gperd34FP6YrqWn6kx3C0w0kLl00qtjBUqwkqrhX78KNLCsKVSETHYZUVDxLa9MaIUSDcOmPEl_wa2AWLwjoLzhBIMtlfdBpqC5l9Lmrq59CAd0Cvq_y24G-WPrEGuc90">
+<span class="text-headline-md font-headline-md font-bold text-white">Hiru Academy</span>
+</div>
+<p class="text-surface-container-high text-sm">© 2024 Hiru Academy. Seluruh Hak Cipta Dilindungi.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mt-6 md:mt-0">
+<a class="text-surface-container-high hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">Tentang Kami</a>
+<a class="text-surface-container-high hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">Hubungi Kami</a>
+<a class="text-surface-container-high hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">Kebijakan Privasi</a>
+<a class="text-surface-container-high hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">Syarat &amp; Ketentuan</a>
+<a class="text-surface-container-high hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">FAQ</a>
+</div>
+</div>
+</footer>
+</body></html>
