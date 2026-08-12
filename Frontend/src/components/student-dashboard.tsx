@@ -14,14 +14,15 @@ const navItems = [
   { label: "Progres", icon: "progress" as const },
 ];
 
-function FeatureCard({ feature }: { feature: DashboardFeature }) {
+function FeatureCard({ feature, membership }: { feature: DashboardFeature; membership: DashboardData["membership"] }) {
   const locked = feature.state === "locked";
+  const action = <>{locked ? "Lihat cara membuka" : feature.state === "readonly" ? "Buka mode baca" : "Buka fitur"}<b aria-hidden="true">→</b></>;
   return (
     <article className={`dash-feature state-${feature.state}`}>
       <div className="dash-feature-top"><span className="dash-feature-icon"><Glyph name={feature.icon} /></span><span className="dash-state">{locked && <Glyph name="lock" />}{feature.label}</span></div>
       <h3>{feature.title}</h3>
       <p>{feature.description}</p>
-      <span className="dash-feature-action">{locked ? "Lihat cara membuka" : feature.state === "readonly" ? "Buka mode baca" : "Buka fitur"}<b aria-hidden="true">→</b></span>
+      {feature.key === "tryout" ? <Link className="dash-feature-action" href={`/tryout?membership=${membership}`}>{action}</Link> : <span className="dash-feature-action">{action}</span>}
     </article>
   );
 }
@@ -53,7 +54,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
           </section>
 
           <section className="dash-section-head"><div><p className="dash-kicker">Akses belajarmu</p><h2>Fitur utama</h2></div>{lockedCount > 0 && <span>{lockedCount} fitur terkunci</span>}</section>
-          <section className="dash-feature-grid" aria-label="Fitur berdasarkan membership">{data.features.map((feature) => <FeatureCard feature={feature} key={feature.key} />)}</section>
+          <section className="dash-feature-grid" aria-label="Fitur berdasarkan membership">{data.features.map((feature) => <FeatureCard feature={feature} membership={data.membership} key={feature.key} />)}</section>
 
           {lockedCount > 0 && <section className="upgrade-card"><div className="upgrade-mark" aria-hidden="true">開</div><div><p className="dash-kicker">Buka lebih banyak pengalaman</p><h2>Belajar lebih jauh saat kamu siap.</h2><p>Fitur terkunci tetap terlihat agar manfaat membership berikutnya mudah dipahami.</p></div><Link href="/#program">Lihat pilihan belajar <span aria-hidden="true">→</span></Link></section>}
         </main>
