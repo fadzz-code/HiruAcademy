@@ -18,7 +18,7 @@ const stateLabels: Record<LevelState, string> = { completed: "Selesai", current:
 
 function levelStates(membership: Membership): LevelState[] {
   if (membership === "free") return ["limited", "limited", "limited", "limited", "limited"];
-  return ["current", "available", "available", "locked", "locked"];
+  return ["locked", "current", "available", "locked", "locked"];
 }
 
 export function getJourneyLevels(membership: Membership): JourneyLevel[] {
@@ -38,7 +38,7 @@ const chapterSeeds = [
 const chapterLabels: Record<ChapterState, string> = { completed: "Selesai", current: "Sedang berjalan", available: "Belum dimulai", locked: "Terkunci" };
 
 export function getJourneyChapters(membership: Membership, level: JourneyLevel): JourneyChapter[] {
-  const states: ChapterState[] = level.state === "completed" ? ["completed", "completed", "completed", "completed"] : level.state === "locked" ? ["locked", "locked", "locked", "locked"] : membership === "free" ? ["current", "locked", "locked", "locked"] : ["completed", "current", "available", "locked"];
+  const states: ChapterState[] = level.state === "completed" ? ["completed", "completed", "completed", "completed"] : level.state === "locked" ? ["locked", "locked", "locked", "locked"] : membership === "free" ? ["current", "locked", "locked", "locked"] : ["completed", "completed", "completed", "current"];
   return chapterSeeds.map((chapter, index) => {
     const state = states[index] ?? "locked";
     return { ...chapter, state, statusLabel: chapterLabels[state], progressLabel: state === "completed" ? "Aktivitas selesai" : state === "current" ? "Lanjutkan aktivitas" : state === "available" ? "Siap dimulai" : membership === "free" ? "Upgrade untuk membuka" : "Selesaikan prerequisite" };

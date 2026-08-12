@@ -10,6 +10,19 @@ function Glyph({ name }: { name: keyof typeof glyphs }) {
   return <span className="dash-glyph" aria-hidden="true">{glyphs[name]}</span>;
 }
 
+function LmsDashboard({ data }: { data: DashboardData & { lms: NonNullable<DashboardData["lms"]> } }) {
+  const fixture = data.lms;
+  return <>
+    <section className="dash-welcome"><div><p className="dash-kicker">{fixture.eyebrow}</p><h1>{fixture.heading}</h1><p>{fixture.description}</p></div><div className="membership-badge membership-lms"><span>✦</span>Belajar Mandiri</div></section>
+    <section className="lms-continue"><div><p className="dash-kicker">{fixture.continue.label}</p><h2>{fixture.continue.title}</h2><p>{fixture.continue.description}</p><div><Link className="continue-button" href={fixture.continue.href}>{fixture.continue.primary}<b aria-hidden="true">→</b></Link><Link className="lms-secondary" href="/journey?membership=lms">{fixture.continue.secondary}</Link></div></div><div className="continue-art" aria-hidden="true"><span className="sun-mini" /><span className="mountain-mini" /><span className="gate-mini"><i /><b /><em /><strong /></span><span className="kana-mini">進</span></div></section>
+    <section className="lms-section-head"><p className="dash-kicker">{fixture.quickSection.eyebrow}</p><h2>{fixture.quickSection.heading}</h2><p>{fixture.quickSection.description}</p></section>
+    <section className="lms-quick-grid">{fixture.quickActions.map((action) => { const content = <><Glyph name={action.icon} /><span><strong>{action.title}</strong><small>{action.detail}</small></span></>; return action.href ? <Link href={action.href} key={action.title}>{content}</Link> : <span key={action.title}>{content}</span>; })}</section>
+    <section className="lms-section-head"><p className="dash-kicker">{fixture.entitlementSection.eyebrow}</p><h2>{fixture.entitlementSection.heading}</h2><p>{fixture.entitlementSection.description}</p></section>
+    <section className="lms-entitlement-grid">{fixture.entitlements.map((item) => <article className={item.status === "TERKUNCI" ? "locked" : ""} key={item.title}><span>{item.status}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</section>
+    <section className="lms-section-head"><p className="dash-kicker">{fixture.progressSection.eyebrow}</p><h2>{fixture.progressSection.heading}</h2><p>{fixture.progressSection.description}</p></section>
+  </>;
+}
+
 function FeatureCard({ feature, membership }: { feature: DashboardFeature; membership: DashboardData["membership"] }) {
   const locked = feature.state === "locked";
   const action = <>{locked ? "Lihat cara membuka" : feature.state === "readonly" ? "Buka mode baca" : "Buka fitur"}<b aria-hidden="true">→</b></>;
@@ -37,6 +50,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
         <main className="dash-content">
           {previewEnabled && <nav className="preview-nav" aria-label="Preview membership"><span>Preview visual:</span><Link className={data.membership === "free" ? "selected" : ""} href="/dashboard?membership=free">Free</Link><Link className={data.membership === "lms" ? "selected" : ""} href="/dashboard?membership=lms">LMS</Link><Link className={data.membership === "sensei" ? "selected" : ""} href="/dashboard?membership=sensei">Sensei</Link><small>development only</small></nav>}
 
+          {data.membership === "lms" && data.lms ? <LmsDashboard data={{ ...data, lms: data.lms }} /> : <>
           <section className="dash-welcome"><div><p className="dash-kicker">Dashboard siswa</p><h1>Halo, {data.user.displayName}</h1><p>Siap melanjutkan perjalanan bahasa Jepangmu?</p></div><div className={`membership-badge membership-${data.membership}`}><span>✦</span>{data.membershipLabel}</div></section>
 
           <section className="dash-overview">
@@ -48,6 +62,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
           <section className="dash-feature-grid" aria-label="Fitur berdasarkan membership">{data.features.map((feature) => <FeatureCard feature={feature} membership={data.membership} key={feature.key} />)}</section>
 
           {lockedCount > 0 && <section className="upgrade-card"><div className="upgrade-mark" aria-hidden="true">開</div><div><p className="dash-kicker">Buka lebih banyak pengalaman</p><h2>Belajar lebih jauh saat kamu siap.</h2><p>Fitur terkunci tetap terlihat agar manfaat membership berikutnya mudah dipahami.</p></div><Link href="/#program">Lihat pilihan belajar <span aria-hidden="true">→</span></Link></section>}
+          </>}
         </main>
       </div>
     </div>
