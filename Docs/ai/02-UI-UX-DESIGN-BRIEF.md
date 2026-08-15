@@ -1788,3 +1788,20 @@ Untuk setiap screen yang akan diimplementasikan:
 12. bandingkan kembali dengan Figma Page 08–11 untuk memastikan fungsi/copy tidak kembali ke Page 1 lama.
 
 **Definition of design handoff done:** implementasi Next.js terasa seperti evolusi langsung dari HTML reference, tetapi content, flow, entitlement, dan state sepenuhnya mengikuti Figma Page 08–11.
+
+
+## Screen implementation authority
+
+For screen implementation:
+
+- visible copy → Figma Screen Contract, verbatim
+- content hierarchy → Figma Screen Contract
+- screen layout → Figma Screen Contract
+- button/action behavior → Figma Screen Contract
+- visual styling → Docs/RefrensiHTML/DESIGN.md
+- global UX/accessibility behavior → this document
+
+Do not invent missing visible copy.
+
+If exact Figma information has not been extracted into a verified
+Screen Contract, mark the item OPEN instead of guessing.
