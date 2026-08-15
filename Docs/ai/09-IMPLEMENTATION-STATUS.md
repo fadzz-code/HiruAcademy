@@ -5,6 +5,10 @@
 ## Ringkasan
 
 - Frontend clickable MVP: **partially complete**.
+- Shared A public pages: **frozen**.
+- Shared B auth/manual enrollment/recovery: **frozen**.
+- Active student strategy: **Sensei/shared superset first**; Mandiri dan Free diturunkan dari shared dashboard/navigation melalui config dan entitlement, bukan dashboard terpisah.
+- Query `membership` hanya fixture demo; production entitlement dan authorization tetap dimiliki Backend.
 - Batch 0 public/program/placement flows: implemented as frontend mock.
 - Batch 1 Free Core Learning: implemented with dashboard → level → chapter → content → flashcard/practice flow.
 - Batch 1.1 checkpoint unlock rule: corrected; Free checkpoint opens only after required activities complete.

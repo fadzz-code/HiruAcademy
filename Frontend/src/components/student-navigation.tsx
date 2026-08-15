@@ -15,23 +15,29 @@ type ModalState = { feature: string; variant: "membershipLock" | "notImplemented
 function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
   const free = membership === "free";
   const sensei = membership === "sensei";
-  return [
+  const items: NavItem[] = [
     { label: "Dashboard", glyph: "⌂", href: `/dashboard?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
-    { label: "Kelas Saya / Journey", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
-    { label: "Perpustakaan", glyph: "冊", href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Kelas Saya", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
+    { label: "Kumpulan Flashcard", glyph: "札", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
     { label: "Latihan Harian", glyph: "練", href: `/practice?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
     { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented" },
-    { label: "Community", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Progress", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Achievement", glyph: "✦", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Certificate", glyph: "✓", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
-    { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "schedule" },
-    { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "replay" },
-    { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "ask-sensei" },
-    { label: "Mini Checkpoint", glyph: "問", href: `/mini-checkpoint?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "mini-checkpoint" },
-    { label: "Notifications", glyph: "♢", href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
-    { label: "Profile", glyph: "人", href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
+    { label: "Perpustakaan", glyph: "冊", href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
   ];
+  if (sensei) items.push(
+    { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "schedule" },
+    { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "replay" },
+    { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "ask-sensei" },
+  );
+  items.push(
+    { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Progres", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
+  );
+  if (!free) items.push({ label: "Sertifikat", glyph: "✓", entitlement: "available", implementation: "notImplemented" });
+  items.push(
+    { label: "Notifikasi", glyph: "♢", href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
+    { label: "Profil", glyph: "人", href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
+  );
+  return items;
 }
 
 export function StudentNavigation({ membership, current }: { membership: Membership; current: CurrentArea }) {
@@ -83,7 +89,7 @@ export function StudentNavigation({ membership, current }: { membership: Members
         const variant = item.entitlement === "locked" ? "membershipLock" : "notImplemented";
         return <button className={`student-nav-item state-${stateClass}${feedback === item.label ? " locked-feedback" : ""}`} type="button" onClick={(event) => openModal(item.label, variant, event.currentTarget)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "locked" ? <i aria-hidden="true">⌑</i> : item.entitlement === "limited" ? <small>Terbatas</small> : item.entitlement === "readOnly" ? <small>Baca saja</small> : null}</button>;
       })}</nav>
-      <div className="student-nav-bottom"><span>{membership === "free" ? "Free Member" : membership === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"}</span><Link href="/">Kembali ke beranda</Link></div>
+      <div className="student-nav-bottom"><span>{membership === "free" ? "Free Member" : membership === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"}</span>{["Mulai Belajar", "Pengaturan", "Keluar"].map((label) => <button type="button" onClick={(event) => openModal(label, "notImplemented", event.currentTarget)} key={label}>{label}</button>)}</div>
     </>
   );
 
