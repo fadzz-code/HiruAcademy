@@ -1,0 +1,5 @@
+import Link from "next/link";
+
+export function AuthStatus({ tone, eyebrow, title, marker, description, items, primary, secondary, onSecondary }: { tone: "success" | "error"; eyebrow: string; title: string; marker: string; description: string; items: string[]; primary: { label: string; href: string }; secondary: { label: string; href?: string }; onSecondary?: () => void }) {
+  return <section className={`auth-status auth-status-${tone}`} role="status"><div className="auth-status-head"><span aria-hidden="true">{marker}</span><div><p className="kicker">{eyebrow}</p><h2>{title}</h2><small>{tone === "success" ? "Success" : "Error"}</small></div></div><p>{description}</p><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul><div className="runner-actions"><Link className="button button-primary" href={primary.href}>{primary.label}</Link>{secondary.href ? <Link className="button button-dark" href={secondary.href}>{secondary.label}</Link> : <button className="button button-dark" type="button" onClick={onSecondary}>{secondary.label}</button>}</div><div className="auth-announcement"><strong>Pengumuman</strong><p>{description}</p></div></section>;
+}
