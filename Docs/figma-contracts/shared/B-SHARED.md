@@ -215,7 +215,7 @@ Use deterministic form state only when needed for the current screen flow. Do no
 
 ## Frontend-first rule
 
-Verification can remain a deterministic UI prototype until Backend auth is implemented. Do not create fake security guarantees in frontend code.
+Verification Email is historical/deferred under latest manual-enrollment decision and is not an active customer route. Do not create fake security guarantees in frontend code.
 
 ---
 

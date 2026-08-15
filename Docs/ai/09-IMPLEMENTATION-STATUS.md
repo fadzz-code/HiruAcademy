@@ -128,7 +128,7 @@ Masih mock/frontend-only:
 ## Belum dibuat
 
 - Production Placement lead capture and backend scoring.
-- Invoice/order, payment verification, WhatsApp handoff state, membership activation.
+- Backend invoice/order persistence, payment verification, WhatsApp handoff configuration, and membership activation.
 - Laravel API, Sanctum auth/session, authorization policy, entitlement service.
 - PostgreSQL schema/migrations/models.
 - S3-compatible upload, signed URL, media validation.
