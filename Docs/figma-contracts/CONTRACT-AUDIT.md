@@ -567,27 +567,19 @@ MFA/password security operations require reauthentication later.
 
 These items stay `OPEN`. They are not permission to invent values.
 
-## OPEN-COPY-01 — Testimonial percentage
+## RESOLVED-COPY-01 — Testimonial percentage
 
-Active Figma contract currently shows:
+Latest client revision resolves the public testimonial indicators as:
 
 ```text
 Alumni: 2.300+
-Kelulusan: 96%
+Merasa lebih terarah: 92%
 Rating pengalaman: 4,9 / 5
 ```
 
-A newer client revision previously established a different middle indicator:
+This overrides the older Figma value `Kelulusan: 96%`.
 
-```text
-92% merasa lebih terarah
-```
-
-Authority rule says the latest client revision wins.
-
-**Status:** BLOCKS exact final testimonial KPI copy.
-
-**Implementation rule:** do not silently choose 96% as final client value. Resolve/update contract/Figma before final public copy freeze.
+**Status:** RESOLVED by latest explicit client revision.
 
 ---
 

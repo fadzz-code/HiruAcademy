@@ -428,8 +428,8 @@ Visible action labels:
 
 - `Alumni`
 - `2.300+`
-- `Kelulusan`
-- `96%`
+- `Merasa lebih terarah`
+- `92%`
 - `Rating pengalaman`
 - `4,9 / 5`
 
@@ -479,7 +479,7 @@ Visible action labels:
 
 ## Authority note
 
-The active Figma frame currently shows `96%`. If a newer client revision requires a different value, the newest client-approved requirement must be resolved before implementation and the contract must then be updated rather than silently changing the code.
+Latest client revision resolves the middle testimonial indicator as `92%` with label `Merasa lebih terarah`, overriding the older Figma value `Kelulusan 96%`.
 
 ---
 

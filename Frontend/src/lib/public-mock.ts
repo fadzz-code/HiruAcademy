@@ -10,5 +10,28 @@ export const levelCatalog = [
   { code: "N2", name: "JLPT N2", title: "Tingkat Lanjut", description: "Perkuat pemahaman kompleks, kecepatan reading, dan listening untuk N2.", topics: ["Listening & Dokkai", "Strategi JLPT"] },
   { code: "N1", name: "JLPT N1", title: "Tingkat Mahir", description: "Latih akurasi bahasa tingkat tinggi dan strategi ujian JLPT N1.", topics: ["Reading & Bunpou", "Strategi JLPT"] },
 ];
+export const programFacilities = [
+  { icon: "▶", title: "Video Penjelasan", description: "Penjelasan utama chapter dengan progres belajar yang tercatat." },
+  { icon: "本", title: "Modul", description: "Modul Tata Bahasa serta Modul Huruf Jepang & Kanji." },
+  { icon: "練", title: "Latihan", description: "Latihan audio, reading, dan penguatan materi harian." },
+  { icon: "旗", title: "Checkpoint", description: "Evaluasi pemahaman di akhir chapter sebelum melanjutkan." },
+  { icon: "札", title: "Flashcard", description: "Deck kosakata dan pola penting dengan sesi pengulangan." },
+  { icon: "試", title: "Try Out JLPT", description: "Simulasi soal JLPT tahun sebelumnya, hasil, dan ulasan jawaban." },
+];
+export const programComparison = [
+  { badge: "Free", title: "Free Member", description: "Chapter 1 gratis pada setiap N1–N5." },
+  { badge: "LMS", title: "Belajar Mandiri", description: "Journey penuh, try out, review, dan sertifikat." },
+  { badge: "LMS + Zoom", title: "Belajar dengan Sensei", description: "Semua LMS ditambah cohort, kelas langsung, Sensei, dan replay." },
+];
+export const testimonials = [
+  { initials: "RI", quote: "Journey membantu saya tahu apa yang harus dipelajari setelah menyelesaikan satu materi.", name: "Rina", membership: "Free Member → LMS" },
+  { initials: "DI", quote: "Checkpoint dan review membuat progres lebih mudah dipantau tanpa merasa terburu-buru.", name: "Dimas", membership: "Belajar Mandiri" },
+  { initials: "AY", quote: "Jadwal, replay, dan learning journey terasa menyatu dalam satu alur belajar.", name: "Ayu", membership: "Belajar dengan Sensei" },
+];
+export const supportingValues = [
+  { glyph: "進", title: "Progress terlihat", description: "Pengguna memahami langkah yang sudah dan belum selesai." },
+  { glyph: "続", title: "Belajar konsisten", description: "Aktivitas disusun agar mudah diteruskan." },
+  { glyph: "選", title: "Akses transparan", description: "Free, LMS, dan LMS + Zoom dibedakan secara jelas." },
+];
 export const placementQuestions = Array.from({ length: 20 }, (_, index) => ({ number: index + 1, area: ["Bunpou", "Moji Goi", "Dokkai", "Choukai"][Math.floor(index / 5)], prompt: "Teks pertanyaan", answers: ["A. Pilihan pertama", "B. Pilihan kedua", "C. Pilihan ketiga", "D. Pilihan keempat"] }));
 export const placementResult = { level: "N4", areas: [{ name: "Bunpou", score: 78 }, { name: "Moji Goi", score: 72 }, { name: "Dokkai", score: 68 }, { name: "Choukai", score: 64 }] };
