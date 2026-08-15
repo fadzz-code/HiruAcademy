@@ -54,3 +54,8 @@ export const blogDetail = {
 };
 export const placementQuestions = Array.from({ length: 20 }, (_, index) => ({ number: index + 1, area: ["Bunpou", "Moji Goi", "Dokkai", "Choukai"][Math.floor(index / 5)], prompt: "Teks pertanyaan", answers: ["A. Pilihan pertama", "B. Pilihan kedua", "C. Pilihan ketiga", "D. Pilihan keempat"] }));
 export const placementResult = { level: "N4", areas: [{ name: "Bunpou", score: 78 }, { name: "Moji Goi", score: 72 }, { name: "Dokkai", score: 68 }, { name: "Choukai", score: 64 }] };
+export const placementRecommendations = [
+  { badge: "★ REKOMENDASI UTAMA", title: "N4 Belajar dengan Sensei", description: "Journey penuh dengan cohort, kelas langsung, Sensei, replay, dan dukungan belajar.", action: "Pilih Belajar dengan Sensei →", href: "/register?placement=N4&plan=sensei" },
+  { badge: "ALTERNATIF MANDIRI", title: "N4 Belajar Mandiri", description: "Journey penuh, latihan, try out, dan review mandiri sesuai ritmemu.", action: "Pilih Belajar Mandiri →", href: "/register?placement=N4&plan=lms" },
+  { badge: "COBA GRATIS", title: "Mulai dengan Free Member", description: "Coba satu chapter lengkap sebelum menentukan upgrade.", action: "Mulai Free Member →", href: "/register?placement=N4&plan=free" },
+];
