@@ -33,5 +33,24 @@ export const supportingValues = [
   { glyph: "続", title: "Belajar konsisten", description: "Aktivitas disusun agar mudah diteruskan." },
   { glyph: "選", title: "Akses transparan", description: "Free, LMS, dan LMS + Zoom dibedakan secara jelas." },
 ];
+export const blogDetailSlug = "strategi-rutinitas-belajar-n4";
+export const blogFeatured = {
+  slug: blogDetailSlug,
+  marker: "道",
+  label: "FEATURED",
+  title: "Strategi membangun rutinitas belajar N4",
+  description: "Susun ritme belajar mingguan dengan video, modul, flashcard, latihan, dan checkpoint tanpa kehilangan fokus.",
+};
+export const blogArticles = [
+  { marker: "文", category: "GRAMMAR", title: "Cara memahami pola kalimat tanpa menghafal berlebihan", description: "Gunakan konteks, contoh, dan latihan singkat untuk memperkuat pemahaman." },
+  { marker: "聴", category: "LISTENING", title: "Latihan listening yang efektif untuk pemula", description: "Bangun kebiasaan mendengar melalui audio pendek dan pengulangan terarah." },
+  { marker: "試", category: "JLPT", title: "Mempersiapkan try out pertama dengan tenang", description: "Kenali struktur soal, manajemen waktu, dan cara membaca hasil evaluasi." },
+];
+export const blogDetail = {
+  slug: blogDetailSlug,
+  eyebrow: "BELAJAR EFEKTIF • 8 MENIT BACA",
+  title: "Strategi membangun rutinitas belajar N4 yang realistis",
+  description: "Rutinitas yang baik bukan tentang belajar selama mungkin, tetapi menjaga urutan aktivitas yang konsisten dan mudah diulang.",
+};
 export const placementQuestions = Array.from({ length: 20 }, (_, index) => ({ number: index + 1, area: ["Bunpou", "Moji Goi", "Dokkai", "Choukai"][Math.floor(index / 5)], prompt: "Teks pertanyaan", answers: ["A. Pilihan pertama", "B. Pilihan kedua", "C. Pilihan ketiga", "D. Pilihan keempat"] }));
 export const placementResult = { level: "N4", areas: [{ name: "Bunpou", score: 78 }, { name: "Moji Goi", score: 72 }, { name: "Dokkai", score: 68 }, { name: "Choukai", score: 64 }] };
