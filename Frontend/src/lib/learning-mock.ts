@@ -4,11 +4,13 @@ export type LessonActivity = { key: string; title: string; description: string; 
 export type FlashcardItem = { id: string; term: string; reading: string; meaning: string; example: { before: string; focus: string; focusReading: string; after: string; translation: string } };
 
 const activities: LessonActivity[] = [
-  { key: "video", title: "Video pengantar", description: "Lihat gambaran konsep sebelum masuk ke contoh dan latihan.", icon: "▶", state: "complete" },
-  { key: "module", title: "Modul ringkas", description: "Baca struktur utama dan contoh penggunaannya.", icon: "本", state: "current" },
-  { key: "flashcards", title: "Flashcard kosakata", description: "Pelajari kosakata contoh melalui kartu depan dan belakang.", icon: "札", state: "available" },
-  { key: "reading", title: "Latihan membaca", description: "Temukan kosakata dalam konteks kalimat pendek.", icon: "読", state: "available" },
-  { key: "checkpoint", title: "Checkpoint", description: "Evaluasi Chapter mengikuti aturan yang dikonfigurasi nanti.", icon: "旗", state: "locked" },
+  { key: "video", title: "Video Lesson", description: "Tonton penjelasan utama chapter.", icon: "▶", state: "complete" },
+  { key: "grammar", title: "Modul Tata Bahasa", description: "Baca dan tandai poin penting.", icon: "本", state: "current" },
+  { key: "kanji", title: "Modul Huruf Jepang & Kanji", description: "Pelajari huruf dan kanji terkait.", icon: "文", state: "available" },
+  { key: "flashcards", title: "Flashcard", description: "Ulangi kosakata dan pola penting.", icon: "札", state: "available" },
+  { key: "audio", title: "Audio Question", description: "Latih pemahaman listening.", icon: "音", state: "available" },
+  { key: "reading", title: "Reading Question", description: "Baca teks dan jawab pertanyaan.", icon: "読", state: "available" },
+  { key: "checkpoint", title: "CHECKPOINT TERKUNCI", description: "Selesaikan seluruh aktivitas sebelum checkpoint", icon: "旗", state: "locked" },
 ];
 
 const flashcards: FlashcardItem[] = [
@@ -26,7 +28,7 @@ export function getLearningData(membership: Membership, level: string, chapter: 
     chapter,
     title: "Pengenalan & Pondasi",
     description: "Konten contoh untuk menunjukkan struktur pengalaman belajar HIRU. Materi final akan mengikuti konfigurasi program.",
-    activities: activities.map((activity, index) => limited && index > 2 ? { ...activity, state: "locked" as const } : activity),
+    activities: activities.map((activity) => limited && activity.key === "checkpoint" ? { ...activity, state: "locked" as const } : activity),
     cards: flashcards,
   };
 }

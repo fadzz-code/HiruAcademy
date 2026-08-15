@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { LearningShell } from "@/components/learning-shell";
-import { LessonOverview } from "@/components/lesson-overview";
-import { parseMembership } from "@/lib/dashboard-mock";
-import { canAccessLearning } from "@/lib/journey-mock";
-import { getLearningData } from "@/lib/learning-mock";
+import { Suspense } from "react";
+import { StaticStudentRoute } from "@/components/static-student-route";
 
 export const metadata: Metadata = { title: "Learning Content", description: "Konten belajar HIRU Academy.", robots: { index: false, follow: false } };
 
-export default async function LearningPage({ params, searchParams }: { params: Promise<{ level: string; chapter: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const [route, query] = await Promise.all([params, searchParams]);
-  const membership = parseMembership(typeof query.membership === "string" ? query.membership : undefined);
-  if (!canAccessLearning(membership, route.level, route.chapter)) notFound();
-  const data = getLearningData(membership, route.level, route.chapter);
-  return <LearningShell membership={membership} level={route.level} chapter={route.chapter} current="overview"><LessonOverview data={data} /></LearningShell>;
+export function generateStaticParams() {
+  return ["n5", "n4", "n3", "n2", "n1"].flatMap((level) => ["chapter-1", "chapter-2", "chapter-3", "chapter-4"].map((chapter) => ({ level, chapter })));
+}
+
+export default async function LearningPage({ params }: { params: Promise<{ level: string; chapter: string }> }) {
+  const { level, chapter } = await params;
+  return <Suspense><StaticStudentRoute kind="learning" level={level} chapter={chapter} /></Suspense>;
 }

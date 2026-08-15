@@ -49,7 +49,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     <form className="auth-form" onSubmit={submit} noValidate={!register}>
       {register && (
         <div className="auth-field">
-          <label htmlFor="name">Nama lengkap</label>
+          <label htmlFor="name">Nama Lengkap</label>
           <input id="name" name="name" type="text" autoComplete="name" placeholder="Masukkan nama lengkap" required />
         </div>
       )}
@@ -58,17 +58,17 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <>
           <div className="auth-field">
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" autoComplete="email" placeholder="nama@email.com" required />
+            <input id="email" name="email" type="email" autoComplete="email" placeholder="contoh@email.com" required />
           </div>
           <div className="auth-field">
             <label htmlFor="whatsapp">Nomor WhatsApp</label>
-            <input id="whatsapp" name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" placeholder="Contoh: 0812 3456 7890" required />
+            <input id="whatsapp" name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" placeholder="+62 8xx xxxx xxxx" required />
           </div>
         </>
       ) : (
         <div className="auth-field">
-          <label htmlFor="identity">Email atau nomor WhatsApp</label>
-          <input id="identity" name="identity" type="text" autoComplete="username" placeholder="Masukkan email atau nomor WhatsApp" required />
+          <label htmlFor="identity">Email / WhatsApp</label>
+          <input id="identity" name="identity" type="text" autoComplete="username" placeholder="email atau nomor WhatsApp" required />
         </div>
       )}
 
@@ -82,9 +82,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </div>
       )}
 
-      <button className="auth-submit" type="submit">{register ? "Buat akun" : "Masuk Ke akun"}<span aria-hidden="true">→</span></button>
+      <button className="auth-submit" type="submit">{register ? "Buat Akun & Lanjut" : "Masuk"}<span aria-hidden="true">→</span></button>
 
-      <p className="auth-switch">{register ? "Sudah punya akun?" : "Belum punya akun?"} <Link href={register ? "/login" : "/register"}>{register ? "Masuk" : "Daftar sekarang"}</Link></p>
+      <p className="auth-switch">{register ? "Sudah punya akun?" : "Belum punya akun?"} <Link href={register ? "/login" : "/register"}>{register ? "Masuk" : "Daftar"}</Link></p>
     </form>
   );
 }

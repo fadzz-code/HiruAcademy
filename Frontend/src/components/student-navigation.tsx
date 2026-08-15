@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint";
+type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "supporting" | "notifications" | "profile";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -18,19 +18,19 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
   return [
     { label: "Dashboard", glyph: "⌂", href: `/dashboard?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
     { label: "Kelas Saya / Journey", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
-    { label: "Perpustakaan", glyph: "冊", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
-    { label: "Latihan Harian", glyph: "練", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
+    { label: "Perpustakaan", glyph: "冊", href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Latihan Harian", glyph: "練", href: `/practice?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
     { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented" },
-    { label: "Community", glyph: "話", entitlement: free ? "readOnly" : "available", implementation: "notImplemented" },
-    { label: "Progress", glyph: "↗", entitlement: "available", implementation: "notImplemented" },
-    { label: "Achievement", glyph: "✦", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
+    { label: "Community", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Progress", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Achievement", glyph: "✦", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
     { label: "Certificate", glyph: "✓", entitlement: free ? "locked" : "available", implementation: "notImplemented" },
     { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "schedule" },
     { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "replay" },
     { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "ask-sensei" },
     { label: "Mini Checkpoint", glyph: "問", href: `/mini-checkpoint?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "mini-checkpoint" },
-    { label: "Notifications", glyph: "♢", entitlement: "available", implementation: "notImplemented" },
-    { label: "Profile", glyph: "人", entitlement: "available", implementation: "notImplemented" },
+    { label: "Notifications", glyph: "♢", href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
+    { label: "Profile", glyph: "人", href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
   ];
 }
 

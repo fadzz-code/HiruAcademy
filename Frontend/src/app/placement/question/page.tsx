@@ -1,0 +1,6 @@
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import { placementQuestions } from "@/lib/public-mock";
+import { PublicPage } from "@/components/public-shell";
+export default function PlacementQuestionPage() { const [index, setIndex] = useState(0); const question = placementQuestions[index]; return <PublicPage active="Placement Test"><main className="public-main"><section className="public-section placement-runner"><p className="kicker">PLACEMENT TEST</p><div className="runner-top"><strong>In Progress</strong><span>Soal {question.number} dari 20</span></div><p className="kicker">SOAL {String(question.number).padStart(2, "0")} / 20 • {question.area.toUpperCase()}</p><h1>{question.prompt}</h1><fieldset><legend>Tips menjawab</legend><p>Baca instruksi sebelum memilih jawaban.</p>{question.answers.map((answer) => <label key={answer}><input type="radio" name={`question-${question.number}`} /> {answer}</label>)}</fieldset><div className="runner-actions"><button className="button button-dark" disabled={index === 0} onClick={() => setIndex(index - 1)}>Sebelumnya</button>{index === 19 ? <Link className="button button-primary" href="/placement/result">Lihat Hasil</Link> : <button className="button button-primary" onClick={() => setIndex(index + 1)}>Lanjut</button>}</div></section></main></PublicPage>; }
