@@ -45,6 +45,18 @@ After authentication:
 - Do not expose public `Register as Admin`.
 - Admin accounts are provisioned internally later.
 
+## Latest client override — manual enrollment flow
+
+This latest product decision overrides Verification Email as a mandatory customer journey while retaining its Figma frame below as historical/deferred reference.
+
+- Account and paid entitlement are separate states.
+- Every Student account receives baseline Free entitlement.
+- Free registration activates baseline Free and continues directly to the Free dashboard.
+- Belajar Mandiri and Belajar dengan Sensei registration creates an active Student account with baseline Free active and paid entitlement pending.
+- Paid registration continues through Checkout → Invoice → WhatsApp Admin → Admin transaction verification.
+- Frontend must not activate paid entitlement. Paid entitlement becomes active only after Backend/Admin verification.
+- `FREE / 11 — Verifikasi Akun` is deferred and must not block active registration or be implemented as an active mandatory route.
+
 ## Important copy conflict
 
 The active Figma Login frame currently contains:
@@ -156,6 +168,8 @@ Use deterministic form state only when needed for the current screen flow. Do no
 ---
 
 # FREE / 11 — Verifikasi Akun
+
+**Lifecycle:** HISTORICAL / DEFERRED — not part of the active customer registration journey under the latest client manual-enrollment decision. Do not use this screen as a blocking route.
 
 **Figma frame:** `389:1654`  
 **Top-level structure:** Auth Visual Panel → Auth Form Panel

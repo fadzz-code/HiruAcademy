@@ -160,6 +160,17 @@ Production authorization belongs to Backend later.
 
 # 5. Shared authentication — FROZEN
 
+## Latest frozen enrollment decision
+
+`ACCOUNT ≠ PAID ENTITLEMENT`.
+
+- Every Student account has baseline Free entitlement.
+- Free registration makes the Student account and Free entitlement active immediately, then continues to the Free dashboard.
+- Belajar Mandiri and Belajar dengan Sensei registration makes the Student account active and keeps baseline Free active while paid entitlement remains pending.
+- Paid flow is Register → Checkout → Invoice → WhatsApp Admin → Admin verifies transaction.
+- Frontend cannot activate paid entitlement; activation belongs to Backend/Admin after transaction verification.
+- Verification Email is historical/deferred and is not a mandatory active customer registration route.
+
 Use one authentication family:
 
 ```text

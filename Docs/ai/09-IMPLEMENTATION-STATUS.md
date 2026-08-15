@@ -12,6 +12,9 @@
 - Batch 2 locked states: Free Try Out, Certificate, Replay, Tanya Sensei, Mini Checkpoint, and Chapter 2+ remain locked; available unfinished screens use `Fitur Belum Tersedia` semantics.
 - Batch 2 uses deterministic frontend mock data; payment, notification delivery, certificate issuing, community write, and backend entitlement remain deferred.
 - Auth, scoring authority, persistence, and backend remain deferred.
+- Active manual enrollment frontend flow: Free Register → Free dashboard; paid Register → Checkout → Invoice pending → configured WhatsApp/Admin verification.
+- Verification Email is historical/deferred and not an active registration route.
+- Account and paid entitlement are separate: baseline Free remains active while paid entitlement is pending; frontend never activates paid access.
 - Manual visual browser QA remains pending.
 - Free, LMS, dan Sensei: **frontend visual prototype dengan mock data**.
 - Auth: **UI only**; belum ada autentikasi nyata.
@@ -24,7 +27,8 @@
 ## Fitur/screens selesai
 
 - Public landing: header, mobile menu, hero, program cards, learning flow, placement CTA, footer. Implementasi: `Frontend/src/app/page.tsx`.
-- Login dan register UI: `Frontend/src/app/login/page.tsx`, `Frontend/src/app/register/page.tsx`, `Frontend/src/components/auth-form.tsx`.
+- Login dan register UI: `Frontend/src/app/login/page.tsx`, `Frontend/src/app/register/page.tsx`, `Frontend/src/components/auth-shell.tsx`.
+- Manual paid enrollment UI: `Frontend/src/app/checkout/page.tsx`, `Frontend/src/app/invoice/page.tsx`; status paid tetap pending sampai Backend/Admin verification.
 - Student dashboard dengan variant Free/LMS/Sensei, locked preview, upgrade CTA: `Frontend/src/components/student-dashboard.tsx`.
 - Student navigation dan modal `Fitur Belum Tersedia`: `Frontend/src/components/student-navigation.tsx`.
 - Journey: level selection, chapter journey, locked/current/completed state: `Frontend/src/components/level-selection.tsx`, `Frontend/src/components/chapter-journey.tsx`.
@@ -64,6 +68,8 @@ Route file aktif:
 - `/`
 - `/login`
 - `/register`
+- `/checkout`
+- `/invoice`
 - `/dashboard`
 - `/journey`
 - `/journey/[level]`
@@ -89,7 +95,7 @@ Route utama student dirutekan oleh `Frontend/src/components/static-student-route
 - `Frontend/src/components/chapter-journey.tsx`
 - `Frontend/src/components/assessment-runner.tsx`
 - `Frontend/src/components/flashcard-session.tsx`
-- `Frontend/src/components/auth-form.tsx`
+- `Frontend/src/components/auth-shell.tsx`
 
 ## Entitlement saat ini
 

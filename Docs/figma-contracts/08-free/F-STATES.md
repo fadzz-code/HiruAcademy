@@ -45,7 +45,7 @@ These materially affect core visible flows:
 - Login success / role redirect
 - Reset link sent
 - Reset link expired
-- Account verified
+- Account verified — historical/deferred; not part of active registration journey
 - Placement processing
 - Placement error
 - Invoice created
@@ -63,7 +63,7 @@ These materially affect core visible flows:
 These are lightweight confirmation/preview states and should reuse the same state/dialog system:
 
 - Payment verification pending
-- Verification code resent
+- Verification code resent — historical/deferred; not part of active registration journey
 - All notifications read
 - Community attachment preview
 
@@ -171,6 +171,8 @@ For frontend-first work, deterministic role fixtures are acceptable.
 ---
 
 # FREE / STATE 04 — Account Verified
+
+**Lifecycle:** HISTORICAL / DEFERRED — not part of the active registration journey. The latest client manual-enrollment decision removes Verification Email as a mandatory customer step; preserve this Figma state only as reference.
 
 **Figma frame:** `389:2314`  
 **Recommended frontend form:** success dialog/state.
