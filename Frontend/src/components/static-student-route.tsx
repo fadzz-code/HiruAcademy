@@ -50,6 +50,9 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   if (kind === "video") return <LearningShell membership={membership} level={level} chapter={chapter} current="video"><VideoLesson data={data} /></LearningShell>;
   if (kind === "grammar" || kind === "kanji") return <LearningShell membership={membership} level={level} chapter={chapter} current="document"><DocumentLesson data={data} kind={kind} /></LearningShell>;
   if (kind === "audio" || kind === "reading") return <LearningShell membership={membership} level={level} chapter={chapter} current={kind}><LearningQuestionActivity data={data} variant={kind} /></LearningShell>;
-  if (kind === "checkpoint") return <LearningShell membership={membership} level={level} chapter={chapter} current="reading"><ChapterCheckpoint data={data} /></LearningShell>;
+  if (kind === "checkpoint") {
+    const checkpoint = data.activities.find((activity) => activity.key === "checkpoint");
+    return <LearningShell membership={membership} level={level} chapter={chapter} current="reading">{checkpoint?.state === "lockedByProgress" ? <LessonOverview data={data} /> : <ChapterCheckpoint data={data} />}</LearningShell>;
+  }
   return <LearningShell membership={membership} level={level} chapter={chapter} current="flashcards"><FlashcardSession cards={data.cards} membership={membership} level={level} chapter={chapter} /></LearningShell>;
 }
