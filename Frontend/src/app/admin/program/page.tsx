@@ -100,7 +100,7 @@ export default function AdminProgramPage() {
                       <span className={`admin-status status-${prog.status === "Dipublikasikan" ? "active" : "pending"}`}>
                         {prog.status}
                       </span>
-                      <button className="button button-secondary disabled" aria-disabled="true" type="button">Buka Chapter Builder</button>
+                      <Link className="button button-secondary" href={`/admin/program/${prog.level.toLowerCase()}/chapters`}>Buka Chapter Builder</Link>
                     </div>
                   </article>
                 ))}
