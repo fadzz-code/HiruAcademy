@@ -9,9 +9,20 @@ export function SupportingScreen({ kind, membership }: { kind: SupportingKind; m
   if (kind === "library") return <LibraryScreen membership={membership} />;
   if (kind === "progress") return <ProgressScreen membership={membership} />;
   if (kind === "leaderboard") return <LeaderboardScreen membership={membership} />;
+  if (kind === "certificate") return <CertificateScreen membership={membership} />;
   if (kind === "community") return <CommunityScreen membership={membership} />;
   if (kind === "createPost") return <CreatePostScreen membership={membership} />;
   return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current={kind === "notifications" ? "notifications" : kind === "profile" ? "profile" : "supporting"} /><main className="supporting-main"><header className="supporting-header"><p className="dash-kicker">{data.eyebrow}</p><h1>{data.title}</h1><p>{data.description}</p>{data.locked && <span className="supporting-badge">TERBATAS</span>}</header><section className="supporting-grid">{data.cards.map((card) => <article className="supporting-card" key={card.title}><span className="supporting-icon" aria-hidden="true">{card.icon}</span><div><span className="supporting-status">{card.status}</span><h2>{card.title}</h2><p>{card.description}</p></div>{card.href ? <Link className="supporting-action" href={`${card.href}?membership=${membership}`}>{card.action ?? "Buka"} +</Link> : <span className="supporting-action disabled" aria-disabled="true">{card.action ?? "Tersedia"}</span>}</article>)}</section>{data.notice && <aside className="supporting-notice"><strong>{data.notice.title}</strong><p>{data.notice.description}</p></aside>}</main></div>;
+}
+
+function CertificateScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
+  const query = `?membership=${membership}`;
+  const certificates = [
+    { icon: "証", title: "Sertifikat JLPT N5", program: "Program JLPT N5", recipient: "Member 1", status: "Diterbitkan", href: `/certificate/n4${query}`, action: "Lihat Sertifikat", available: true },
+    { icon: "鍵", title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N4", status: "Eligible • Pending", action: "Lihat Kriteria" },
+    { icon: "鍵", title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N3", status: "Belum Eligible", action: "Lihat Kriteria" },
+  ];
+  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main certificate-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">CERTIFICATE CENTER</p><h1>Sertifikat digital dari milestone yang tervalidasi</h1><p>Eligibility, issuance, download, dan status sertifikat berasal dari backend. Scope menggunakan sertifikat digital saja.</p></header><Link href={`/profile${query}`}>Profil</Link></div><section className="certificate-summary"><p className="dash-kicker">DIGITAL CREDENTIALS</p><h2>Satu sertifikat telah diterbitkan</h2><p>Jumlah, program, dan eligibility mengikuti progres serta assessment yang valid.</p><div className="certificate-flow"><span>Selesaikan journey</span><span>Penuhi assessment</span><span>Sertifikat terbit</span><span>Download / share</span></div></section><section className="certificate-grid">{certificates.map((item, index) => <article key={index} className={item.available ? "available" : "locked"}><span aria-hidden="true">{item.icon}</span><small>{item.available ? "DIGITAL" : ""}</small><h2>{item.title}</h2><p>{item.recipient ? `${item.recipient} • ` : ""}{item.program}</p><b>{item.status}</b>{item.href ? <Link href={item.href}>{item.action} →</Link> : <button className="disabled" type="button" aria-disabled="true">{item.action} →</button>}</article>)}</section><aside className="certificate-notice"><strong>Pengumuman</strong><p>Sertifikat diterbitkan otomatis atau melalui review setelah semua kriteria backend terpenuhi.</p></aside></main></div>;
 }
 
 function CommunityScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
