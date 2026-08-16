@@ -20,12 +20,12 @@ export function CertificateDetailScreen() {
             <h1>Sertifikat JLPT N5</h1>
             <p>Data penerima, nomor verifikasi, issue date, download, dan revocation mengikuti backend.</p>
           </header>
-          <Link href={`/certificate${query}`}>Kembali ke Sertifikat</Link>
+          <Link href={`/certificate${query}`}>Certificate Center</Link>
         </div>
 
         <section className="certificate-preview">
-          <span aria-hidden="true">✓</span>
-          <p className="dash-kicker">SERTIFIKAT KELULUSAN</p>
+          <span aria-hidden="true">証</span>
+          <small>DIGITAL</small><p className="dash-kicker">SERTIFIKAT KELULUSAN</p>
           <h2>Member •••1</h2>
           <p>Telah menyelesaikan program JLPT N5</p>
           <div className="certificate-actions">
