@@ -25,6 +25,7 @@ const items: Item[] = [
   { label: "Pengguna & Akses", current: "users", children: [
     { label: "User Management", href: "/admin/users" },
     { label: "Access Settings", href: "/admin/access-settings" },
+    { label: "Certificate Management", href: "/admin/certificates" },
   ] },
   { label: "Transaksi", current: "transaction", children: [
     { label: "Invoice Management", href: "/admin/invoices" },
