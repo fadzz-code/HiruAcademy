@@ -1,47 +1,72 @@
 import type { Membership } from "@/lib/dashboard-mock";
 
-export type LevelState = "completed" | "current" | "available" | "limited" | "locked";
-export type ChapterState = "completed" | "current" | "available" | "locked";
+export type LevelAccess = "owned" | "notPurchased" | "freePreview";
+export type CohortState = "active" | "none";
+export type LevelProgression = "current" | "available";
+export type ChapterState = "completed" | "current" | "available" | "progressionLocked" | "entitlementLocked" | "finalPreview";
 
-export type JourneyLevel = { slug: string; code: string; title: string; description: string; state: LevelState; statusLabel: string; progressLabel: string };
-export type JourneyChapter = { key: string; orderLabel: string; title: string; description: string; state: ChapterState; statusLabel: string; progressLabel: string; activities: string[] };
+export type JourneyLevel = {
+  slug: string;
+  code: string;
+  title: string;
+  description: string;
+  access: LevelAccess;
+  cohort: CohortState;
+  progression: LevelProgression;
+  statusLabel: string;
+  actionLabel: string;
+};
 
-const levels = [
-  { slug: "n5", code: "N5", title: "JLPT N5", description: "Perjalanan level awal dengan materi dan aktivitas belajar bertahap." },
-  { slug: "n4", code: "N4", title: "JLPT N4", description: "Lanjutkan pemahaman bahasa Jepang melalui konteks yang lebih beragam." },
-  { slug: "n3", code: "N3", title: "JLPT N3", description: "Preview perjalanan tingkat menengah dalam keluarga level HIRU." },
-  { slug: "n2", code: "N2", title: "JLPT N2", description: "Preview perjalanan tingkat lanjut sesuai katalog final yang tersedia nanti." },
-  { slug: "n1", code: "N1", title: "JLPT N1", description: "Preview level lanjutan; akses mengikuti entitlement program final." },
+export type JourneyChapter = {
+  key: string;
+  orderLabel: string;
+  title: string;
+  description: string;
+  state: ChapterState;
+  statusLabel: string;
+  href?: string;
+};
+
+const senseiLevels: JourneyLevel[] = [
+  { slug: "n5", code: "N5", title: "N5 — Dasar", description: "Dapat dibeli langsung; cohort N4 dan N3 tetap aktif tanpa perubahan.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket N5" },
+  { slug: "n4", code: "N4", title: "N4 — Pemula Lanjutan", description: "Journey, kelas Sensei, jadwal, dan replay aktif pada level N4.", access: "owned", cohort: "active", progression: "current", statusLabel: "SEDANG DIPELAJARI", actionLabel: "Lanjutkan N4" },
+  { slug: "n3", code: "N3", title: "N3 — Menengah", description: "Level aktif kedua dengan journey dan cohort yang disimpan terpisah.", access: "owned", cohort: "active", progression: "available", statusLabel: "LEVEL & COHORT AKTIF", actionLabel: "Buka Journey N3" },
+  { slug: "n2", code: "N2", title: "N2 — Lanjut", description: "Dapat ditambahkan tanpa menyelesaikan N3; jadwal dibuat setelah aktivasi.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket N2" },
+  { slug: "n1", code: "N1", title: "N1 — Mahir", description: "Beli independen sesuai target ujian dan ketersediaan cohort.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket N1" },
 ];
 
-const stateLabels: Record<LevelState, string> = { completed: "Selesai", current: "Sedang dipelajari", available: "Tersedia", limited: "Akses terbatas", locked: "Terkunci" };
-
-function levelStates(membership: Membership): LevelState[] {
-  if (membership === "free") return ["limited", "limited", "limited", "limited", "limited"];
-  return ["locked", "current", "available", "locked", "locked"];
-}
+const baseLevels = [
+  ["n5", "N5", "JLPT N5"], ["n4", "N4", "JLPT N4"], ["n3", "N3", "JLPT N3"], ["n2", "N2", "JLPT N2"], ["n1", "N1", "JLPT N1"],
+] as const;
 
 export function getJourneyLevels(membership: Membership): JourneyLevel[] {
-  return levels.map((level, index) => {
-    const state = levelStates(membership)[index] ?? "locked";
-    return { ...level, state, statusLabel: stateLabels[state], progressLabel: state === "completed" ? "Aktivitas contoh selesai" : state === "current" ? "Ada aktivitas untuk dilanjutkan" : state === "limited" ? "Materi gratis tersedia" : state === "available" ? "Belum dimulai" : "Butuh akses level" };
+  if (membership === "sensei") return senseiLevels;
+  return baseLevels.map(([slug, code, title]) => {
+    const free = membership === "free";
+    const owned = free || slug === "n4" || slug === "n3";
+    return { slug, code, title, description: free ? "Chapter 1 tersedia sebagai akses Free pada level ini." : owned ? "Level dimiliki dan progress disimpan terpisah." : "Level belum aktif pada akunmu.", access: free ? "freePreview" : owned ? "owned" : "notPurchased", cohort: "none", progression: slug === "n4" ? "current" : "available", statusLabel: free ? "CHAPTER 1" : owned ? slug === "n4" ? "SEDANG DIPELAJARI" : "LEVEL DIMILIKI" : "BELUM DIBELI", actionLabel: owned ? "Buka perjalanan" : `Lihat Paket ${code}` };
   });
 }
 
-const chapterSeeds = [
-  { key: "chapter-1", orderLabel: "Chapter 01", title: "Pengenalan & Pondasi", description: "Mulai dari konsep dasar dan konteks yang dibutuhkan untuk perjalanan level ini.", activities: ["Video", "Modul", "Flashcard"] },
-  { key: "chapter-2", orderLabel: "Chapter 02", title: "Pola Bahasa & Latihan", description: "Hubungkan materi dengan latihan singkat untuk memperkuat pemahaman.", activities: ["Video", "Modul", "Audio", "Checkpoint"] },
-  { key: "chapter-3", orderLabel: "Chapter 03", title: "Penerapan Bertahap", description: "Lanjutkan ke aktivitas yang menempatkan materi dalam konteks belajar.", activities: ["Reading", "Flashcard", "Latihan"] },
-  { key: "chapter-4", orderLabel: "Chapter 04", title: "Review & Penguatan", description: "Tinjau kembali materi sebelum menuju bagian perjalanan berikutnya.", activities: ["Modul", "Reading", "Checkpoint"] },
-];
-
-const chapterLabels: Record<ChapterState, string> = { completed: "Selesai", current: "Sedang berjalan", available: "Belum dimulai", locked: "Terkunci" };
+const senseiChapterSeeds = [
+  ["chapter-1", "01", "Tata Bahasa Dasar N4", "completed", "Selesai"],
+  ["chapter-2", "02", "Transportasi dan Arah", "completed", "Selesai"],
+  ["chapter-3", "03", "Aktivitas Harian", "completed", "Selesai"],
+  ["chapter-4", "04", "Pola Kalimat & Kehidupan", "current", "Lanjutkan"],
+  ["chapter-5", "05", "Kesehatan dan Kondisi", "progressionLocked", "Terkunci"],
+] as const;
 
 export function getJourneyChapters(membership: Membership, level: JourneyLevel): JourneyChapter[] {
-  const states: ChapterState[] = level.state === "completed" ? ["completed", "completed", "completed", "completed"] : level.state === "locked" ? ["locked", "locked", "locked", "locked"] : membership === "free" ? ["current", "locked", "locked", "locked"] : ["completed", "completed", "completed", "current"];
-  return chapterSeeds.map((chapter, index) => {
-    const state = states[index] ?? "locked";
-    return { ...chapter, state, statusLabel: chapterLabels[state], progressLabel: state === "completed" ? "Aktivitas selesai" : state === "current" ? "Lanjutkan aktivitas" : state === "available" ? "Siap dimulai" : membership === "free" ? "Upgrade untuk membuka" : "Selesaikan prerequisite" };
+  if (membership === "sensei") {
+    return [
+      ...senseiChapterSeeds.map(([key, orderLabel, title, state, statusLabel]) => ({ key, orderLabel, title: level.slug === "n4" ? title : `${level.code} • ${title}`, description: "Video • 2 modul • flashcard • audio • reading • checkpoint", state, statusLabel, href: state === "current" ? `/learn/${level.slug}/chapter-4?membership=sensei` : undefined })),
+      { key: "chapter-12", orderLabel: "12", title: "Chapter Terakhir — Penyelesaian Level", description: "Selesaikan seluruh aktivitas untuk membuka Feedback Akhir Level.", state: "finalPreview", statusLabel: "Simulasi Akhir" },
+    ];
+  }
+  return [1, 2, 3, 4].map((number) => {
+    const free = membership === "free";
+    const state: ChapterState = free ? number === 1 ? "current" : "entitlementLocked" : number < 4 ? "completed" : "current";
+    return { key: `chapter-${number}`, orderLabel: String(number).padStart(2, "0"), title: `Chapter ${number}`, description: "Video • modul • flashcard • audio • reading • checkpoint", state, statusLabel: state === "completed" ? "Selesai" : state === "current" ? "Lanjutkan" : "Terkunci", href: state === "current" ? `/learn/${level.slug}/chapter-${number}?membership=${membership}` : undefined };
   });
 }
 
@@ -51,6 +76,6 @@ export function findJourneyLevel(membership: Membership, slug: string): JourneyL
 
 export function canAccessLearning(membership: Membership, levelSlug: string, chapterKey: string): boolean {
   const level = findJourneyLevel(membership, levelSlug);
-  if (!level || level.state === "locked") return false;
-  return getJourneyChapters(membership, level).some((chapter) => chapter.key === chapterKey && chapter.state !== "locked");
+  if (!level || level.access === "notPurchased") return false;
+  return getJourneyChapters(membership, level).some((chapter) => chapter.key === chapterKey && (chapter.state === "completed" || chapter.state === "current" || chapter.state === "available"));
 }
