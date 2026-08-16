@@ -1,11 +1,29 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { StudentNavigation } from "@/components/student-navigation";
 import { supportingData, type SupportingKind } from "@/lib/supporting-mock";
 
 export function SupportingScreen({ kind, membership }: { kind: SupportingKind; membership: "free" | "lms" | "sensei" }) {
   const data = supportingData[kind];
   if (kind === "practice" && membership === "sensei") return <SenseiPractice />;
+  if (kind === "library") return <LibraryScreen membership={membership} />;
   return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current={kind === "notifications" ? "notifications" : kind === "profile" ? "profile" : "supporting"} /><main className="supporting-main"><header className="supporting-header"><p className="dash-kicker">{data.eyebrow}</p><h1>{data.title}</h1><p>{data.description}</p>{data.locked && <span className="supporting-badge">TERBATAS</span>}</header><section className="supporting-grid">{data.cards.map((card) => <article className="supporting-card" key={card.title}><span className="supporting-icon" aria-hidden="true">{card.icon}</span><div><span className="supporting-status">{card.status}</span><h2>{card.title}</h2><p>{card.description}</p></div>{card.href ? <Link className="supporting-action" href={`${card.href}?membership=${membership}`}>{card.action ?? "Buka"} →</Link> : <span className="supporting-action disabled" aria-disabled="true">{card.action ?? "Tersedia"}</span>}</article>)}</section>{data.notice && <aside className="supporting-notice"><strong>{data.notice.title}</strong><p>{data.notice.description}</p></aside>}</main></div>;
+}
+
+function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
+  const [search, setSearch] = useState("");
+  const [level, setLevel] = useState("Semua");
+  const [type, setType] = useState("Semua");
+  const [locked, setLocked] = useState(false);
+  const materials = [
+    { icon: "文", type: "Tata Bahasa", title: "Pola Kalimat Sehari-hari", description: "Modul Chapter 4 yang terakhir dibuka.", status: "Tersimpan", href: `/learn/n4/chapter-4/grammar?membership=${membership}` },
+    { icon: "漢", type: "Kanji", title: "Keadaan, Waktu & Aktivitas", description: "Kanji chapter dengan bookmark dan catatan.", status: "Tersedia", href: `/learn/n4/chapter-4/kanji?membership=${membership}` },
+    { icon: "聴", type: "Audio", title: "Simulasi Choukai N4", description: "Akses audio lengkap mengikuti membership.", status: "Terkunci" },
+  ];
+  const visible = materials.filter((item) => (type === "Semua" || item.type === type) && item.title.toLowerCase().includes(search.toLowerCase()) && (level === "Semua" || level === "N4"));
+  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="library" /><main className="supporting-main library-page"><header className="supporting-header"><p className="dash-kicker">PERPUSTAKAAN MATERI</p><h1>Temukan kembali materi dari seluruh journey</h1><p>Akses material mengikuti level dan entitlement membership.</p></header><label className="library-search"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari materi, tata bahasa, kanji, atau audio" /></label><div className="library-filters">{["Semua","N5","N4","N3","SSW","Interview"].map((item) => <button className={level === item ? "active" : ""} type="button" onClick={() => setLevel(item)} key={item}>{item}</button>)}</div><div className="library-filters types">{["Semua","Tata Bahasa","Kanji","Kosakata","Audio","Reading"].map((item) => <button className={type === item ? "active" : ""} type="button" onClick={() => setType(item)} key={item}>{item}</button>)}</div>{visible.length ? <><section className="library-section-head"><h2>Rekomendasi N4</h2></section><section className="library-material-grid">{visible.map((item) => <article key={item.title}><span aria-hidden="true">{item.icon}</span><small>{item.type}</small><h2>{item.title}</h2><p>{item.description}</p><b>{item.status}</b>{item.href ? <Link aria-label={`${item.type}: ${item.title}`} href={item.href}>Buka materi</Link> : <button type="button" onClick={() => setLocked(true)} aria-label={`${item.type}: ${item.title}`}>Lihat status</button>}</article>)}</section><section className="library-recent"><p className="dash-kicker">Baru dibuka</p>{[["語","Flashcard Chapter 4","Kosakata"],["読","Reading Aktivitas Harian","Reading"],["試","Review Try Out 1","Try Out"]].map(([icon,title,meta]) => <div key={title}><span>{icon}</span><strong>{title}</strong><small>{meta}</small></div>)}</section></> : <section className="library-empty"><p className="dash-kicker">LIBRARY • EMPTY</p><h2>Belum ada materi pada filter ini</h2><span>空</span><p>Ubah level, kategori, atau kata kunci untuk menemukan materi yang tersedia.</p><small>Filter dapat direset • Entitlement tetap diperiksa • Data berasal dari backend</small><button type="button" onClick={() => { setSearch(""); setLevel("Semua"); setType("Semua"); }}>Reset Filter</button></section>}{locked && <div className="library-locked" role="dialog" aria-modal="true" aria-labelledby="library-locked-title"><section><p className="dash-kicker">CONTENT • LOCKED</p><h2 id="library-locked-title">Materi belum termasuk dalam aksesmu</h2><span>鍵</span><p>Akses mengikuti level dan plan membership. Progress yang sudah tersimpan tidak hilang.</p><small>Plan gated • Backend authority • Renewal atau upgrade tersedia</small><div><Link href={`/renewal?membership=${membership}`}>Lihat Membership</Link><button type="button" onClick={() => setLocked(false)}>Kembali ke Library</button></div></section></div>}</main></div>;
 }
 
 function SenseiPractice() {
