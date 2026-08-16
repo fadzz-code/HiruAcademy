@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { StudentNavigation } from "@/components/student-navigation";
-import type { DashboardData, DashboardIcon } from "@/lib/dashboard-mock";
+import type { DashboardData, DashboardEntitlement, DashboardIcon } from "@/lib/dashboard-mock";
 
 const glyphs: Record<DashboardIcon | "bell", string> = {
   achievement: "✦", bell: "♢", certificate: "証", checkpoint: "✓", community: "人", journey: "道", library: "本", practice: "練", replay: "再", sensei: "先", tryout: "試",
@@ -8,6 +8,10 @@ const glyphs: Record<DashboardIcon | "bell", string> = {
 
 function Glyph({ name }: { name: keyof typeof glyphs }) {
   return <span className="dash-glyph" aria-hidden="true">{glyphs[name]}</span>;
+}
+
+function EntitlementCard({ item }: { item: DashboardEntitlement }) {
+  return <article className={`state-${item.state}`}><span className="entitlement-status">{item.status}</span><h3>{item.title}</h3><p>{item.description}</p></article>;
 }
 
 export function StudentDashboard({ data, previewEnabled }: { data: DashboardData; previewEnabled: boolean }) {
@@ -24,7 +28,7 @@ export function StudentDashboard({ data, previewEnabled }: { data: DashboardData
           <section className="lms-section-head"><p className="dash-kicker">AKSI CEPAT</p><h2>Akses yang paling sering digunakan</h2><p>Satu pola tindakan yang sama di seluruh jenis akun.</p></section>
           <section className="lms-quick-grid" aria-label="Aksi cepat">{config.quickActions.map((action) => { const content = <><Glyph name={action.icon} /><span><strong>{action.title}</strong><small>{action.detail}</small></span></>; return action.href ? <Link href={action.href} key={action.title}>{content}</Link> : <span className="unavailable" aria-disabled="true" key={action.title}>{content}</span>; })}</section>
           <section className="lms-section-head"><p className="dash-kicker">STATUS ENTITLEMENT</p><h2>Fitur dan hak aksesmu</h2><p>Semua fitur tetap terlihat; status ditentukan plan, level, dan backend.</p></section>
-          <section className="lms-entitlement-grid" aria-label="Status entitlement">{config.entitlements.map((item) => <article className={`state-${item.state}`} key={item.title}><span className="entitlement-status"><i aria-hidden="true">{item.state === "locked" ? "⌑" : item.state === "available" ? "✓" : "•"}</i>{item.status}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</section>
+          {data.membership === "sensei" ? <div className="sensei-entitlement-groups"><section><h3>Fitur Belajar Mandiri</h3><div className="lms-entitlement-grid" aria-label="Fitur Belajar Mandiri">{config.entitlements.slice(0, 6).map((item) => <EntitlementCard item={item} key={item.title} />)}</div></section><section><h3>Fitur Belajar dengan Sensei</h3><div className="lms-entitlement-grid" aria-label="Fitur Belajar dengan Sensei">{config.entitlements.slice(6, 9).map((item) => <EntitlementCard item={item} key={item.title} />)}</div></section><section><h3>Progres dan membership</h3><div className="lms-entitlement-grid" aria-label="Progres dan membership">{config.entitlements.slice(9).map((item) => <EntitlementCard item={item} key={item.title} />)}</div></section></div> : <section className="lms-entitlement-grid" aria-label="Status entitlement">{config.entitlements.map((item) => <EntitlementCard item={item} key={item.title} />)}</section>}
           <section className="lms-section-head"><p className="dash-kicker">PROGRES</p><h2>Aktivitas dan motivasi</h2><p>Nilai aktual mengikuti aktivitas yang tersimpan di backend.</p></section>
           <section className="sensei-progress-grid" aria-label="Ringkasan progres">{config.progressSummary.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong></article>)}</section>
           <section className="dashboard-announcement"><span aria-hidden="true">!</span><div><h2>Pengumuman</h2><p>{config.announcement}</p></div></section>
