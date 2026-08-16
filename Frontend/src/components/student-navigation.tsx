@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "supporting" | "notifications" | "profile";
+type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "supporting" | "notifications" | "profile";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -31,7 +31,7 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
   );
   items.push(
     { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Progres", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Progres", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" },
   );
   if (!free) items.push({ label: "Sertifikat", glyph: "✓", entitlement: "available", implementation: "notImplemented" });
   items.push(
