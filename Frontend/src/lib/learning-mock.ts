@@ -30,7 +30,7 @@ export function getLearningData(membership: Membership, levelSlug: string, chapt
     { key: "flashcards", order: "04", title: "Flashcard", railTitle: "Flashcard", description: "Ulangi kosakata dan pola penting.", icon: "札", state: "available", href: `${basePath}/flashcards${query}`, statusLabel: "Belum Mulai" },
     { key: "audio", order: "05", title: "Audio Question", railTitle: "Audio", description: "Latih pemahaman listening.", icon: "音", state: "available", href: `${basePath}/audio${query}`, statusLabel: "Belum Mulai" },
     { key: "reading", order: "06", title: "Reading Question", railTitle: "Reading", description: "Baca teks dan jawab pertanyaan.", icon: "読", state: "available", href: `${basePath}/reading${query}`, statusLabel: "Belum Mulai" },
-    { key: "checkpoint", order: "07", title: "Checkpoint", railTitle: "Checkpoint", description: "Status akan berubah otomatis setelah persyaratan chapter terpenuhi.", icon: "旗", state: "lockedByProgress", statusLabel: "Terkunci" },
+    { key: "checkpoint", order: "07", title: "Checkpoint", railTitle: "Checkpoint", description: "Status akan berubah otomatis setelah persyaratan chapter terpenuhi.", icon: "旗", state: membership === "sensei" && fixture ? "available" : "lockedByProgress", href: membership === "sensei" && fixture ? `${basePath}/checkpoint${query}` : undefined, statusLabel: membership === "sensei" && fixture ? "Tersedia" : "Terkunci" },
   ];
   return {
     membership,
