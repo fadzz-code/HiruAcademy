@@ -8,11 +8,13 @@ export const scheduleSessions = [
 ];
 
 export const replays = [
-  { id: "chapter-4", title: "Chapter 4 — Pola Kalimat dan Kehidupan", meta: "Sensei Aiko • 88 menit", category: "Chapter 4", featured: true },
-  { id: "grammar", title: "Review Grammar N4", meta: "Sensei Aiko • 54 menit", category: "Chapter 4" },
-  { id: "kanji", title: "Kanji & Reading", meta: "Tim Akademik • 61 menit", category: "Tersimpan" },
-  { id: "consultation", title: "Konsultasi Cohort", meta: "Tim Akademik • 47 menit", category: "Tersimpan" },
+  { id: "chapter-4", title: "Chapter 4 — Pola Kalimat dan Kehidupan", description: "Replay untuk cohort aktif; tampil setelah sesi dipublikasikan.", category: "Chapter 4", featured: true },
+  { id: "grammar", title: "Review Grammar N4", description: "Pembahasan latihan dan contoh kalimat.", category: "Chapter 4" },
+  { id: "kanji", title: "Kanji & Reading", description: "Review kanji dan strategi reading.", category: "Tersimpan" },
+  { id: "consultation", title: "Konsultasi Cohort", description: "Tanya jawab dan arahan belajar.", category: "Tersimpan" },
 ];
+
+export const replayMarkers = [["00:00", "Pembukaan"], ["08:20", "Review materi"], ["24:15", "Latihan bersama"], ["46:40", "Tanya jawab"], ["58:10", "Arahan berikutnya"]];
 
 export const miniCheckpoints = [
   { id: "n5-s1-p1", level: "N5", session: "Sesi 1", part: "Part 1" },
