@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "supporting" | "notifications" | "profile";
+type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "supporting" | "notifications" | "profile";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -20,7 +20,7 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
     { label: "Kelas Saya", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
     { label: "Kumpulan Flashcard", glyph: "札", entitlement: free ? "limited" : "available", implementation: "notImplemented" },
     { label: "Latihan Harian", glyph: "練", href: `/practice?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented" },
+    { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented", active: current === "tryout" },
     { label: "Perpustakaan", glyph: "冊", href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
   ];
   if (sensei) items.push(

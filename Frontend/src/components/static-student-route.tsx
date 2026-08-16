@@ -16,6 +16,7 @@ import { LockedTryout } from "@/components/locked-tryout";
 import { MiniCheckpointScreen } from "@/components/mini-checkpoint-screen";
 import { ClassDetailScreen, ReplayPlayerScreen, ReplayScreen, ScheduleScreen } from "@/components/sensei-screens";
 import { SenseiShell } from "@/components/sensei-shell";
+import { SenseiTryoutScreen } from "@/components/sensei-tryout-screen";
 import { StudentDashboard } from "@/components/student-dashboard";
 import { VideoLesson } from "@/components/video-lesson";
 import { getTryoutConfig, hasTryoutAccess } from "@/lib/assessment-mock";
@@ -30,7 +31,7 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
   if (kind === "dashboard") return <StudentDashboard data={getDashboardData(membership)} previewEnabled={process.env.NODE_ENV !== "production"} />;
   if (kind === "levels") return <JourneyShell membership={membership} current="levels"><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
-  if (kind === "tryout") return hasTryoutAccess(membership) ? <AssessmentRunner config={getTryoutConfig()} membership={membership} /> : <LockedTryout />;
+  if (kind === "tryout") return membership === "sensei" ? <SenseiShell current="tryout"><SenseiTryoutScreen /></SenseiShell> : hasTryoutAccess(membership) ? <AssessmentRunner config={getTryoutConfig()} membership={membership} /> : <LockedTryout />;
   if (kind === "schedule" || kind === "class-detail" || kind === "replay" || kind === "replay-player" || kind === "ask" || kind === "mini") {
     if (!hasSenseiAccess(membership)) return <StudentDashboard data={getDashboardData(membership)} previewEnabled={false} />;
     if (kind === "schedule") return <SenseiShell current="schedule"><ScheduleScreen /></SenseiShell>;
