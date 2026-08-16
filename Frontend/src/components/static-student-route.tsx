@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { AskSenseiScreen } from "@/components/ask-sensei-screen";
 import { AssessmentRunner } from "@/components/assessment-runner";
 import { ChapterJourney } from "@/components/chapter-journey";
+import { ChapterCheckpoint } from "@/components/chapter-checkpoint";
 import { DocumentLesson } from "@/components/document-lesson";
 import { FlashcardSession } from "@/components/flashcard-session";
 import { JourneyShell } from "@/components/journey-shell";
@@ -23,7 +24,7 @@ import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearni
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
 
-type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "tryout" | "schedule" | "replay" | "ask" | "mini";
+type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint" | "tryout" | "schedule" | "replay" | "ask" | "mini";
 
 export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; level?: string; chapter?: string }) {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
@@ -46,5 +47,6 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   if (kind === "video") return <LearningShell membership={membership} level={level} chapter={chapter} current="video"><VideoLesson data={data} /></LearningShell>;
   if (kind === "grammar" || kind === "kanji") return <LearningShell membership={membership} level={level} chapter={chapter} current="document"><DocumentLesson data={data} kind={kind} /></LearningShell>;
   if (kind === "audio" || kind === "reading") return <LearningShell membership={membership} level={level} chapter={chapter} current={kind}><LearningQuestionActivity data={data} variant={kind} /></LearningShell>;
+  if (kind === "checkpoint") return <LearningShell membership={membership} level={level} chapter={chapter} current="reading"><ChapterCheckpoint data={data} /></LearningShell>;
   return <LearningShell membership={membership} level={level} chapter={chapter} current="flashcards"><FlashcardSession cards={data.cards} membership={membership} level={level} chapter={chapter} /></LearningShell>;
 }
