@@ -17,11 +17,11 @@ export const replays = [
 export const replayMarkers = [["00:00", "Pembukaan"], ["08:20", "Review materi"], ["24:15", "Latihan bersama"], ["46:40", "Tanya jawab"], ["58:10", "Arahan berikutnya"]];
 
 export const miniCheckpoints = [
-  { id: "n5-s1-p1", level: "N5", session: "Sesi 1", part: "Part 1" },
-  { id: "n4-s2-p1", level: "N4", session: "Sesi 2", part: "Part 1" },
-  { id: "n3-s1-p2", level: "N3", session: "Sesi 1", part: "Part 2" },
-  { id: "n2-s1-p1", level: "N2", session: "Sesi 1", part: "Part 1" },
-];
+  { level: "N5", status: "AKTIF SESUAI AKSES", sessions: 3 },
+  { level: "N4", status: "TERSEDIA", sessions: 3 },
+  { level: "N3", status: "AKTIF SESUAI AKSES", sessions: 4 },
+  { level: "N2", status: "AKTIF SESUAI AKSES", sessions: 4 },
+].map((group) => ({ ...group, items: Array.from({ length: group.sessions }, (_, session) => [1, 2].map((part) => ({ id: `${group.level.toLowerCase()}-s${session + 1}-p${part}`, level: group.level, session: `sesi ${session + 1}`, part: `part ${part}` }))).flat() }));
 
 export const miniCheckpointConfig: AssessmentConfig = {
   type: "mini-checkpoint",

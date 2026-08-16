@@ -27,6 +27,7 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
     { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "schedule" },
     { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "replay" },
     { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "ask-sensei" },
+    { label: "Mini Checkpoint", glyph: "旗", href: `/mini-checkpoint?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "mini-checkpoint" },
   );
   items.push(
     { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
