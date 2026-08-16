@@ -14,13 +14,14 @@ import { MiniCheckpointScreen } from "@/components/mini-checkpoint-screen";
 import { ReplayScreen, ScheduleScreen } from "@/components/sensei-screens";
 import { SenseiShell } from "@/components/sensei-shell";
 import { StudentDashboard } from "@/components/student-dashboard";
+import { VideoLesson } from "@/components/video-lesson";
 import { getTryoutConfig, hasTryoutAccess } from "@/lib/assessment-mock";
 import { getDashboardData, parseMembership } from "@/lib/dashboard-mock";
 import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearning } from "@/lib/journey-mock";
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
 
-type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "flashcards" | "tryout" | "schedule" | "replay" | "ask" | "mini";
+type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "flashcards" | "tryout" | "schedule" | "replay" | "ask" | "mini";
 
 export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; level?: string; chapter?: string }) {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
@@ -40,5 +41,6 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   if (!chapter || !canAccessLearning(membership, level, chapter)) return <JourneyShell membership={membership} current="levels"><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
   const data = getLearningData(membership, level, chapter);
   if (kind === "learning") return <LearningShell membership={membership} level={level} chapter={chapter} current="overview"><LessonOverview data={data} /></LearningShell>;
+  if (kind === "video") return <LearningShell membership={membership} level={level} chapter={chapter} current="video"><VideoLesson data={data} /></LearningShell>;
   return <LearningShell membership={membership} level={level} chapter={chapter} current="flashcards"><FlashcardSession cards={data.cards} membership={membership} level={level} chapter={chapter} /></LearningShell>;
 }
