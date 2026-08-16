@@ -105,7 +105,7 @@ const configs: Record<Membership, DashboardConfig> = {
     quickActions: [
       { title: "Lanjutkan", detail: "Chapter 4", icon: "journey", href: "/learn/n4/chapter-4?membership=sensei" },
       { title: "Jadwal Kelas", detail: "Sesi berikutnya", icon: "journey", href: "/schedule?membership=sensei" },
-      { title: "Masuk Kelas", detail: "Detail kelas", icon: "journey" },
+      { title: "Masuk Kelas", detail: "Detail kelas", icon: "journey", href: "/schedule/chapter-4?membership=sensei" },
       { title: "Replay", detail: "Kelas tersimpan", icon: "replay", href: "/replay?membership=sensei" },
       { title: "Tanya Sensei", detail: "Kirim pertanyaan", icon: "sensei", href: "/ask-sensei?membership=sensei" },
       { title: "Mini Checkpoint", detail: "N4 sesi 2 part 1", icon: "checkpoint", href: "/mini-checkpoint?membership=sensei" },

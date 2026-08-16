@@ -26,7 +26,7 @@ export function CertificateDetailScreen() {
         <section className="certificate-preview">
           <span aria-hidden="true">✓</span>
           <p className="dash-kicker">SERTIFIKAT KELULUSAN</p>
-          <h2>Member 1</h2>
+          <h2>Member •••1</h2>
           <p>Telah menyelesaikan program JLPT N5</p>
           <div className="certificate-actions">
             <button className="button button-dark disabled" type="button" aria-disabled="true">Download PDF</button>
@@ -40,9 +40,9 @@ export function CertificateDetailScreen() {
             <h2>Status &amp; verifikasi</h2>
             <div className="verification-status"><span>Issued</span><span>Valid</span></div>
             <dl>
-              <div><dt>Penerima</dt><dd>Member 1</dd></div>
+              <div><dt>Penerima</dt><dd>Member •••1</dd></div>
               <div><dt>Program</dt><dd>JLPT N5</dd></div>
-              <div><dt>Verification ID</dt><dd>CERTN5</dd></div>
+              <div><dt>Verification ID</dt><dd>CERT•••N5</dd></div>
               <div><dt>Issue date</dt><dd>Dari backend</dd></div>
               <div><dt>Status</dt><dd>Valid</dd></div>
               <div><dt>Format</dt><dd>Digital PDF</dd></div>

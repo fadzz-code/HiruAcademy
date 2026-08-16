@@ -30,7 +30,7 @@ export function CommunityPostScreen() {
             <strong>Rina</strong><span>Member N4</span><small>Waktu dari backend</small>
           </header>
           <h2>Perbedaan penggunaan に dan で untuk tempat?</h2>
-          <p>Sensei, saya bingung kapan harus pakai に dan kapan pakai で untuk tempat. Misalnya pergi ke stasiun atau makan di restoran.</p>
+          <p>Saya masih bingung membedakan partikel untuk lokasi keberadaan dan tempat aktivitas pada contoh Chapter 4. Mohon penjelasan beserta contoh tambahan.</p>
           <div className="post-attachment-placeholder">
             <span>Screenshot materi Chapter 4</span>
             <button className="button button-secondary disabled" aria-disabled="true">Buka lampiran</button>
@@ -43,13 +43,13 @@ export function CommunityPostScreen() {
         <section className="community-replies">
           <div className="reply-card">
             <header className="post-author-row">
-              <strong>Sensei Aiko</strong><span className="badge-sensei">Sensei</span><small>Waktu dari backend</small>
+              <strong>Sensei •••1</strong><span className="badge-sensei">Sensei</span><small>Waktu dinamis</small>
             </header>
-            <p>に menunjukkan arah atau titik akhir dari perpindahan (contoh: 駅に行きます). Sedangkan で menunjukkan tempat terjadinya suatu aktivitas (contoh: レストランで食べます).</p>
+            <p>Untuk lokasi keberadaan gunakan に, sedangkan で menunjukkan tempat berlangsungnya aktivitas. Contoh lengkap dapat dihubungkan dengan materi terkait.</p>
           </div>
           <div className="reply-card">
             <header className="post-author-row">
-              <strong>Dimas</strong><span>Member N4</span><small>Waktu dari backend</small>
+              <strong>Dimas</strong><span>Member</span><small>Waktu dinamis</small>
             </header>
             <p>Oh, berarti kalau aktivitasnya cuma &apos;ada/exist&apos; pakai に juga ya Sensei? Seperti 公園にいます.</p>
           </div>
