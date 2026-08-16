@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "supporting" | "notifications" | "profile";
+type CurrentArea = "dashboard" | "journey" | "learning" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "community" | "supporting" | "notifications" | "profile";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -30,7 +30,7 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
     { label: "Mini Checkpoint", glyph: "旗", href: `/mini-checkpoint?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "mini-checkpoint" },
   );
   items.push(
-    { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "community" },
     { label: "Progres", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" },
   );
   if (!free) items.push({ label: "Sertifikat", glyph: "✓", entitlement: "available", implementation: "notImplemented" });

@@ -9,8 +9,24 @@ export function SupportingScreen({ kind, membership }: { kind: SupportingKind; m
   if (kind === "library") return <LibraryScreen membership={membership} />;
   if (kind === "progress") return <ProgressScreen membership={membership} />;
   if (kind === "leaderboard") return <LeaderboardScreen membership={membership} />;
+  if (kind === "community") return <CommunityScreen membership={membership} />;
   if (kind === "createPost") return <CreatePostScreen membership={membership} />;
   return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current={kind === "notifications" ? "notifications" : kind === "profile" ? "profile" : "supporting"} /><main className="supporting-main"><header className="supporting-header"><p className="dash-kicker">{data.eyebrow}</p><h1>{data.title}</h1><p>{data.description}</p>{data.locked && <span className="supporting-badge">TERBATAS</span>}</header><section className="supporting-grid">{data.cards.map((card) => <article className="supporting-card" key={card.title}><span className="supporting-icon" aria-hidden="true">{card.icon}</span><div><span className="supporting-status">{card.status}</span><h2>{card.title}</h2><p>{card.description}</p></div>{card.href ? <Link className="supporting-action" href={`${card.href}?membership=${membership}`}>{card.action ?? "Buka"} +</Link> : <span className="supporting-action disabled" aria-disabled="true">{card.action ?? "Tersedia"}</span>}</article>)}</section>{data.notice && <aside className="supporting-notice"><strong>{data.notice.title}</strong><p>{data.notice.description}</p></aside>}</main></div>;
+}
+
+function CommunityScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
+  const [search, setSearch] = useState("");
+  const query = `?membership=${membership}`;
+  const isSensei = membership === "sensei";
+  const canWrite = membership !== "free";
+  const posts = [
+    { id: "post-1", tag: isSensei ? "Tanya Sensei" : "Diskusi Member", title: "Perbedaan penggunaan に dan で untuk tempat?", summary: "Pertanyaan grammar untuk memahami konteks aktivitas dan lokasi.", href: `/community/post-1${query}` },
+    { id: "post-2", tag: "Semua Akses", title: "Pengingat jadwal dan materi minggu ini", summary: "Info dari Hiru untuk pembelajar.", href: `/community/post-2${query}` },
+    { id: "post-3", tag: "Diskusi Member", title: "Tips menjaga konsistensi flashcard N4", summary: "Forum diskusi dengan sesama pembelajar.", href: `/community/post-3${query}` },
+  ];
+  const visible = posts.filter((p) => p.title.toLowerCase().includes(search.toLowerCase()));
+
+  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main community-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">FORUM KOMUNITAS</p><h1>Berdiskusi, bertanya, dan berbagi perjalanan belajar</h1><p>{isSensei ? "Belajar dengan Sensei dapat membuat post, membalas komentar, dan menggunakan Tanya Sensei sesuai entitlement." : canWrite ? "Free Member dapat membaca. Belajar Mandiri dapat membuat post, membalas komentar, dan melaporkan konten sesuai entitlement." : "Free Member dapat membaca. Post, komentar, dan Tanya Sensei tetap terkunci sesuai entitlement."}</p></header>{canWrite && <Link className="button button-dark" href={`/community/create${query}`}>Buat Postingan</Link>}</div><section className="community-access-grid">{[["Tanya Sensei", "Pertanyaan untuk pengajar pada plan Belajar dengan Sensei."],["Diskusi Member", "Forum diskusi dengan sesama pembelajar."],["Info dari Hiru", "Pengumuman, event, dan informasi akademi."],["Kerja ke Jepang", "Informasi karier dan persiapan profesional."]].map(([title, desc]) => <article key={title}><strong>{title}</strong><p>{desc}</p></article>)}</section><section className="community-feed-head"><div><p className="dash-kicker">Diskusi terbaru</p><small>Urutan dan engagement berasal dari data backend.</small></div><label className="library-search"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari diskusi atau topik" /></label></section><section className="community-list">{visible.map((post) => <article key={post.id}><div><span>{post.tag}</span><h2>{post.title}</h2><p>{post.summary}</p></div><Link className="button button-primary" href={post.href}>Buka</Link></article>)}</section></main></div>;
 }
 
 function CreatePostScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
