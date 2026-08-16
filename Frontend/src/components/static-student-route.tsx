@@ -14,7 +14,7 @@ import { LevelSelection } from "@/components/level-selection";
 import { LearningQuestionActivity } from "@/components/learning-question-activity";
 import { LockedTryout } from "@/components/locked-tryout";
 import { MiniCheckpointScreen } from "@/components/mini-checkpoint-screen";
-import { ReplayScreen, ScheduleScreen } from "@/components/sensei-screens";
+import { ClassDetailScreen, ReplayScreen, ScheduleScreen } from "@/components/sensei-screens";
 import { SenseiShell } from "@/components/sensei-shell";
 import { StudentDashboard } from "@/components/student-dashboard";
 import { VideoLesson } from "@/components/video-lesson";
@@ -24,16 +24,17 @@ import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearni
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
 
-type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint" | "tryout" | "schedule" | "replay" | "ask" | "mini";
+type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint" | "tryout" | "schedule" | "class-detail" | "replay" | "ask" | "mini";
 
 export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; level?: string; chapter?: string }) {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
   if (kind === "dashboard") return <StudentDashboard data={getDashboardData(membership)} previewEnabled={process.env.NODE_ENV !== "production"} />;
   if (kind === "levels") return <JourneyShell membership={membership} current="levels"><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
   if (kind === "tryout") return hasTryoutAccess(membership) ? <AssessmentRunner config={getTryoutConfig()} membership={membership} /> : <LockedTryout />;
-  if (kind === "schedule" || kind === "replay" || kind === "ask" || kind === "mini") {
+  if (kind === "schedule" || kind === "class-detail" || kind === "replay" || kind === "ask" || kind === "mini") {
     if (!hasSenseiAccess(membership)) return <StudentDashboard data={getDashboardData(membership)} previewEnabled={false} />;
     if (kind === "schedule") return <SenseiShell current="schedule"><ScheduleScreen /></SenseiShell>;
+    if (kind === "class-detail") return <SenseiShell current="schedule"><ClassDetailScreen /></SenseiShell>;
     if (kind === "replay") return <SenseiShell current="replay"><ReplayScreen /></SenseiShell>;
     if (kind === "ask") return <SenseiShell current="ask-sensei"><AskSenseiScreen /></SenseiShell>;
     return <SenseiShell current="mini-checkpoint"><MiniCheckpointScreen /></SenseiShell>;

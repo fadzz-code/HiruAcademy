@@ -2,9 +2,9 @@ import type { AssessmentConfig } from "@/lib/assessment-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 
 export const scheduleSessions = [
-  { id: "chapter-4", date: "18", day: "Rabu", month: "Desember", title: "Chapter 4 • Sesi Live", time: "19.00 WIB", duration: "90 menit", sensei: "Sensei Aiko", cohort: "N4 • Cohort Aktif", status: "Mendatang" },
-  { id: "consultation", date: "21", day: "Sabtu", month: "Desember", title: "Konsultasi Cohort", time: "10.00 WIB", duration: "60 menit", sensei: "Tim Akademik", cohort: "N4 • Cohort Aktif", status: "Mendatang" },
-  { id: "previous", date: "11", day: "Rabu", month: "Desember", title: "Sesi sebelumnya", time: "19.00 WIB", duration: "90 menit", sensei: "Sensei Aiko", cohort: "N4 • Cohort Aktif", status: "Selesai" },
+  { id: "chapter-4", title: "Chapter 4 • Sesi Live", meta: "Hari/Tanggal • Jam WIB • Sensei dari admin", status: "Terjadwal" },
+  { id: "consultation", title: "Konsultasi Cohort", meta: "Jadwal dan topik mengikuti cohort aktif", status: "Terjadwal" },
+  { id: "previous", title: "Sesi sebelumnya", meta: "Replay tersedia setelah dipublikasikan", status: "Selesai" },
 ];
 
 export const replays = [
