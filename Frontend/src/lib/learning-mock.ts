@@ -4,6 +4,10 @@ export type LearningActivityKey = "video" | "grammar" | "kanji" | "flashcards" |
 export type LearningActivityState = "completed" | "current" | "available" | "lockedByProgress" | "lockedByEntitlement";
 export type LessonActivity = { key: LearningActivityKey; order: string; title: string; railTitle: string; description: string; icon: string; state: LearningActivityState; href?: string; statusLabel?: string };
 export type FlashcardItem = { id: string; term: string; reading: string; meaning: string; example: { before: string; focus: string; focusReading: string; after: string; translation: string } };
+export type LearningQuestion = { prompt: string; instruction?: string; answers: string[]; questionCount: number };
+
+const audioQuestion: LearningQuestion = { prompt: "Apa aktivitas yang dilakukan pembicara setiap pagi?", instruction: "Dengarkan audio sampai selesai sebelum memilih jawaban.", answers: ["Membaca koran", "Belajar Bahasa Jepang", "Berangkat ke stasiun", "Memasak sarapan"], questionCount: 5 };
+const readingQuestion: LearningQuestion = { prompt: "Apa yang dilakukan Tanaka setelah sarapan?", answers: ["Pergi ke perusahaan", "Belajar Bahasa Jepang", "Tidur kembali", "Membaca buku"], questionCount: 5 };
 
 const flashcards: FlashcardItem[] = [
   { id: "learn", term: "学ぶ", reading: "まなぶ", meaning: "belajar / mempelajari", example: { before: "毎日、日本語を", focus: "学", focusReading: "まな", after: "んでいます。", translation: "Saya belajar bahasa Jepang setiap hari." } },
@@ -24,8 +28,8 @@ export function getLearningData(membership: Membership, levelSlug: string, chapt
     { key: "grammar", order: "02", title: "Modul Tata Bahasa", railTitle: "Modul Tata Bahasa", description: "Baca dan tandai poin penting.", icon: "本", state: "available", href: `${basePath}/grammar${query}`, statusLabel: "Belum Mulai" },
     { key: "kanji", order: "03", title: "Modul Huruf Jepang & Kanji", railTitle: "Modul Huruf & Kanji", description: "Pelajari huruf dan kanji terkait.", icon: "文", state: "available", href: `${basePath}/kanji${query}`, statusLabel: "Belum Mulai" },
     { key: "flashcards", order: "04", title: "Flashcard", railTitle: "Flashcard", description: "Ulangi kosakata dan pola penting.", icon: "札", state: "available", href: `${basePath}/flashcards${query}`, statusLabel: "Belum Mulai" },
-    { key: "audio", order: "05", title: "Audio Question", railTitle: "Audio", description: "Latih pemahaman listening.", icon: "音", state: "available", statusLabel: "Belum Mulai" },
-    { key: "reading", order: "06", title: "Reading Question", railTitle: "Reading", description: "Baca teks dan jawab pertanyaan.", icon: "読", state: "available" },
+    { key: "audio", order: "05", title: "Audio Question", railTitle: "Audio", description: "Latih pemahaman listening.", icon: "音", state: "available", href: `${basePath}/audio${query}`, statusLabel: "Belum Mulai" },
+    { key: "reading", order: "06", title: "Reading Question", railTitle: "Reading", description: "Baca teks dan jawab pertanyaan.", icon: "読", state: "available", href: `${basePath}/reading${query}`, statusLabel: "Belum Mulai" },
     { key: "checkpoint", order: "07", title: "Checkpoint", railTitle: "Checkpoint", description: "Status akan berubah otomatis setelah persyaratan chapter terpenuhi.", icon: "旗", state: "lockedByProgress", statusLabel: "Terkunci" },
   ];
   return {
@@ -39,6 +43,9 @@ export function getLearningData(membership: Membership, levelSlug: string, chapt
     videoTitle: fixture ? "Pola kalimat untuk aktivitas sehari-hari" : `Video ${chapterTitle}`,
     activities,
     cards: flashcards,
+    audioQuestion,
+    readingQuestion,
+    readingPassage: "毎朝、田中さんは七時に起きます。朝ご飯を食べてから、日本語を三十分勉強します。そのあと、八時に会社へ行きます。",
   };
 }
 
