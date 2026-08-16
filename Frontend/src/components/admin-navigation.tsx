@@ -7,7 +7,7 @@ import { BrandLogo } from "@/components/brand-logo";
 const items = [
   { label: "Dashboard", href: "/admin", current: "dashboard" },
   { label: "Program", href: "/admin/program", current: "program" },
-  { label: "Content Builder", current: "content" },
+  { label: "Content Builder", href: "/admin/program/n4/chapters", current: "content" },
   { label: "Placement & Hasil", current: "placement" },
   { label: "Pengguna & Akses", current: "users" },
   { label: "Transaksi", current: "transaction" },

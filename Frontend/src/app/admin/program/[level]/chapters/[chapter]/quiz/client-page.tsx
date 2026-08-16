@@ -28,7 +28,7 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
   };
 
   return (
-    <AdminShell current="program">
+    <AdminShell current="content">
       <main className="admin-page builder-page">
         <header className="admin-header">
           <div>
@@ -166,6 +166,7 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
             </div>
           </section>
         </div>
+        <footer className="builder-footer"><Link className="button button-dark" href={`/admin/program/${level}/tryout`}>Penyusun Try Out</Link><p>Perubahan assessment aktif setelah disimpan dan dipublikasikan.</p></footer>
       </main>
     </AdminShell>
   );

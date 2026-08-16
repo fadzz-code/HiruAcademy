@@ -30,7 +30,7 @@ export function ClientChapterBuilder({ params }: { params: Promise<{ level: stri
   const current = chapters.find(c => c.id === selectedChapter) || chapters[3];
 
   return (
-    <AdminShell current="program">
+    <AdminShell current="content">
       <main className="admin-page builder-page">
         <header className="admin-header">
           <div>
