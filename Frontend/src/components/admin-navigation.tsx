@@ -36,6 +36,8 @@ const items: Item[] = [
     { label: "Blog", href: "/admin/blog" },
     { label: "Testimoni", href: "/admin/testimonials" },
     { label: "Feedback Akhir Level", href: "/admin/feedback" },
+    { label: "Community", href: "/admin/community" },
+    { label: "Notification Templates", href: "/admin/notification-templates" },
   ] },
   { label: "Sensei & Cohort", current: "sensei" },
   { label: "Analitik", current: "analytics" },
