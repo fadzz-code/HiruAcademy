@@ -73,6 +73,6 @@ export function getDocumentLesson(data: LearningData, kind: DocumentLessonKind) 
     example: grammar ? "毎朝、日本語を勉強します。 • Saya belajar Bahasa Jepang setiap pagi." : "毎朝（まいあさ）• setiap pagi　時間（じかん）• waktu / durasi",
     notes: grammar ? [["★", "Pola utama", "Tandai struktur kalimat yang sering digunakan."], ["文", "Contoh", "Bandingkan beberapa konteks penggunaan."], ["練", "Latihan", "Coba tulis satu kalimat rutinitasmu."]] : [["字", "Bentuk", "Perhatikan komponen dan arah goresan."], ["読", "Bacaan", "Catat on-yomi dan kun-yomi yang relevan."], ["復", "Ulangi", "Lanjutkan ke flashcard setelah membaca."]],
     previous: { label: grammar ? "Kembali ke Video" : "Modul Tata Bahasa", href: `${basePath}/${grammar ? "video" : "grammar"}${query}` },
-    next: grammar ? { label: "Modul Huruf & Kanji", href: `${basePath}/kanji${query}` } : data.membership === "free" ? { label: "Mulai Flashcard", href: `${basePath}/flashcards${query}` } : { label: "Buka Kumpulan Flashcard" },
+    next: grammar ? { label: "Modul Huruf & Kanji", href: `${basePath}/kanji${query}` } : data.membership === "free" ? { label: "Mulai Flashcard", href: `${basePath}/flashcards${query}` } : { label: "Buka Kumpulan Flashcard", href: `/flashcards${query}` },
   };
 }
