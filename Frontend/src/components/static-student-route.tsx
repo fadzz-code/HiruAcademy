@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { AskSenseiScreen } from "@/components/ask-sensei-screen";
 import { AssessmentRunner } from "@/components/assessment-runner";
 import { ChapterJourney } from "@/components/chapter-journey";
+import { DocumentLesson } from "@/components/document-lesson";
 import { FlashcardSession } from "@/components/flashcard-session";
 import { JourneyShell } from "@/components/journey-shell";
 import { LearningShell } from "@/components/learning-shell";
@@ -21,7 +22,7 @@ import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearni
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
 
-type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "flashcards" | "tryout" | "schedule" | "replay" | "ask" | "mini";
+type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "tryout" | "schedule" | "replay" | "ask" | "mini";
 
 export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; level?: string; chapter?: string }) {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
@@ -42,5 +43,6 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   const data = getLearningData(membership, level, chapter);
   if (kind === "learning") return <LearningShell membership={membership} level={level} chapter={chapter} current="overview"><LessonOverview data={data} /></LearningShell>;
   if (kind === "video") return <LearningShell membership={membership} level={level} chapter={chapter} current="video"><VideoLesson data={data} /></LearningShell>;
+  if (kind === "grammar" || kind === "kanji") return <LearningShell membership={membership} level={level} chapter={chapter} current="document"><DocumentLesson data={data} kind={kind} /></LearningShell>;
   return <LearningShell membership={membership} level={level} chapter={chapter} current="flashcards"><FlashcardSession cards={data.cards} membership={membership} level={level} chapter={chapter} /></LearningShell>;
 }

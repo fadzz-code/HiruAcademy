@@ -4,7 +4,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { StudentNavigation } from "@/components/student-navigation";
 import type { Membership } from "@/lib/dashboard-mock";
 
-export function LearningShell({ membership, level, current, children }: { membership: Membership; level: string; chapter: string; current: "overview" | "video" | "flashcards"; children: ReactNode }) {
+export function LearningShell({ membership, level, current, children }: { membership: Membership; level: string; chapter: string; current: "overview" | "video" | "document" | "flashcards"; children: ReactNode }) {
   const query = `?membership=${membership}`;
   const journeyHref = `/journey/${level}${query}`;
   return (
