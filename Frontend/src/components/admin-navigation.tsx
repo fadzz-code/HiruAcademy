@@ -34,6 +34,8 @@ const items: Item[] = [
   { label: "Konten & Komunikasi", current: "communication", children: [
     { label: "Announcement", href: "/admin/announcements" },
     { label: "Blog", href: "/admin/blog" },
+    { label: "Testimoni", href: "/admin/testimonials" },
+    { label: "Feedback Akhir Level", href: "/admin/feedback" },
   ] },
   { label: "Sensei & Cohort", current: "sensei" },
   { label: "Analitik", current: "analytics" },
