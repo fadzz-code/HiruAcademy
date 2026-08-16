@@ -8,6 +8,7 @@ import { StudentNavigation } from "@/components/student-navigation";
 export function CertificateUnavailableScreen() {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
   const query = `?membership=${membership}`;
+  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main"><AssessmentUnavailable eyebrow="AKSES PREMIUM" title="Akses ini belum aktif pada Free Member" description="Sertifikat tersedia sesuai membership dan eligibility yang telah diverifikasi." facts={["Entitlement check", "Eligibility backend"]} primary={{ label: "Lihat Membership", href: `/renewal${query}` }} secondary={{ label: "Kembali Dashboard", href: `/dashboard${query}` }} /></main></div>;
   return (
     <div className="supporting-shell student-shell">
       <StudentNavigation membership={membership} current="certificate" />

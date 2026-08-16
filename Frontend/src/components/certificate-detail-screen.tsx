@@ -9,6 +9,7 @@ export function CertificateDetailScreen() {
   const searchParams = useSearchParams();
   const membership = parseMembership(searchParams.get("membership") ?? undefined);
   const query = `?membership=${membership}`;
+  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">AKSES PREMIUM</p><h1>Akses ini belum aktif pada Free Member</h1><p>Sertifikat tersedia sesuai membership dan eligibility yang telah diverifikasi.</p><div className="status-actions"><Link className="button button-primary" href={`/renewal${query}`}>Lihat Membership</Link><Link className="button button-secondary" href={`/dashboard${query}`}>Kembali Dashboard</Link></div></section></main></div>;
 
   return (
     <div className="supporting-shell student-shell">

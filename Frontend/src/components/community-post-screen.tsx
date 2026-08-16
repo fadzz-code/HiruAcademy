@@ -35,7 +35,7 @@ export function CommunityPostScreen() {
           <p>Saya masih bingung membedakan partikel untuk lokasi keberadaan dan tempat aktivitas pada contoh Chapter 4. Mohon penjelasan beserta contoh tambahan.</p>
           <div className="post-attachment-placeholder"><span aria-hidden="true">文</span><div><strong>Screenshot materi Chapter 4</strong><small>File dan metadata berasal dari backend.</small></div><button className="button button-secondary" type="button" onClick={() => setState("attachment")}>Buka</button></div>{state === "attachment" && <p className="community-local-feedback" role="status">Lampiran fixture tidak memuat file eksternal.</p>}
           <footer className="post-actions">
-             <span>Suka • —</span><span>Balasan • —</span><span>Simpan</span><button type="button" onClick={() => setState("reported")}>Laporkan</button>
+             <span>Suka • —</span><span>Balasan • —</span><span>Simpan</span>{canWrite && <button type="button" onClick={() => setState("reported")}>Laporkan</button>}
           </footer>
         </section>
 

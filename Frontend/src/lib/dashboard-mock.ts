@@ -69,14 +69,14 @@ const configs: Record<Membership, DashboardConfig> = {
     quickActions: [
       { title: "Lanjutkan", detail: "Chapter 1", icon: "journey", href: "/learn/n4/chapter-1?membership=free" },
       { title: "Pilih Level", detail: "N1–N5", icon: "journey", href: "/journey?membership=free" },
-      { title: "Flashcard", detail: "Deck gratis", icon: "practice" },
+      { title: "Flashcard", detail: "Deck gratis", icon: "practice", href: "/flashcards?membership=free" },
       { title: "Latihan Harian", detail: "Akses terbatas", icon: "practice", href: "/practice?membership=free" },
       { title: "Komunitas", detail: "Baca saja", icon: "community", href: "/community?membership=free" },
       { title: "Bayar via WA", detail: "Buka akses", icon: "achievement", href: "/renewal?membership=free" },
     ],
-    entitlements: lmsEntitlements.map((item) => ({ ...item, status: item.title === "Perjalanan Level" ? "AKTIF" : item.title === "Chapter & Materi" ? "CHAPTER 1" : item.title === "Latihan Harian" ? "TERBATAS" : item.title === "Community" ? "READ ONLY" : item.title === "Membership & Payment" ? "WA" : "TERKUNCI", state: item.title === "Perjalanan Level" || item.title === "Membership & Payment" ? "available" : item.title === "Chapter & Materi" || item.title === "Latihan Harian" ? "limited" : item.title === "Community" ? "readOnly" : "locked" })),
-    progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Level Dicoba", value: "— level" }],
-    announcement: "Akses Free Member mengikuti Chapter 1 dan status fitur yang tersedia.",
+    entitlements: lmsEntitlements.map((item) => ({ ...item, description: item.title === "Perjalanan Level" ? "Pilih N1–N5 dan simpan progress tiap level." : item.title === "Chapter & Materi" ? "Chapter 1 tersedia pada setiap level." : item.title === "Community" ? "Percakapan dapat dibaca tanpa membuat post." : item.description, status: item.title === "Perjalanan Level" ? "AKTIF" : item.title === "Chapter & Materi" ? "CHAPTER 1" : item.title === "Latihan Harian" ? "TERBATAS" : item.title === "Community" ? "READ ONLY" : item.title === "Membership & Payment" ? "WA" : "TERKUNCI", state: item.title === "Perjalanan Level" || item.title === "Membership & Payment" ? "available" : item.title === "Chapter & Materi" || item.title === "Latihan Harian" ? "limited" : item.title === "Community" ? "readOnly" : "locked" })),
+    progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Level Gratis", value: "5 level" }],
+    announcement: "Chapter lanjutan, Try Out, sertifikat, jadwal, replay, Tanya Sensei, Achievement, dan Mini Checkpoint tetap terlihat sebagai preview akses berbayar melalui WhatsApp Admin.",
   },
   lms: {
     eyebrow: "BELAJAR MANDIRI • 2 LEVEL AKTIF",
@@ -94,7 +94,7 @@ const configs: Record<Membership, DashboardConfig> = {
     ],
     entitlements: lmsEntitlements,
     progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Level Aktif", value: "2 level" }],
-    announcement: "Journey, latihan, Try Out, community, dan sertifikat aktif sesuai level. Fitur Sensei memerlukan akses Belajar dengan Sensei.",
+    announcement: "Seluruh fitur Belajar Mandiri aktif. Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tetap terlihat sebagai akses Belajar dengan Sensei melalui WhatsApp Admin.",
   },
   sensei: {
     eyebrow: "BELAJAR DENGAN SENSEI • 2 LEVEL & COHORT AKTIF",

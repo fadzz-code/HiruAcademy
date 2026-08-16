@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { AskSenseiScreen } from "@/components/ask-sensei-screen";
-import { AssessmentRunner } from "@/components/assessment-runner";
+import { AssessmentUnavailable } from "@/components/assessment-unavailable";
 import { ChapterJourney } from "@/components/chapter-journey";
 import { ChapterCheckpoint } from "@/components/chapter-checkpoint";
 import { DocumentLesson } from "@/components/document-lesson";
@@ -18,8 +18,9 @@ import { ClassDetailScreen, ReplayPlayerScreen, ReplayScreen, ScheduleScreen } f
 import { SenseiShell } from "@/components/sensei-shell";
 import { SenseiTryoutScreen } from "@/components/sensei-tryout-screen";
 import { StudentDashboard } from "@/components/student-dashboard";
+import { StudentNavigation } from "@/components/student-navigation";
 import { VideoLesson } from "@/components/video-lesson";
-import { getTryoutConfig, hasTryoutAccess } from "@/lib/assessment-mock";
+import { hasTryoutAccess } from "@/lib/assessment-mock";
 import { getDashboardData, parseMembership } from "@/lib/dashboard-mock";
 import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearning } from "@/lib/journey-mock";
 import { getLearningData } from "@/lib/learning-mock";
@@ -31,9 +32,9 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
   if (kind === "dashboard") return <StudentDashboard data={getDashboardData(membership)} previewEnabled={process.env.NODE_ENV !== "production"} />;
   if (kind === "levels") return <JourneyShell membership={membership} current="levels"><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
-  if (kind === "tryout") return membership === "sensei" ? <SenseiShell current="tryout"><SenseiTryoutScreen /></SenseiShell> : hasTryoutAccess(membership) ? <AssessmentRunner config={getTryoutConfig()} membership={membership} /> : <LockedTryout />;
+  if (kind === "tryout") return membership === "sensei" ? <SenseiShell current="tryout"><SenseiTryoutScreen /></SenseiShell> : hasTryoutAccess(membership) ? <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="tryout" /><main className="supporting-main"><SenseiTryoutScreen membership={membership} /></main></div> : <LockedTryout />;
   if (kind === "schedule" || kind === "class-detail" || kind === "replay" || kind === "replay-player" || kind === "ask" || kind === "mini") {
-    if (!hasSenseiAccess(membership)) return <StudentDashboard data={getDashboardData(membership)} previewEnabled={false} />;
+    if (!hasSenseiAccess(membership)) return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="supporting" /><main className="supporting-main"><AssessmentUnavailable eyebrow="AKSES BELAJAR DENGAN SENSEI" title="Fitur ini belum aktif pada membershipmu" description="Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tersedia pada Belajar dengan Sensei." facts={["Entitlement membership", "Akses Sensei"]} primary={{ label: "Lihat Membership", href: `/renewal?membership=${membership}` }} secondary={{ label: "Kembali Dashboard", href: `/dashboard?membership=${membership}` }} /></main></div>;
     if (kind === "schedule") return <SenseiShell current="schedule"><ScheduleScreen /></SenseiShell>;
     if (kind === "class-detail") return <SenseiShell current="schedule"><ClassDetailScreen /></SenseiShell>;
     if (kind === "replay") return <SenseiShell current="replay"><ReplayScreen /></SenseiShell>;
