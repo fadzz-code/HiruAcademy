@@ -31,7 +31,10 @@ const items: Item[] = [
     { label: "Invoice Management", href: "/admin/invoices" },
     { label: "Referral & Diskon", href: "/admin/referrals" },
   ] },
-  { label: "Konten & Komunikasi", current: "communication" },
+  { label: "Konten & Komunikasi", current: "communication", children: [
+    { label: "Announcement", href: "/admin/announcements" },
+    { label: "Blog", href: "/admin/blog" },
+  ] },
   { label: "Sensei & Cohort", current: "sensei" },
   { label: "Analitik", current: "analytics" },
   { label: "Pengaturan", current: "settings" },
