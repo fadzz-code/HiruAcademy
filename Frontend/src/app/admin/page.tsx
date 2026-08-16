@@ -16,8 +16,8 @@ export default function AdminDashboardPage() {
   ];
 
   const queues = [
-    { type: "Placement", title: "Placement Lead", meta: "12 antrean", status: "Perlu Review" },
-    { type: "Mini Checkpoint", title: "Sesi N4 Aktif", meta: "5 submit terbaru", status: "Review Sensei" },
+    { type: "Placement", title: "Placement Lead", meta: "12 antrean", status: "Perlu Review", href: "/admin/placement" },
+    { type: "Mini Checkpoint", title: "Sesi N4 Aktif", meta: "5 submit terbaru", status: "Review Sensei", href: "/admin/mini-checkpoint" },
   ];
 
   const placements = [
@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
             </section>
 
             <section className="admin-section">
-              <h2>REKAP PLACEMENT TERBARU</h2>
+              <div className="admin-section-link"><h2>REKAP PLACEMENT TERBARU</h2><Link href="/admin/placement">Buka Placement Leads</Link></div>
               <div className="admin-table-container">
                 <table className="admin-table">
                   <thead>
@@ -111,6 +111,7 @@ export default function AdminDashboardPage() {
                     <h3>{item.title}</h3>
                     <p>{item.meta}</p>
                     <span className="admin-status status-pending">{item.status}</span>
+                    <Link href={item.href}>Buka Modul</Link>
                   </article>
                 ))}
               </div>
