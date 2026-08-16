@@ -26,7 +26,10 @@ const items: Item[] = [
     { label: "User Management", href: "/admin/users" },
     { label: "Access Settings", href: "/admin/access-settings" },
   ] },
-  { label: "Transaksi", current: "transaction" },
+  { label: "Transaksi", current: "transaction", children: [
+    { label: "Invoice Management", href: "/admin/invoices" },
+    { label: "Referral & Diskon", href: "/admin/referrals" },
+  ] },
   { label: "Konten & Komunikasi", current: "communication" },
   { label: "Sensei & Cohort", current: "sensei" },
   { label: "Analitik", current: "analytics" },
