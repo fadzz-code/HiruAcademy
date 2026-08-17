@@ -40,7 +40,10 @@ const items: Item[] = [
     { label: "Notification Templates", href: "/admin/notification-templates" },
     { label: "Landing Page", href: "/admin/landing-page" },
   ] },
-  { label: "Sensei & Cohort", current: "sensei" },
+  { label: "Sensei & Cohort", current: "sensei", children: [
+    { label: "Sensei Management", href: "/admin/sensei" },
+    { label: "Cohort & Kelas", href: "/admin/cohorts" },
+  ] },
   { label: "Analitik", current: "analytics" },
   { label: "Pengaturan", current: "settings" },
 ];
