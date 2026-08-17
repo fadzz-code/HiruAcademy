@@ -45,7 +45,10 @@ const items: Item[] = [
     { label: "Cohort & Kelas", href: "/admin/cohorts" },
   ] },
   { label: "Analitik", href: "/admin/analytics", current: "analytics" },
-  { label: "Pengaturan", current: "settings" },
+  { label: "Pengaturan", current: "settings", children: [
+    { label: "Audit Logs", href: "/admin/audit-logs" },
+    { label: "General Settings", href: "/admin/settings" },
+  ] },
 ];
 
 function Chevron({ open }: { open: boolean }) {
