@@ -38,6 +38,7 @@ const items: Item[] = [
     { label: "Feedback Akhir Level", href: "/admin/feedback" },
     { label: "Community", href: "/admin/community" },
     { label: "Notification Templates", href: "/admin/notification-templates" },
+    { label: "Landing Page", href: "/admin/landing-page" },
   ] },
   { label: "Sensei & Cohort", current: "sensei" },
   { label: "Analitik", current: "analytics" },
