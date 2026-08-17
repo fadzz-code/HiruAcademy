@@ -44,7 +44,7 @@ const items: Item[] = [
     { label: "Sensei Management", href: "/admin/sensei" },
     { label: "Cohort & Kelas", href: "/admin/cohorts" },
   ] },
-  { label: "Analitik", current: "analytics" },
+  { label: "Analitik", href: "/admin/analytics", current: "analytics" },
   { label: "Pengaturan", current: "settings" },
 ];
 
