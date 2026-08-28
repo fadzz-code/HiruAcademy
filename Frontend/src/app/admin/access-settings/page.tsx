@@ -24,3 +24,6 @@ export default function AccessSettingsPage() {
     {saved && <div className="admin-dialog-layer"><button className="admin-dialog-backdrop" type="button" onClick={() => setSaved(false)} aria-label="Tutup success state"/><section className="a4-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-saved-title"><section className="a4-success"><p className="admin-kicker">ADMIN • SIMPAN AKSES</p><h2 id="settings-saved-title">Pengaturan akses berhasil disimpan</h2><span aria-hidden="true">✓</span><p>State frontend deterministik. Permission tidak disinkronkan, policy tidak dipersistensikan, dan audit belum ditulis.</p><button className="button button-primary" type="button" onClick={() => setSaved(false)}>Kembali ke Access Settings</button></section></section></div>}
   </main></AdminShell>;
 }
+
+
+
