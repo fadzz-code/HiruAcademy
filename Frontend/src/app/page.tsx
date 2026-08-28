@@ -39,6 +39,18 @@ const learningFlow = [
   { icon: "check" as const, eyebrow: "04 — Sertifikat", title: "Dapatkan Bukti Pencapaian", description: "Selesaikan program dan evaluasi akhir untuk mendapatkan sertifikat sebagai bukti pencapaian belajarmu.", cta: "Lihat Ketentuan →", href: null },
 ];
 
+const lmsPreviews = [
+  { key: "dashboard", icon: "layers" as const, label: "Dashboard" },
+  { key: "journey", icon: "compass" as const, label: "Learning Journey" },
+  { key: "lesson", icon: "play" as const, label: "Materi / Video Lesson" },
+  { key: "flashcard", icon: "book" as const, label: "Flashcard" },
+  { key: "evaluation", icon: "target" as const, label: "Try Out / Evaluasi" },
+];
+
+function LmsPreview({ preview }: { preview: (typeof lmsPreviews)[number] }) {
+  return <figure className={`lms-preview lms-preview-${preview.key}`} aria-label={`Tampilan LMS Hiru Academy: ${preview.label}`} role="img"><figcaption><Icon name={preview.icon} width="18" height="18" />{preview.label}</figcaption><div className="lms-browser" aria-hidden="true"><div className="lms-browser-bar"><i /><i /><i /><span /></div><div className="lms-screen"><aside><b>H</b><i /><i /><i /><i /></aside><div className="lms-screen-main"><header><span /><b /></header><div className="lms-preview-feature"><strong /><span /></div><div className="lms-preview-grid"><i /><i /><i /></div></div></div></div></figure>;
+}
+
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
   return <a className={dark ? "button button-dark" : "button button-primary"} href={href}>{children}<Icon name="arrow" width="20" height="20" /></a>;
 }
@@ -55,6 +67,8 @@ export default function Home() {
         <section className="section" id="program" data-reveal><div className="container"><div className="section-heading"><h2>Pilih cara belajar yang paling sesuai</h2><p>Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem.</p></div><div className="offer-grid">{offers.map((offer, index) => <article className="offer-card reveal-item" key={offer.title} style={{ "--reveal-index": index } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={offer.icon} width="28" height="28" /></div><span className="offer-badge">{offer.badge}</span>{offer.popular && <span className="popular-badge">Populer</span>}<h3>{offer.title}</h3><p>{offer.description}</p><ul className="offer-points">{offer.points.map((point) => <li key={point}>{point}</li>)}</ul><a href={offer.href}>{offer.cta}</a></article>)}</div></div></section>
 
         <section className="section soft-section" id="cara-belajar" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Terarah dari Menentukan Level hingga Mencapai Target</h2><p>Mulai dari mengetahui kemampuan awal, mempelajari materi secara bertahap, hingga mengukur kesiapan menghadapi JLPT—semuanya tersedia dalam satu alur belajar yang terstruktur.</p></div><div className="offer-grid learning-flow-grid">{learningFlow.map((item, index) => <article className="offer-card reveal-item" key={item.title} style={{ "--reveal-index": Math.min(index, 2) } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={item.icon} width="28" height="28" /></div><span className="card-number">{item.eyebrow.replace(" — ", " · ")}</span><h3>{item.title}</h3><p>{item.description}</p>{item.href ? <a href={item.href}>{item.cta}</a> : <span className="footer-disabled offer-disabled" aria-disabled="true">{item.cta}</span>}</article>)}</div></div></section>
+
+        <section className="section lms-showcase" data-reveal><div className="container section-heading"><h2>Bukan Hanya Belajar Saat Zoom</h2><p>Lanjutkan belajar melalui materi, rekaman, latihan, dan evaluasi yang tersimpan di LMS Hiru Academy.</p></div><div className="lms-showcase-viewport"><div className="lms-showcase-track"><div className="lms-showcase-group">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div><div className="lms-showcase-group lms-showcase-copy" aria-hidden="true">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div></div></div></section>
 
         <section className="final-cta" id="tentang" data-reveal><div className="container"><div className="cta-panel"><div className="cta-pattern" aria-hidden="true">あ <span>日</span> 語</div><h2>Belum tahu harus mulai dari level mana?</h2><p>Belum yakin levelmu? Gunakan Placement Test. Sudah punya target? Coba Chapter 1 gratis pada level pilihanmu.</p><ArrowLink href="/placement">Mulai Sekarang</ArrowLink></div></div></section>
       </main>
