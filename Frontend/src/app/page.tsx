@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { SVGProps } from "react";
 import { LandingMotion } from "@/components/landing-motion";
 import { PublicPage } from "@/components/public-shell";
+import { SenseiGrid } from "@/components/sensei-grid";
 import { testimonials } from "@/lib/public-mock";
 
 type IconName = "arrow" | "book" | "check" | "compass" | "layers" | "play" | "sparkle" | "target" | "users";
@@ -71,6 +72,8 @@ export default function Home() {
         <section className="section soft-section" id="cara-belajar" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Terarah dari Menentukan Level hingga Mencapai Target</h2><p>Mulai dari mengetahui kemampuan awal, mempelajari materi secara bertahap, hingga mengukur kesiapan menghadapi JLPT—semuanya tersedia dalam satu alur belajar yang terstruktur.</p></div><div className="offer-grid learning-flow-grid">{learningFlow.map((item, index) => <article className="offer-card reveal-item" key={item.title} style={{ "--reveal-index": Math.min(index, 2) } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={item.icon} width="28" height="28" /></div><span className="card-number">{item.eyebrow.replace(" — ", " · ")}</span><h3>{item.title}</h3><p>{item.description}</p>{item.href ? <a href={item.href}>{item.cta}</a> : <span className="footer-disabled offer-disabled" aria-disabled="true">{item.cta}</span>}</article>)}</div></div></section>
 
         <section className="section lms-showcase" data-reveal><div className="container section-heading"><h2>Bukan Hanya Belajar Saat Zoom</h2><p>Lanjutkan belajar melalui materi, rekaman, latihan, dan evaluasi yang tersimpan di LMS Hiru Academy.</p></div><div className="lms-showcase-viewport"><div className="lms-showcase-track"><div className="lms-showcase-group">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div><div className="lms-showcase-group lms-showcase-copy" aria-hidden="true">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div></div></div></section>
+
+        <section className="section landing-sensei" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Bersama Sensei Berpengalaman</h2></div><SenseiGrid limit={3} reveal /><div className="landing-sensei-action"><Link className="button button-primary" href="/sensei">Lihat Semua Sensei</Link></div></div></section>
 
         <section className="section landing-testimonials" data-reveal><div className="container"><div className="section-heading"><p className="kicker">CERITA PEMBELAJAR</p><h2>Cerita dari Pembelajar Hiru Academy</h2></div><div className="testimonial-grid">{testimonials.map((testimonial, index) => <article className="testimonial-card reveal-item" key={testimonial.name} style={{ "--reveal-index": index } as React.CSSProperties}><div className="testimonial-avatar" aria-hidden="true">{testimonial.initials}</div><blockquote>{testimonial.quote}</blockquote><footer><strong>{testimonial.name}</strong><small>{testimonial.membership}</small></footer></article>)}</div><div className="landing-testimonials-action"><Link className="button button-primary" href="/testimoni">Lihat lebih banyak</Link></div></div></section>
 
