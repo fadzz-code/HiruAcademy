@@ -19,7 +19,7 @@ export function LandingMotion() {
     root.dataset.motionReady = "true";
     counters.forEach((counter) => { counter.textContent = `0${counter.dataset.suffix ?? ""}`; });
 
-    let frame = 0;
+    const frames = new Set<number>();
     const animatedCounters = new Set<HTMLElement>();
 
     const animateCounter = (counter: HTMLElement) => {
@@ -35,10 +35,14 @@ export function LandingMotion() {
         const progress = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         counter.textContent = `${Math.round(target * eased)}${suffix}`;
-        if (progress < 1) frame = requestAnimationFrame(update);
+        if (progress < 1) {
+          const nextFrame = requestAnimationFrame(update);
+          frames.add(nextFrame);
+        }
       };
 
-      frame = requestAnimationFrame(update);
+      const firstFrame = requestAnimationFrame(update);
+      frames.add(firstFrame);
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -51,11 +55,17 @@ export function LandingMotion() {
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -8%" });
 
-    revealTargets.forEach((target) => observer.observe(target));
+    const setupFrame = requestAnimationFrame(() => {
+      const paintFrame = requestAnimationFrame(() => {
+        revealTargets.forEach((target) => observer.observe(target));
+      });
+      frames.add(paintFrame);
+    });
+    frames.add(setupFrame);
 
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(frame);
+      frames.forEach(cancelAnimationFrame);
     };
   }, []);
 
