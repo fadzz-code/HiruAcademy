@@ -1,14 +1,14 @@
 export const plans = [
-  { badge: "Coba Gratis", title: "Free Member", description: "Coba satu chapter lengkap sebelum memutuskan upgrade.", points: ["1 chapter lengkap", "Community read-only", "Progress tersimpan"] },
-  { badge: "Direkomendasikan", title: "Belajar Mandiri", description: "Akses journey penuh, latihan, Try Out, review, dan sertifikat digital.", points: ["Journey dan latihan penuh", "Try Out + review jawaban", "Community write + certificate"] },
-  { badge: "LMS + Zoom", title: "Belajar dengan Sensei", description: "Semua fitur LMS ditambah cohort, sesi Zoom, replay, dan Tanya Sensei.", points: ["Journey dan latihan penuh", "Zoom bersama Sensei", "Replay setelah dipublikasikan"] },
+  { id: "free", badge: "GRATIS", title: "Coba Gratis", description: "Cocok untuk kamu yang ingin mencoba sistem belajar Hiru sebelum berlangganan.", points: ["Akses 1 chapter lengkap setiap level", "Progres belajar tersimpan", "Akses membaca komunitas"], price: "Rp0", period: "" },
+  { id: "lms", badge: "BELAJAR FLEKSIBEL", title: "Belajar Mandiri", description: "Cocok untuk kamu yang ingin belajar menyesuaikan waktu dan kecepatan sendiri.", points: ["Alur belajar dan latihan lengkap", "Try Out dan pembahasan jawaban", "Akses komunitas serta sertifikat digital"], price: "Mulai Rp99.000/6 bulan", period: "6 bulan" },
+  { id: "sensei", badge: "POPULER", title: "Kelas bersama Sensei", description: "Cocok untuk kamu yang membutuhkan jadwal rutin, bimbingan dan evaluasi langsung.", points: ["Semua fasilitas Belajar Mandiri", "10x live Zoom ・ 90 menit/bulan", "Rekaman kelas dan evaluasi hasil belajar"], price: "Mulai Rp350.000/bulan", period: "Bulanan" },
 ];
 export const levelCatalog = [
-  { code: "N5", name: "JLPT N5", title: "Dasar Bahasa Jepang", description: "Bangun fondasi huruf, kosakata, dan pola kalimat dasar secara bertahap.", topics: ["Hiragana & Katakana", "Fondasi Grammar"] },
-  { code: "N4", name: "JLPT N4", title: "Pemula Lanjutan", description: "Lanjutkan pola kalimat, reading, listening, dan kanji sesuai target N4.", topics: ["Journey Aktif", "Contoh Terpilih"] },
-  { code: "N3", name: "JLPT N3", title: "Tingkat Menengah", description: "Fokus reading, bunpou, kosakata, dan kanji untuk target ujian N3.", topics: ["Reading & Bunpou", "Kanji & Goi"] },
-  { code: "N2", name: "JLPT N2", title: "Tingkat Lanjut", description: "Perkuat pemahaman kompleks, kecepatan reading, dan listening untuk N2.", topics: ["Listening & Dokkai", "Strategi JLPT"] },
-  { code: "N1", name: "JLPT N1", title: "Tingkat Mahir", description: "Latih akurasi bahasa tingkat tinggi dan strategi ujian JLPT N1.", topics: ["Reading & Bunpou", "Strategi JLPT"] },
+  { code: "N5", name: "JLPT N5", title: "Dasar Bahasa Jepang", description: "Cocok untuk pemula yang ingin menguasai huruf Jepang, kosakata, dan pola kalimat dasar.", topics: ["Hiragana & Katakana", "Pola kalimat dasar"] },
+  { code: "N4", name: "JLPT N4", title: "Pemula Lanjutan", description: "Cocok untuk kamu yang telah memahami materi N5 dan ingin menguasai pola kalimat, kanji, dokkai dan choukai level N4.", topics: ["Pola kalimat & Kanji", "Dokkai & Choukai"] },
+  { code: "N3", name: "JLPT N3", title: "Tingkat Menengah", description: "Cocok untuk kamu yang sudah memiliki dasar N4 dan ingin memahami teks serta percakapan yang lebih kompleks.", topics: ["Dokkai & Pola kalimat", "Goi & Kanji"] },
+  { code: "N2", name: "JLPT N2", title: "Tingkat Lanjut", description: "Cocok untuk kamu yang sudah memiliki pondasi N3 dan ingin meningkatkan kecepatan memahami teks, percakapan, dan pola kalimat yang lebih kompleks.", topics: ["Dokkai & Choukai", "Strategi JLPT"] },
+  { code: "N1", name: "JLPT N1", title: "Tingkat Mahir", description: "Cocok untuk kamu yang memiliki dasar N2 dan ingin menguasai nuansa bahasa tingkat tinggi serta strategi menghadapi JLPT N1.", topics: ["Bahasa tingkat tinggi", "Strategi JLPT"] },
 ];
 export const programFacilities = [
   { icon: "▶", title: "Video Penjelasan", description: "Penjelasan utama chapter dengan progres belajar yang tercatat." },
