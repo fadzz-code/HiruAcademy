@@ -9,11 +9,40 @@ export function LandingMotion() {
 
     const revealTargets = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
     const counters = Array.from(root.querySelectorAll<HTMLElement>("[data-counter]"));
+    const showcase = root.querySelector<HTMLElement>(".lms-showcase-viewport");
+    const showcaseTrack = showcase?.querySelector<HTMLElement>(".lms-showcase-track");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let showcaseFrame = 0;
+    let showcaseResumeTimer = 0;
+    let showcasePaused = false;
+
+    const pauseShowcase = () => {
+      showcasePaused = true;
+      window.clearTimeout(showcaseResumeTimer);
+      showcaseResumeTimer = window.setTimeout(() => { showcasePaused = false; }, 1500);
+    };
+    const animateShowcase = () => {
+      if (showcase && showcaseTrack && !showcasePaused) {
+        showcase.scrollLeft += 0.5;
+        if (showcase.scrollLeft >= showcaseTrack.scrollWidth / 2) showcase.scrollLeft = 0;
+      }
+      showcaseFrame = requestAnimationFrame(animateShowcase);
+    };
+
+    showcase?.addEventListener("wheel", pauseShowcase);
+    showcase?.addEventListener("touchstart", pauseShowcase);
+    showcase?.addEventListener("pointerdown", pauseShowcase);
+    if (!reducedMotion) showcaseFrame = requestAnimationFrame(animateShowcase);
 
     if (reducedMotion || !("IntersectionObserver" in window)) {
       revealTargets.forEach((target) => target.dataset.revealed = "true");
-      return;
+      return () => {
+        cancelAnimationFrame(showcaseFrame);
+        window.clearTimeout(showcaseResumeTimer);
+        showcase?.removeEventListener("wheel", pauseShowcase);
+        showcase?.removeEventListener("touchstart", pauseShowcase);
+        showcase?.removeEventListener("pointerdown", pauseShowcase);
+      };
     }
 
     root.dataset.motionReady = "true";
@@ -64,6 +93,11 @@ export function LandingMotion() {
     frames.add(setupFrame);
 
     return () => {
+      cancelAnimationFrame(showcaseFrame);
+      window.clearTimeout(showcaseResumeTimer);
+      showcase?.removeEventListener("wheel", pauseShowcase);
+      showcase?.removeEventListener("touchstart", pauseShowcase);
+      showcase?.removeEventListener("pointerdown", pauseShowcase);
       observer.disconnect();
       frames.forEach(cancelAnimationFrame);
     };

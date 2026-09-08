@@ -52,7 +52,7 @@ const lmsPreviews = [
 ];
 
 function LmsPreview({ preview }: { preview: (typeof lmsPreviews)[number] }) {
-  return <figure className={`lms-preview lms-preview-${preview.key}`} aria-label={`Tampilan LMS Hiru Academy: ${preview.label}`} role="img"><figcaption><Icon name={preview.icon} width="18" height="18" />{preview.label}</figcaption><div className="lms-browser" aria-hidden="true"><div className="lms-browser-bar"><i /><i /><i /><span /></div><div className="lms-screen"><aside><b>H</b><i /><i /><i /><i /></aside><div className="lms-screen-main"><header><span /><b /></header><div className="lms-preview-feature"><strong /><span /></div><div className="lms-preview-grid"><i /><i /><i /></div></div></div></div></figure>;
+  return <figure className={`lms-preview lms-preview-${preview.key}`} aria-label={`Tampilan LMS Hiru Academy: ${preview.label}`}><figcaption>{preview.label}</figcaption><div className="lms-preview-empty" role="img" aria-label={`No image: ${preview.label}`}>No image</div></figure>;
 }
 
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
