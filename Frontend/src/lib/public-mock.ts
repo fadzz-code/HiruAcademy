@@ -24,10 +24,11 @@ export const programComparison = [
   { badge: "LMS + Zoom", title: "Belajar dengan Sensei", description: "Semua LMS ditambah cohort, kelas langsung, Sensei, dan replay." },
 ];
 export const testimonials = [
-  { initials: "RI", quote: "Journey membantu saya tahu apa yang harus dipelajari setelah menyelesaikan satu materi.", name: "Rina", membership: "Free Member → LMS" },
-  { initials: "DI", quote: "Checkpoint dan review membuat progres lebih mudah dipantau tanpa merasa terburu-buru.", name: "Dimas", membership: "Belajar Mandiri" },
-  { initials: "AY", quote: "Jadwal, replay, dan learning journey terasa menyatu dalam satu alur belajar.", name: "Ayu", membership: "Belajar dengan Sensei" },
+  { initials: "RI", avatarSrc: "", videoSrc: "", quote: "Journey membantu saya tahu apa yang harus dipelajari setelah menyelesaikan satu materi.", name: "Rina", membership: "Free Member → LMS" },
+  { initials: "DI", avatarSrc: "", videoSrc: "", quote: "Checkpoint dan review membuat progres lebih mudah dipantau tanpa merasa terburu-buru.", name: "Dimas", membership: "Belajar Mandiri" },
+  { initials: "AY", avatarSrc: "", videoSrc: "", quote: "Jadwal, replay, dan learning journey terasa menyatu dalam satu alur belajar.", name: "Ayu", membership: "Belajar dengan Sensei" },
 ];
+export const testimonialVideos = testimonials.slice(0, 2).map(({ name, membership, videoSrc }) => ({ name, membership, videoSrc, posterSrc: "" }));
 export const supportingValues = [
   { glyph: "進", title: "Progress terlihat", description: "Pengguna memahami langkah yang sudah dan belum selesai." },
   { glyph: "続", title: "Belajar konsisten", description: "Aktivitas disusun agar mudah diteruskan." },
