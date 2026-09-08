@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LuBell, LuCalendarDays, LuCircleCheck, LuClipboardCheck, LuDumbbell, LuEllipsis, LuFlag, LuHouse, LuLayers3, LuLibrary, LuLockKeyhole, LuMenu, LuMessageCircleQuestion, LuMessagesSquare, LuPlay, LuRoute, LuTrendingUp, LuUser, LuX } from "react-icons/lu";
+import type { IconType } from "react-icons";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
 type CurrentArea = "dashboard" | "journey" | "learning" | "flashcards" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "certificate" | "community" | "supporting" | "notifications" | "profile";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
-type NavItem = { label: string; glyph: string; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
+type NavItem = { label: string; icon: IconType; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
 // TEMP FRONTEND MVP: remove notImplemented modal states as real feature routes are added.
 type ModalState = { feature: string; variant: "membershipLock" | "notImplemented" };
 
@@ -16,27 +18,25 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
   const free = membership === "free";
   const sensei = membership === "sensei";
   const items: NavItem[] = [
-    { label: "Dashboard", glyph: "⌂", href: `/dashboard?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
-    { label: "Kelas Saya", glyph: "道", href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
-    { label: "Kumpulan Flashcard", glyph: "札", href: `/flashcards?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "flashcards" },
-    { label: "Latihan Harian", glyph: "練", href: `/practice?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
-    { label: "Try Out", glyph: "試", href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented", active: current === "tryout" },
-    { label: "Perpustakaan", glyph: "冊", href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "library" },
+    { label: "Dashboard", icon: LuHouse, href: `/dashboard?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
+    { label: "Kelas Saya", icon: LuRoute, href: `/journey?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "journey" || current === "learning" },
+    { label: "Kumpulan Flashcard", icon: LuLayers3, href: `/flashcards?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "flashcards" },
+    { label: "Latihan Harian", icon: LuDumbbell, href: `/practice?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "supporting" },
+    { label: "Try Out", icon: LuClipboardCheck, href: `/tryout?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented", active: current === "tryout" },
+    { label: "Perpustakaan", icon: LuLibrary, href: `/library?membership=${membership}`, entitlement: free ? "limited" : "available", implementation: "implemented", active: current === "library" },
+    { label: "Jadwal", icon: LuCalendarDays, href: `/schedule?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "schedule" },
+    { label: "Replay", icon: LuPlay, href: `/replay?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "replay" },
+    { label: "Tanya Sensei", icon: LuMessageCircleQuestion, href: `/ask-sensei?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "ask-sensei" },
+    { label: "Mini Checkpoint", icon: LuFlag, href: `/mini-checkpoint?membership=${membership}`, entitlement: sensei ? "available" : "locked", implementation: "implemented", active: current === "mini-checkpoint" },
   ];
-  if (sensei) items.push(
-    { label: "Jadwal", glyph: "予", href: `/schedule?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "schedule" },
-    { label: "Replay", glyph: "▶", href: `/replay?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "replay" },
-    { label: "Tanya Sensei", glyph: "先", href: `/ask-sensei?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "ask-sensei" },
-    { label: "Mini Checkpoint", glyph: "旗", href: `/mini-checkpoint?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "mini-checkpoint" },
-  );
   items.push(
-    { label: "Komunitas", glyph: "話", href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "community" },
-    { label: "Progres", glyph: "↗", href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" },
+    { label: "Komunitas", icon: LuMessagesSquare, href: `/community?membership=${membership}`, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "community" },
+    { label: "Progres", icon: LuTrendingUp, href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" },
   );
-  if (!free) items.push({ label: "Sertifikat", glyph: "✓", href: `/certificate?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "certificate" });
+  items.push({ label: "Sertifikat", icon: LuCircleCheck, href: `/certificate?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented", active: current === "certificate" });
   items.push(
-    { label: "Notifikasi", glyph: "♢", href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
-    { label: "Profil", glyph: "人", href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
+    { label: "Notifikasi", icon: LuBell, href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
+    { label: "Profil", icon: LuUser, href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
   );
   return items;
 }
@@ -86,20 +86,21 @@ export function StudentNavigation({ membership, current }: { membership: Members
       <Link className="student-nav-brand" href="/" aria-label="HIRU Academy, kembali ke beranda"><BrandLogo /></Link>
       <nav aria-label="Navigasi siswa">{items.map((item) => {
         const stateClass = item.active ? "active" : item.entitlement;
-        if (item.entitlement !== "locked" && item.implementation === "implemented" && item.href) return <Link className={`student-nav-item state-${stateClass}`} href={item.href} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "limited" && <small>Terbatas</small>}{item.entitlement === "readOnly" && <small>Baca saja</small>}</Link>;
+        const Icon = item.icon;
+        if (item.entitlement !== "locked" && item.implementation === "implemented" && item.href) return <Link className={`student-nav-item state-${stateClass}`} href={item.href} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true"><Icon /></span>{item.label}</Link>;
         const variant = item.entitlement === "locked" ? "membershipLock" : "notImplemented";
-        return <button className={`student-nav-item state-${stateClass}${feedback === item.label ? " locked-feedback" : ""}`} type="button" onClick={(event) => openModal(item.label, variant, event.currentTarget)} key={item.label}><span aria-hidden="true">{item.glyph}</span>{item.label}{item.entitlement === "locked" ? <i aria-hidden="true">⌑</i> : item.entitlement === "limited" ? <small>Terbatas</small> : item.entitlement === "readOnly" ? <small>Baca saja</small> : null}</button>;
+        return <button className={`student-nav-item state-${stateClass}${feedback === item.label ? " locked-feedback" : ""}`} type="button" onClick={(event) => openModal(item.label, variant, event.currentTarget)} key={item.label}><span aria-hidden="true"><Icon /></span>{item.label}{item.entitlement === "locked" && <i aria-hidden="true"><LuLockKeyhole /></i>}</button>;
       })}</nav>
-      <div className="student-nav-bottom"><span>{membership === "free" ? "Free Member" : membership === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"}</span>{["Mulai Belajar", "Pengaturan", "Keluar"].map((label) => <button type="button" onClick={(event) => openModal(label, "notImplemented", event.currentTarget)} key={label}>{label}</button>)}</div>
+      <div className="student-nav-bottom">{["Mulai Belajar", "Pengaturan", "Keluar"].map((label) => <button type="button" onClick={(event) => openModal(label, "notImplemented", event.currentTarget)} key={label}>{label}</button>)}</div>
     </>
   );
 
   return (
     <>
       <aside className="student-nav-desktop">{navigation}</aside>
-      <button className="student-mobile-trigger" type="button" onClick={() => setMobileOpen(true)} aria-label="Buka navigasi" aria-expanded={mobileOpen}>☰</button>
-      {mobileOpen && <div className="student-mobile-nav"><button className="student-mobile-backdrop" type="button" aria-label="Tutup navigasi" onClick={() => setMobileOpen(false)} /><aside><button className="student-mobile-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Tutup navigasi">×</button>{navigation}</aside></div>}
-      {modal && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="student-modal-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup">×</button><span className="locked-modal-icon" aria-hidden="true">{modal.variant === "membershipLock" ? "⌑" : "…"}</span><p>{modal.feature}</p><h2 id="student-modal-title">{modal.variant === "membershipLock" ? "Akses Terkunci" : "Fitur Belum Tersedia"}</h2>{modal.variant === "notImplemented" && <p className="locked-modal-message">Fitur ini belum tersedia di versi demo.</p>}<div className={`locked-modal-actions${modal.variant === "notImplemented" ? " single" : ""}`}><button type="button" onClick={closeModal}>Tutup</button>{modal.variant === "membershipLock" && <Link href="/#program" onClick={closeModal}>Upgrade</Link>}</div></section></div>}
+      <button className="student-mobile-trigger" type="button" onClick={() => setMobileOpen(true)} aria-label="Buka navigasi" aria-expanded={mobileOpen}><LuMenu aria-hidden="true" /></button>
+      {mobileOpen && <div className="student-mobile-nav"><button className="student-mobile-backdrop" type="button" aria-label="Tutup navigasi" onClick={() => setMobileOpen(false)} /><aside><button className="student-mobile-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Tutup navigasi"><LuX aria-hidden="true" /></button>{navigation}</aside></div>}
+      {modal && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="student-modal-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup"><LuX aria-hidden="true" /></button><span className="locked-modal-icon" aria-hidden="true">{modal.variant === "membershipLock" ? <LuLockKeyhole /> : <LuEllipsis />}</span><p>{modal.feature}</p><h2 id="student-modal-title">{modal.variant === "membershipLock" ? "Akses Terkunci" : "Fitur Belum Tersedia"}</h2>{modal.variant === "notImplemented" && <p className="locked-modal-message">Fitur ini belum tersedia di versi demo.</p>}<div className={`locked-modal-actions${modal.variant === "notImplemented" ? " single" : ""}`}><button type="button" onClick={closeModal}>Tutup</button>{modal.variant === "membershipLock" && <Link href="/#program" onClick={closeModal}>Upgrade</Link>}</div></section></div>}
     </>
   );
 }

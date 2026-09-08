@@ -61,7 +61,7 @@ const lmsEntitlements: DashboardEntitlement[] = [
 
 const configs: Record<Membership, DashboardConfig> = {
   free: {
-    eyebrow: "FREE MEMBER • CHAPTER 1 PADA N1–N5",
+    eyebrow: "CHAPTER 1 PADA N1–N5",
     heading: "Selamat datang, Hilmi",
     description: "Lanjutkan level terakhir atau pilih level lain untuk mencoba Chapter 1.",
     badge: "Free Member",
@@ -79,7 +79,7 @@ const configs: Record<Membership, DashboardConfig> = {
     announcement: "Chapter lanjutan, Try Out, sertifikat, jadwal, replay, Tanya Sensei, Achievement, dan Mini Checkpoint tetap terlihat sebagai preview akses berbayar melalui WhatsApp Admin.",
   },
   lms: {
-    eyebrow: "BELAJAR MANDIRI • 2 LEVEL AKTIF",
+    eyebrow: "2 LEVEL AKTIF",
     heading: "Selamat datang, Hilmi",
     description: "Lanjutkan progress terakhir atau pilih level aktif lain.",
     badge: "Belajar Mandiri",
@@ -97,7 +97,7 @@ const configs: Record<Membership, DashboardConfig> = {
     announcement: "Seluruh fitur Belajar Mandiri aktif. Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tetap terlihat sebagai akses Belajar dengan Sensei melalui WhatsApp Admin.",
   },
   sensei: {
-    eyebrow: "BELAJAR DENGAN SENSEI • 2 LEVEL & COHORT AKTIF",
+    eyebrow: "2 LEVEL & COHORT AKTIF",
     heading: "Selamat datang, Hilmi",
     description: "Lanjutkan belajar, periksa jadwal, atau buka replay kelas.",
     badge: "Belajar dengan Sensei",
