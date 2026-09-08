@@ -5,7 +5,7 @@ import { StaticStudentRoute } from "@/components/static-student-route";
 export const metadata: Metadata = { title: "Learning Journey", description: "Chapter perjalanan belajar HIRU Academy.", robots: { index: false, follow: false } };
 
 export function generateStaticParams() {
-  return ["n5", "n4", "n3", "n2", "n1"].map((level) => ({ level }));
+  return ["dasar", "n5", "n4", "n3", "n2", "ssw-pengolahan-makanan", "interview"].map((level) => ({ level }));
 }
 
 export default async function JourneyPage({ params }: { params: Promise<{ level: string }> }) {

@@ -1,136 +1,193 @@
 export type Membership = "free" | "lms" | "sensei";
-export type EntitlementState = "available" | "limited" | "readOnly" | "locked";
-export type DashboardIcon = "achievement" | "certificate" | "checkpoint" | "community" | "journey" | "library" | "practice" | "replay" | "sensei" | "tryout";
+export type DashboardIcon =
+  | "achievement"
+  | "certificate"
+  | "checkpoint"
+  | "community"
+  | "journey"
+  | "library"
+  | "practice"
+  | "replay"
+  | "sensei"
+  | "tryout"
+  | "affiliate";
 
 export type DashboardAction = {
   title: string;
   detail: string;
   icon: DashboardIcon;
-  href?: string;
+  href: string;
 };
 
-export type DashboardEntitlement = {
-  title: string;
-  status: "AKTIF" | "TERKUNCI" | "TERBATAS" | "READ ONLY" | "CHAPTER 1" | "WA";
-  state: EntitlementState;
-  description: string;
+export type LeaderboardEntry = {
+  rank: number;
+  name: string;
+  xp: string;
+  isCurrentUser?: boolean;
 };
 
 export type DashboardConfig = {
-  eyebrow: string;
-  heading: string;
-  description: string;
-  badge: string;
+  greeting: string;
+  subgreeting: string;
+  level: string;
+  target: string;
   continue: {
     label: string;
     title: string;
     description: string;
     primary: string;
     primaryHref: string;
-    secondary: string;
-    secondaryHref: string;
+    timeRemaining: string;
     progress: string;
+    progressPercent: number;
+    progressLabel: string;
+    detail: string;
   };
   quickActions: DashboardAction[];
-  entitlements: DashboardEntitlement[];
+  leaderboard: LeaderboardEntry[];
   progressSummary: { label: string; value: string }[];
-  announcement: string;
 };
 
 export type DashboardData = {
   membership: Membership;
   membershipLabel: string;
-  user: { displayName: string; initials: string };
+  user: {
+    displayName: string;
+    initials: string;
+    level: string;
+    target: string;
+    joinDate: string;
+  };
   config: DashboardConfig;
 };
 
-const lmsEntitlements: DashboardEntitlement[] = [
-  { title: "Perjalanan Level", status: "AKTIF", state: "available", description: "Kelola N4 dan N3 aktif dalam satu akun." },
-  { title: "Chapter & Materi", status: "AKTIF", state: "available", description: "Seluruh Chapter terbuka pada level yang dibeli." },
-  { title: "Latihan Harian", status: "AKTIF", state: "available", description: "Latihan harian terbuka pada level aktif." },
-  { title: "Try Out & Ulasan", status: "AKTIF", state: "available", description: "Try Out dan ulasan jawaban tersedia." },
-  { title: "Community", status: "AKTIF", state: "available", description: "Buat postingan dan balas percakapan." },
-  { title: "Sertifikat", status: "AKTIF", state: "available", description: "Sertifikat tersedia setelah syarat terpenuhi." },
-  { title: "Jadwal Kelas", status: "TERKUNCI", state: "locked", description: "Buka Jadwal Kelas melalui Belajar dengan Sensei dan pembayaran via WhatsApp Admin." },
-  { title: "Replay Kelas", status: "TERKUNCI", state: "locked", description: "Buka Replay Kelas melalui Belajar dengan Sensei dan pembayaran via WhatsApp Admin." },
-  { title: "Tanya Sensei", status: "TERKUNCI", state: "locked", description: "Buka Tanya Sensei melalui Belajar dengan Sensei dan pembayaran via WhatsApp Admin." },
-  { title: "Achievement", status: "AKTIF", state: "available", description: "Achievement, streak, dan milestone tersedia pada Belajar Mandiri." },
-  { title: "Mini Checkpoint Kelas", status: "TERKUNCI", state: "locked", description: "Khusus Belajar dengan Sensei. Buka akses melalui WhatsApp Admin." },
-  { title: "Membership & Payment", status: "WA", state: "available", description: "Renewal atau upgrade dilanjutkan melalui WhatsApp Admin." },
+const defaultLeaderboard: LeaderboardEntry[] = [
+  { rank: 1, name: "Siti Aisyah", xp: "Konsisten" },
+  { rank: 2, name: "Budi Santoso", xp: "Konsisten" },
+  { rank: 3, name: "Rina Wati", xp: "Konsisten" },
+  { rank: 4, name: "Dian Indra", xp: "Konsisten" },
+  { rank: 5, name: "Hilmi (Kamu)", xp: "Level N4", isCurrentUser: true },
 ];
+
+const quickActionsFor = (membership: Membership): DashboardAction[] => {
+  if (membership === "sensei") {
+    return [
+      { title: "Journey", detail: "Perjalanan Level", icon: "journey", href: `/journey?membership=${membership}` },
+      { title: "Jadwal", detail: "Sesi Kelas Zoom", icon: "checkpoint", href: `/schedule?membership=${membership}` },
+      { title: "Replay", detail: "Rekaman Kelas", icon: "replay", href: `/replay?membership=${membership}` },
+      { title: "Tanya Sensei", detail: "Konsultasi Materi", icon: "sensei", href: `/ask-sensei?membership=${membership}` },
+      { title: "Komunitas", detail: "Diskusi Pembelajar", icon: "community", href: `/community?membership=${membership}` },
+      { title: "Affiliate", detail: "Ajak Teman & Diskon", icon: "affiliate", href: `/affiliate?membership=${membership}` },
+    ];
+  }
+
+  return [
+    { title: "Journey", detail: "Perjalanan Level", icon: "journey", href: `/journey?membership=${membership}` },
+    { title: "Perpustakaan", detail: "Materi & Modul", icon: "library", href: `/library?membership=${membership}` },
+    { title: "Latihan", detail: "Latihan Harian", icon: "practice", href: `/practice?membership=${membership}` },
+    { title: "Try Out", detail: "Simulasi Ujian", icon: "tryout", href: `/tryout?membership=${membership}` },
+    { title: "Komunitas", detail: "Diskusi Pembelajar", icon: "community", href: `/community?membership=${membership}` },
+    { title: "Affiliate", detail: "Ajak Teman & Diskon", icon: "affiliate", href: `/affiliate?membership=${membership}` },
+  ];
+};
 
 const configs: Record<Membership, DashboardConfig> = {
   free: {
-    eyebrow: "CHAPTER 1 PADA N1–N5",
-    heading: "Selamat datang, Hilmi",
-    description: "Lanjutkan level terakhir atau pilih level lain untuk mencoba Chapter 1.",
-    badge: "Free Member",
-    continue: { label: "LANJUTKAN BELAJAR", title: "Chapter 1 — JLPT N4", description: "Contoh level terakhir yang dibuka. Chapter 1 pada N1, N2, N3, N4, dan N5 tetap tersedia.", primary: "Buka Chapter 1", primaryHref: "/learn/n4/chapter-1?membership=free", secondary: "Pilih Level", secondaryHref: "/journey?membership=free", progress: "56% selesai" },
-    quickActions: [
-      { title: "Lanjutkan", detail: "Chapter 1", icon: "journey", href: "/learn/n4/chapter-1?membership=free" },
-      { title: "Pilih Level", detail: "N1–N5", icon: "journey", href: "/journey?membership=free" },
-      { title: "Flashcard", detail: "Deck gratis", icon: "practice", href: "/flashcards?membership=free" },
-      { title: "Latihan Harian", detail: "Akses terbatas", icon: "practice", href: "/practice?membership=free" },
-      { title: "Komunitas", detail: "Baca saja", icon: "community", href: "/community?membership=free" },
-      { title: "Bayar via WA", detail: "Buka akses", icon: "achievement", href: "/renewal?membership=free" },
+    greeting: "Halo, Hilmi",
+    subgreeting: "Siap untuk melanjutkan perjalanan bahasa Jepangmu hari ini?",
+    level: "Level N4",
+    target: "Target JLPT: Des 2026",
+    continue: {
+      label: "TERAKHIR BELAJAR",
+      title: "Chapter 1 — JLPT N4",
+      description: "Pelajari tata bahasa dasar dan pola kalimat esensial untuk persiapan JLPT N4.",
+      primary: "Lanjutkan Belajar",
+      primaryHref: "/learn/n4/chapter-1?membership=free",
+      timeRemaining: "Siap dipelajari",
+      progress: "56%",
+      progressPercent: 56,
+      progressLabel: "Progres N4",
+      detail: "14 dari 25 modul selesai",
+    },
+    quickActions: quickActionsFor("free"),
+    leaderboard: defaultLeaderboard,
+    progressSummary: [
+      { label: "Progres Materi", value: "Level N4" },
+      { label: "Konsistensi", value: "Aktif" },
+      { label: "Modul Selesai", value: "14 modul" },
     ],
-    entitlements: lmsEntitlements.map((item) => ({ ...item, description: item.title === "Perjalanan Level" ? "Pilih N1–N5 dan simpan progress tiap level." : item.title === "Chapter & Materi" ? "Chapter 1 tersedia pada setiap level." : item.title === "Community" ? "Percakapan dapat dibaca tanpa membuat post." : item.description, status: item.title === "Perjalanan Level" ? "AKTIF" : item.title === "Chapter & Materi" ? "CHAPTER 1" : item.title === "Latihan Harian" ? "TERBATAS" : item.title === "Community" ? "READ ONLY" : item.title === "Membership & Payment" ? "WA" : "TERKUNCI", state: item.title === "Perjalanan Level" || item.title === "Membership & Payment" ? "available" : item.title === "Chapter & Materi" || item.title === "Latihan Harian" ? "limited" : item.title === "Community" ? "readOnly" : "locked" })),
-    progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Level Gratis", value: "5 level" }],
-    announcement: "Chapter lanjutan, Try Out, sertifikat, jadwal, replay, Tanya Sensei, Achievement, dan Mini Checkpoint tetap terlihat sebagai preview akses berbayar melalui WhatsApp Admin.",
   },
   lms: {
-    eyebrow: "2 LEVEL AKTIF",
-    heading: "Selamat datang, Hilmi",
-    description: "Lanjutkan progress terakhir atau pilih level aktif lain.",
-    badge: "Belajar Mandiri",
-    continue: { label: "LANJUTKAN BELAJAR", title: "Chapter 4 — JLPT N4", description: "Progress terakhir berasal dari backend. N4 dan N3 aktif serta tersimpan terpisah.", primary: "Lanjutkan Belajar", primaryHref: "/learn/n4/chapter-4?membership=lms", secondary: "Pilih Level", secondaryHref: "/journey?membership=lms", progress: "56% selesai" },
-    quickActions: [
-      { title: "Lanjutkan", detail: "Chapter 4", icon: "journey", href: "/learn/n4/chapter-4?membership=lms" },
-      { title: "Pilih Level", detail: "2 level aktif", icon: "journey", href: "/journey?membership=lms" },
-      { title: "Flashcard", detail: "Semua deck", icon: "practice", href: "/learn/n4/chapter-4/flashcards?membership=lms" },
-      { title: "Latihan Harian", detail: "Aktif", icon: "practice", href: "/practice?membership=lms" },
-      { title: "Try Out", detail: "Simulasi JLPT", icon: "tryout", href: "/tryout?membership=lms" },
-      { title: "Perpustakaan", detail: "Semua materi", icon: "library", href: "/library?membership=lms" },
+    greeting: "Halo, Hilmi",
+    subgreeting: "Siap untuk melanjutkan perjalanan bahasa Jepangmu hari ini?",
+    level: "Level N4",
+    target: "Target JLPT: Des 2026",
+    continue: {
+      label: "TERAKHIR BELAJAR",
+      title: "Bunpou Bab 12: Kata Kerja Te-form",
+      description: "Mari selesaikan latihan pola kalimat -te kudasai untuk meminta bantuan dengan sopan.",
+      primary: "Lanjutkan Belajar",
+      primaryHref: "/learn/n4/chapter-4?membership=lms",
+      timeRemaining: "Siap dipelajari",
+      progress: "65%",
+      progressPercent: 65,
+      progressLabel: "Progres N4",
+      detail: "26 dari 40 modul selesai",
+    },
+    quickActions: quickActionsFor("lms"),
+    leaderboard: defaultLeaderboard,
+    progressSummary: [
+      { label: "XP Mingguan", value: "9.120 XP" },
+      { label: "Streak Belajar", value: "12 hari" },
+      { label: "Modul Selesai", value: "26 modul" },
     ],
-    entitlements: lmsEntitlements,
-    progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Level Aktif", value: "2 level" }],
-    announcement: "Seluruh fitur Belajar Mandiri aktif. Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tetap terlihat sebagai akses Belajar dengan Sensei melalui WhatsApp Admin.",
   },
   sensei: {
-    eyebrow: "2 LEVEL & COHORT AKTIF",
-    heading: "Selamat datang, Hilmi",
-    description: "Lanjutkan belajar, periksa jadwal, atau buka replay kelas.",
-    badge: "Belajar dengan Sensei",
-    continue: { label: "LANJUTKAN BELAJAR", title: "Chapter 4 — JLPT N4", description: "Progress terakhir, jadwal, dan replay mengikuti level serta cohort aktif.", primary: "Lanjutkan Belajar", primaryHref: "/learn/n4/chapter-4?membership=sensei", secondary: "Lihat Jadwal", secondaryHref: "/schedule?membership=sensei", progress: "56% selesai" },
-    quickActions: [
-      { title: "Lanjutkan", detail: "Chapter 4", icon: "journey", href: "/learn/n4/chapter-4?membership=sensei" },
-      { title: "Jadwal Kelas", detail: "Sesi berikutnya", icon: "journey", href: "/schedule?membership=sensei" },
-      { title: "Masuk Kelas", detail: "Detail kelas", icon: "journey", href: "/schedule/chapter-4?membership=sensei" },
-      { title: "Replay", detail: "Kelas tersimpan", icon: "replay", href: "/replay?membership=sensei" },
-      { title: "Tanya Sensei", detail: "Kirim pertanyaan", icon: "sensei", href: "/ask-sensei?membership=sensei" },
-      { title: "Mini Checkpoint", detail: "N4 sesi 2 part 1", icon: "checkpoint", href: "/mini-checkpoint?membership=sensei" },
+    greeting: "Halo, Hilmi",
+    subgreeting: "Siap untuk melanjutkan perjalanan bahasa Jepangmu hari ini?",
+    level: "Level N4",
+    target: "Target JLPT: Des 2026",
+    continue: {
+      label: "TERAKHIR BELAJAR",
+      title: "Bunpou Bab 12: Kata Kerja Te-form",
+      description: "Mari selesaikan latihan pola kalimat -te kudasai untuk meminta bantuan dengan sopan.",
+      primary: "Lanjutkan Belajar",
+      primaryHref: "/learn/n4/chapter-4?membership=sensei",
+      timeRemaining: "Siap dipelajari",
+      progress: "65%",
+      progressPercent: 65,
+      progressLabel: "Progres N4",
+      detail: "26 dari 40 modul selesai",
+    },
+    quickActions: quickActionsFor("sensei"),
+    leaderboard: defaultLeaderboard,
+    progressSummary: [
+      { label: "Progres Materi", value: "Level N4" },
+      { label: "Konsistensi", value: "Aktif" },
+      { label: "Sesi Cohort", value: "Sesuai Jadwal" },
     ],
-    entitlements: [
-      { title: "Perjalanan Level", status: "AKTIF", state: "available", description: "Kelola N4 dan N3 beserta cohort aktif." },
-      { title: "Chapter & Materi", status: "AKTIF", state: "available", description: "Seluruh Chapter terbuka pada level aktif." },
-      { title: "Latihan Harian", status: "AKTIF", state: "available", description: "Latihan harian tersedia pada setiap level aktif." },
-      { title: "Try Out & Ulasan", status: "AKTIF", state: "available", description: "Try Out dan ulasan jawaban tersedia." },
-      { title: "Community", status: "AKTIF", state: "available", description: "Buat postingan dan diskusi bersama cohort." },
-      { title: "Sertifikat", status: "AKTIF", state: "available", description: "Sertifikat tersedia setelah syarat terpenuhi." },
-      { title: "Jadwal Kelas", status: "AKTIF", state: "available", description: "Jadwal mengikuti cohort dan konfigurasi Admin." },
-      { title: "Replay Kelas", status: "AKTIF", state: "available", description: "Buka kembali sesi yang telah dipublikasikan." },
-      { title: "Tanya Sensei", status: "AKTIF", state: "available", description: "Kirim pertanyaan terkait materi kepada Sensei." },
-      { title: "Achievement", status: "AKTIF", state: "available", description: "Achievement, streak, dan milestone tersedia sesuai progres belajar." },
-      { title: "Mini Checkpoint Kelas", status: "AKTIF", state: "available", description: "Dibuka sesuai level, sesi, dan part. Timer dimulai saat Mini Checkpoint dimulai." },
-      { title: "Membership & Payment", status: "WA", state: "available", description: "Renewal atau perubahan akses dilanjutkan melalui WhatsApp Admin." },
-    ],
-    progressSummary: [{ label: "XP Mingguan", value: "— XP" }, { label: "Streak Belajar", value: "— hari" }, { label: "Sesi Cohort", value: "— sesi" }],
-    announcement: "Journey, latihan, Try Out, community, sertifikat, jadwal, replay, dan Tanya Sensei aktif sesuai level serta cohort.",
   },
 };
 
+const membershipLabels: Record<Membership, string> = {
+  free: "Free Member",
+  lms: "Belajar Mandiri",
+  sensei: "Belajar dengan Sensei",
+};
+
 export function getDashboardData(membership: Membership): DashboardData {
-  return { membership, membershipLabel: configs[membership].badge, user: { displayName: "Hilmi", initials: "HI" }, config: configs[membership] };
+  return {
+    membership,
+    membershipLabel: membershipLabels[membership],
+    user: {
+      displayName: "Hilmi",
+      initials: "HI",
+      level: "Level N4",
+      target: "Des 2026",
+      joinDate: "12 Januari 2026",
+    },
+    config: configs[membership],
+  };
 }
 
 export function parseMembership(value?: string): Membership {

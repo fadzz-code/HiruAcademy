@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { LuBell, LuCalendarDays, LuCircleCheck, LuClipboardCheck, LuDumbbell, LuEllipsis, LuFlag, LuHouse, LuLayers3, LuLibrary, LuLockKeyhole, LuMenu, LuMessageCircleQuestion, LuMessagesSquare, LuPlay, LuRoute, LuTrendingUp, LuUser, LuX } from "react-icons/lu";
+import { LuBell, LuCalendarDays, LuCircleCheck, LuClipboardCheck, LuDumbbell, LuEllipsis, LuFlag, LuHandshake, LuHouse, LuLayers3, LuLibrary, LuLockKeyhole, LuMenu, LuMessageCircleQuestion, LuMessagesSquare, LuPlay, LuRoute, LuTrendingUp, LuUser, LuX } from "react-icons/lu";
 import type { IconType } from "react-icons";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "flashcards" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "certificate" | "community" | "supporting" | "notifications" | "profile";
+type CurrentArea = "dashboard" | "journey" | "learning" | "flashcards" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "certificate" | "community" | "supporting" | "notifications" | "profile" | "affiliate";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavItem = { label: string; icon: IconType; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean };
@@ -34,6 +34,7 @@ function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
     { label: "Progres", icon: LuTrendingUp, href: `/progress?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" },
   );
   items.push({ label: "Sertifikat", icon: LuCircleCheck, href: `/certificate?membership=${membership}`, entitlement: free ? "locked" : "available", implementation: "implemented", active: current === "certificate" });
+  items.push({ label: "Affiliate", icon: LuHandshake, href: `/affiliate?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "affiliate" });
   items.push(
     { label: "Notifikasi", icon: LuBell, href: `/notifications?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
     { label: "Profil", icon: LuUser, href: `/profile?membership=${membership}`, entitlement: "available", implementation: "implemented", active: current === "profile" },
@@ -100,7 +101,7 @@ export function StudentNavigation({ membership, current }: { membership: Members
       <aside className="student-nav-desktop">{navigation}</aside>
       <button className="student-mobile-trigger" type="button" onClick={() => setMobileOpen(true)} aria-label="Buka navigasi" aria-expanded={mobileOpen}><LuMenu aria-hidden="true" /></button>
       {mobileOpen && <div className="student-mobile-nav"><button className="student-mobile-backdrop" type="button" aria-label="Tutup navigasi" onClick={() => setMobileOpen(false)} /><aside><button className="student-mobile-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Tutup navigasi"><LuX aria-hidden="true" /></button>{navigation}</aside></div>}
-      {modal && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="student-modal-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup"><LuX aria-hidden="true" /></button><span className="locked-modal-icon" aria-hidden="true">{modal.variant === "membershipLock" ? <LuLockKeyhole /> : <LuEllipsis />}</span><p>{modal.feature}</p><h2 id="student-modal-title">{modal.variant === "membershipLock" ? "Akses Terkunci" : "Fitur Belum Tersedia"}</h2>{modal.variant === "notImplemented" && <p className="locked-modal-message">Fitur ini belum tersedia di versi demo.</p>}<div className={`locked-modal-actions${modal.variant === "notImplemented" ? " single" : ""}`}><button type="button" onClick={closeModal}>Tutup</button>{modal.variant === "membershipLock" && <Link href="/#program" onClick={closeModal}>Upgrade</Link>}</div></section></div>}
+      {modal && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={closeModal} /><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="student-modal-title"><button ref={closeRef} className="locked-modal-close" type="button" onClick={closeModal} aria-label="Tutup"><LuX aria-hidden="true" /></button><span className="locked-modal-icon" aria-hidden="true">{modal.variant === "membershipLock" ? <LuLockKeyhole /> : <LuEllipsis />}</span><p>{modal.feature}</p><h2 id="student-modal-title">{modal.variant === "membershipLock" ? "Akses Terkunci" : "Fitur Belum Tersedia"}</h2>{modal.variant === "notImplemented" && <p className="locked-modal-message">Fitur ini sedang disiapkan dan akan segera hadir.</p>}<div className={`locked-modal-actions${modal.variant === "notImplemented" ? " single" : ""}`}><button type="button" onClick={closeModal}>Tutup</button>{modal.variant === "membershipLock" && <Link href="/#program" onClick={closeModal}>Upgrade</Link>}</div></section></div>}
     </>
   );
 }

@@ -13,7 +13,7 @@ const questions: AssessmentQuestion[] = [
 ];
 
 export function getTryoutConfig(): AssessmentConfig {
-  return { type: "tryout", title: "Try Out Preview", context: "Simulasi visual dengan data contoh", timerEnabled: true, timerLabel: "Waktu contoh · bukan timer server", reviewEnabled: true, sampleLabel: "Preview — aturan final belum dikonfigurasi", questions };
+  return { type: "tryout", title: "Try Out JLPT N4", context: "Simulasi Ujian Mandiri", timerEnabled: true, timerLabel: "Sisa Waktu", reviewEnabled: true, sampleLabel: "Simulasi Try Out", questions };
 }
 
 export function hasTryoutAccess(membership: Membership) {

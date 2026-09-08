@@ -19,7 +19,7 @@ export function CertificateDetailScreen() {
           <header className="supporting-header">
             <p className="dash-kicker">DIGITAL CERTIFICATE</p>
             <h1>Sertifikat JLPT N5</h1>
-            <p>Data penerima, nomor verifikasi, issue date, download, dan revocation mengikuti backend.</p>
+            <p>Sertifikat resmi digital kelulusan program HIRU Academy.</p>
           </header>
           <Link href={`/certificate${query}`}>Certificate Center</Link>
         </div>
@@ -44,7 +44,7 @@ export function CertificateDetailScreen() {
               <div><dt>Penerima</dt><dd>Member •••1</dd></div>
               <div><dt>Program</dt><dd>JLPT N5</dd></div>
               <div><dt>Verification ID</dt><dd>CERT•••N5</dd></div>
-              <div><dt>Issue date</dt><dd>Dari backend</dd></div>
+              <div><dt>Issue date</dt><dd>Terverifikasi</dd></div>
               <div><dt>Status</dt><dd>Valid</dd></div>
               <div><dt>Format</dt><dd>Digital PDF</dd></div>
             </dl>
@@ -54,8 +54,8 @@ export function CertificateDetailScreen() {
             <section className="certificate-activity">
               <h2>Aktivitas sertifikat</h2>
               <ul>
-                <li><strong>Diterbitkan</strong><span>Issue time dari backend</span><small>Tercatat</small></li>
-                <li><strong>Diunduh</strong><span>Download log dari backend</span><small>Tercatat</small></li>
+                <li><strong>Diterbitkan</strong><span>Resmi terbit</span><small>Tercatat</small></li>
+                <li><strong>Diunduh</strong><span>Format PDF</span><small>Tersedia</small></li>
                 <li><strong>Dibagikan</strong><span>Share event opsional</span><small>Opsional</small></li>
               </ul>
             </section>
@@ -74,7 +74,7 @@ export function CertificateDetailScreen() {
 
         <aside className="certificate-notice">
           <strong>VERIFICATION</strong>
-          <p>Status validitas harus diperiksa melalui backend. Data desain menggunakan nilai termasking.</p>
+          <p>Sertifikat digital resmi dilengkapi ID verifikasi unik yang dapat diverifikasi keasliannya.</p>
         </aside>
       </main>
     </div>

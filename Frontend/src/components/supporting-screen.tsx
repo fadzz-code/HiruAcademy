@@ -2,6 +2,30 @@ import { StudentNavigation } from "@/components/student-navigation";
 import { supportingData, type SupportingKind } from "@/lib/supporting-mock";
 import Link from "next/link";
 import { useState } from "react";
+import {
+  LuAward,
+  LuBell,
+  LuBookOpen,
+  LuCalendar,
+  LuCheck,
+  LuCircleCheck,
+  LuClipboardCheck,
+  LuClock,
+  LuCopy,
+  LuFlame,
+  LuFlag,
+  LuKey,
+  LuLayers3,
+  LuLock,
+  LuMail,
+  LuMessagesSquare,
+  LuRotateCcw,
+  LuRoute,
+  LuSearch,
+  LuShare2,
+  LuTag,
+  LuUser,
+} from "react-icons/lu";
 
 export function SupportingScreen({ kind, membership }: { kind: SupportingKind; membership: "free" | "lms" | "sensei" }) {
   const data = supportingData[kind];
@@ -15,20 +39,400 @@ export function SupportingScreen({ kind, membership }: { kind: SupportingKind; m
   if (kind === "profile") return <ProfileScreen membership={membership} />;
   if (kind === "renewal") return <RenewalScreen membership={membership} />;
   if (kind === "createPost") return <CreatePostScreen membership={membership} />;
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="supporting" /><main className="supporting-main"><header className="supporting-header"><p className="dash-kicker">{data.eyebrow}</p><h1>{data.title}</h1><p>{data.description}</p>{data.locked && <span className="supporting-badge">TERBATAS</span>}</header><section className="supporting-grid">{data.cards.map((card) => <article className="supporting-card" key={card.title}><span className="supporting-icon" aria-hidden="true">{card.icon}</span><div><span className="supporting-status">{card.status}</span><h2>{card.title}</h2><p>{card.description}</p></div>{card.href ? <Link className="supporting-action" href={`${card.href}?membership=${membership}`}>{card.action ?? "Buka"} +</Link> : <span className="supporting-action disabled" aria-disabled="true">{card.action ?? "Tersedia"}</span>}</article>)}</section>{data.notice && <aside className="supporting-notice"><strong>{data.notice.title}</strong><p>{data.notice.description}</p></aside>}</main></div>;
+  if (kind === "affiliate") return <AffiliateScreen membership={membership} />;
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="supporting" />
+      <main className="supporting-main">
+        <header className="supporting-header">
+          <p className="dash-kicker">{data.eyebrow}</p>
+          <h1>{data.title}</h1>
+          <p>{data.description}</p>
+          {data.locked && <span className="supporting-badge">TERBATAS</span>}
+        </header>
+        <section className="supporting-grid">
+          {data.cards.map((item) => (
+            <article className="supporting-card" key={item.title}>
+              <span className="supporting-icon" aria-hidden="true"><LuBookOpen /></span>
+              <div>
+                <span className="supporting-status">{item.status}</span>
+                <h2>{item.title}</h2>
+                <p>{item.description}</p>
+              </div>
+              {item.href ? (
+                <Link className="supporting-action" href={`${item.href}?membership=${membership}`}>
+                  {item.action ?? "Buka"} +
+                </Link>
+              ) : (
+                <span className="supporting-action disabled" aria-disabled="true">
+                  {item.action ?? "Tersedia"}
+                </span>
+              )}
+            </article>
+          ))}
+        </section>
+        {data.notice && (
+          <aside className="supporting-notice">
+            <strong>{data.notice.title}</strong>
+            <p>{data.notice.description}</p>
+          </aside>
+        )}
+      </main>
+    </div>
+  );
 }
 
 function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const query = `?membership=${membership}`;
-  const membershipCopy = membership === "free" ? "Free Member" : "Belajar Mandiri";
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="profile" /><main className="supporting-main profile-page"><header className="supporting-header"><p className="dash-kicker">AKUN &amp; MEMBERSHIP</p><h1>Profil dan status belajarmu</h1><p>Kelola informasi akun, membership, sertifikat, dan preferensi.</p></header><section className="profile-identity"><span>H</span><div><h2>Hilmi</h2><p>hilmi.student@example.com</p><b>Level N4</b></div></section><section className="profile-membership"><div><p className="dash-kicker">STATUS MEMBERSHIP</p><h2>{membershipCopy}</h2><p>Periode akses dan tanggal akhir berasal dari backend.</p></div><Link className="button button-primary" href={`/renewal${query}`}>Perpanjang Membership</Link></section><section className="profile-stats">{[["65%","Progres N4"],["450","Kanji dikuasai"],["12","Hari beruntun"]].map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</section><section className="profile-certificates"><h2>Sertifikat</h2><div><Link href={`/certificate${query}`}><span>Diterbitkan</span><strong>Sertifikat N5</strong></Link><article><span>Belum Memenuhi</span><strong>Sertifikat N4</strong></article></div></section><section className="profile-settings"><h2>Pengaturan akun</h2><div>{[["人","Edit Profil","Nama, WhatsApp, dan preferensi belajar."],["鍵","Ganti Kata Sandi","Perbarui keamanan akun."],["知","Notifikasi","Atur pengingat belajar dan informasi kelas."]].map(([icon,title,description]) => title === "Notifikasi" ? <Link href={`/notifications${query}`} key={title}><span>{icon}</span><div><strong>{title}</strong><small>{description}</small></div></Link> : <article key={title}><span>{icon}</span><div><strong>{title}</strong><small>{description}</small></div></article>)}</div></section><section className="profile-referral"><p className="dash-kicker">REFERRAL &amp; DISKON</p><h2>Kode referral saya</h2><strong>HIRU-HILMI</strong><p>Teman mendapat diskon. Reward milikmu aktif setelah invoice teman diverifikasi Admin.</p><div><span>1 reward diskon tersedia<small>Nilai &amp; masa berlaku dari backend</small></span><button type="button" disabled>Salin Kode</button><button type="button" disabled>Bagikan</button><Link href={`/renewal${query}`}>Gunakan</Link></div></section></main></div>;
+  const membershipCopy =
+    membership === "sensei"
+      ? "Belajar dengan Sensei"
+      : membership === "lms"
+      ? "Belajar Mandiri"
+      : "Free Member";
+
+  const [codeCopied, setCodeCopied] = useState(false);
+
+  const copyReferral = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText("HIRU-HILMI");
+      setCodeCopied(true);
+      setTimeout(() => setCodeCopied(false), 2000);
+    }
+  };
+
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="profile" />
+      <main className="supporting-main profile-page">
+        <header className="supporting-header">
+          <p className="dash-kicker">AKUN &amp; MEMBERSHIP</p>
+          <h1>Profil dan status belajarmu</h1>
+          <p>Kelola informasi akun, status belajar, sertifikat, dan preferensi.</p>
+        </header>
+        <section className="profile-identity">
+          <span>H</span>
+          <div>
+            <h2>Hilmi</h2>
+            <p>hilmi.student@example.com</p>
+            <div className="profile-identity-tags">
+              <span className="profile-pill"><LuRoute aria-hidden="true" /> Level N4</span>
+              <span className="profile-pill"><LuFlag aria-hidden="true" /> Target JLPT: Des 2026</span>
+              <span className="profile-pill"><LuCalendar aria-hidden="true" /> Bergabung: 12 Januari 2026</span>
+            </div>
+          </div>
+        </section>
+        <section className="profile-membership">
+          <div>
+            <p className="dash-kicker">STATUS MEMBERSHIP</p>
+            <h2>{membershipCopy}</h2>
+            <p>Akses aktif hingga 31 Desember 2026. Seluruh progres belajar tersimpan.</p>
+          </div>
+          <Link className="button button-primary" href={`/renewal${query}`}>Perpanjang Membership</Link>
+        </section>
+        <section className="profile-stats">
+          {[["65%", "Progres N4"], ["450", "Kanji dikuasai"], ["12", "Hari beruntun"]].map(([value, label]) => (
+            <div key={label}>
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </section>
+        <section className="profile-certificates">
+          <div className="profile-section-header">
+            <h2>Sertifikat</h2>
+            <Link href={`/certificate${query}`}>Lihat Semua Sertifikat →</Link>
+          </div>
+          <div>
+            <Link className="profile-cert-card" href={`/certificate/n5${query}`}>
+              <div className="profile-cert-top">
+                <LuCircleCheck className="cert-check-icon" aria-hidden="true" />
+                <span className="cert-badge verified">Diterbitkan</span>
+              </div>
+              <strong>Sertifikat JLPT N5</strong>
+              <small>Program JLPT N5 • Diterbitkan 15 Des 2025</small>
+            </Link>
+            <Link className="profile-cert-card pending" href={`/certificate/n4${query}`}>
+              <div className="profile-cert-top">
+                <LuClock className="cert-clock-icon" aria-hidden="true" />
+                <span className="cert-badge pending">Dalam Proses</span>
+              </div>
+              <strong>Sertifikat JLPT N4</strong>
+              <small>Program JLPT N4 • Menyelesaikan Journey N4</small>
+            </Link>
+          </div>
+        </section>
+        <section className="profile-referral">
+          <div className="profile-section-header">
+            <div>
+              <p className="dash-kicker">PROGRAM AFILIASI &amp; REFERRAL</p>
+              <h2>Kode referral saya</h2>
+            </div>
+            <Link className="button button-secondary" href={`/affiliate${query}`}>Buka Halaman Affiliate →</Link>
+          </div>
+          <strong>HIRU-HILMI</strong>
+          <p>Ajak teman belajar bahasa Jepang di HIRU Academy. Teman mendapat diskon pendaftaran, dan reward milikmu aktif setelah invoice terverifikasi.</p>
+          <div className="profile-referral-actions">
+            <span>1 reward diskon tersedia (Rp 150.000)</span>
+            <button type="button" className="button button-secondary" onClick={copyReferral}>
+              {codeCopied ? <><LuCheck aria-hidden="true" /> Tersalin!</> : <><LuCopy aria-hidden="true" /> Salin Kode</>}
+            </button>
+            <Link className="button button-primary" href={`/renewal${query}`}>Gunakan Reward</Link>
+          </div>
+        </section>
+        <section className="profile-settings">
+          <h2>Pengaturan akun</h2>
+          <div>
+            <article>
+              <span aria-hidden="true"><LuUser /></span>
+              <div>
+                <strong>Edit Profil</strong>
+                <small>Nama, WhatsApp, dan preferensi belajar.</small>
+              </div>
+            </article>
+            <article>
+              <span aria-hidden="true"><LuKey /></span>
+              <div>
+                <strong>Ganti Kata Sandi</strong>
+                <small>Perbarui keamanan akun.</small>
+              </div>
+            </article>
+            <Link href={`/notifications${query}`}>
+              <span aria-hidden="true"><LuBell /></span>
+              <div>
+                <strong>Notifikasi</strong>
+                <small>Atur pengingat belajar dan informasi kelas.</small>
+              </div>
+            </Link>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
+  const query = `?membership=${membership}`;
+  const [codeCopied, setCodeCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const referralCode = "HIRU-HILMI";
+  const referralLink = "https://hiruacademy.id/ref/HIRU-HILMI";
+  const shareMessage = encodeURIComponent(
+    "Ayo belajar bahasa Jepang di HIRU Academy! Gunakan kode referral HIRU-HILMI untuk mendapatkan diskon pendaftaran: https://hiruacademy.id/ref/HIRU-HILMI"
+  );
+  const waUrl = `https://api.whatsapp.com/send?text=${shareMessage}`;
+
+  const copyToClipboard = (text: string, isCode: boolean) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      if (isCode) {
+        setCodeCopied(true);
+        setTimeout(() => setCodeCopied(false), 2000);
+      } else {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      }
+    }
+  };
+
+  const stats = [
+    { label: "Total Referral", value: "4 Teman", desc: "Teman yang mendaftar dengan kodemu" },
+    { label: "Referral Berhasil", value: "2 Terverifikasi", desc: "Invoice lunas & membership aktif" },
+    { label: "Menunggu Verifikasi", value: "1 Menunggu", desc: "Invoice dalam antrean review" },
+    { label: "Total Reward", value: "Rp 350.000", desc: "Reward diskon siap digunakan" },
+  ];
+
+  const steps = [
+    { number: "01", title: "Bagikan Kode / Link", desc: "Bagikan link atau kode referral HIRU-HILMI ke teman atau media sosial." },
+    { number: "02", title: "Teman Mendaftar", desc: "Teman memasukkan kode referral dan mendapatkan diskon langsung saat checkout." },
+    { number: "03", title: "Verifikasi Pembayaran", desc: "Tim HIRU memverifikasi invoice pembayaran pendaftaran temanmu." },
+    { number: "04", title: "Reward Aktif", desc: "Reward diskon dan komisi otomatis aktif untuk renewal atau pemakaian berikutnya." },
+  ];
+
+  const history = [
+    { id: "INV-1024", name: "Rina S.", program: "Program JLPT N4", date: "4 Mar 2026", status: "Menunggu", statusClass: "pending", reward: "Menunggu verifikasi" },
+    { id: "INV-1017", name: "Dimas P.", program: "Program JLPT N3", date: "28 Feb 2026", status: "Tersedia", statusClass: "active", reward: "Rp 150.000 (Tersedia)" },
+    { id: "INV-1008", name: "Ayu W.", program: "Belajar Mandiri N4", date: "14 Feb 2026", status: "Digunakan", statusClass: "used", reward: "Dipakai pada renewal" },
+    { id: "INV-0998", name: "Budi S.", program: "Program JLPT N5", date: "2 Feb 2026", status: "Dibatalkan", statusClass: "cancelled", reward: "Invoice dibatalkan" },
+  ];
+
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="affiliate" />
+      <main className="supporting-main affiliate-page">
+        <header className="supporting-header">
+          <p className="dash-kicker">PROGRAM AFILIASI &amp; REFERRAL</p>
+          <h1>Ajak teman belajar bersama di HIRU Academy</h1>
+          <p>Bagikan kode atau link referralmu. Teman mendapat diskon pendaftaran, dan kamu memperoleh reward belajar.</p>
+        </header>
+
+        <section className="affiliate-share-card">
+          <div className="affiliate-code-box">
+            <label>Kode Referral Unik</label>
+            <div className="affiliate-input-row">
+              <code>{referralCode}</code>
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={() => copyToClipboard(referralCode, true)}
+              >
+                {codeCopied ? <><LuCheck aria-hidden="true" /> Tersalin!</> : <><LuCopy aria-hidden="true" /> Salin Kode</>}
+              </button>
+            </div>
+          </div>
+
+          <div className="affiliate-link-box">
+            <label>Tautan Pendaftaran Referral</label>
+            <div className="affiliate-input-row">
+              <input type="text" readOnly value={referralLink} />
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => copyToClipboard(referralLink, false)}
+              >
+                {linkCopied ? <><LuCheck aria-hidden="true" /> Tersalin!</> : <><LuCopy aria-hidden="true" /> Salin Link</>}
+              </button>
+            </div>
+          </div>
+
+          <div className="affiliate-wa-row">
+            <a
+              className="button button-wa"
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <LuShare2 aria-hidden="true" /> Bagikan ke WhatsApp
+            </a>
+            <small>Pesan otomatis siap kirim dengan link pendaftaranmu.</small>
+          </div>
+        </section>
+
+        <section className="affiliate-stats-grid" aria-label="Statistik referral">
+          {stats.map((item) => (
+            <article key={item.label} className="affiliate-stat-card">
+              <p>{item.label}</p>
+              <strong>{item.value}</strong>
+              <small>{item.desc}</small>
+            </article>
+          ))}
+        </section>
+
+        <section className="affiliate-flow-section">
+          <h2>Alur Status &amp; Cara Kerja</h2>
+          <div className="affiliate-flow-grid">
+            {steps.map((step) => (
+              <article key={step.number} className="affiliate-flow-step">
+                <span>{step.number}</span>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="affiliate-history-section">
+          <div className="affiliate-history-head">
+            <div>
+              <h2>Riwayat Penggunaan Referral</h2>
+              <p>Daftar teman yang menggunakan kodemu beserta status invoice dan reward.</p>
+            </div>
+            <Link className="button button-secondary" href={`/renewal${query}`}>Gunakan Reward</Link>
+          </div>
+
+          <div className="affiliate-table-container">
+            <table className="affiliate-table">
+              <thead>
+                <tr>
+                  <th>Pengguna</th>
+                  <th>Program</th>
+                  <th>Tanggal</th>
+                  <th>Status</th>
+                  <th>Reward</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((row) => (
+                  <tr key={row.id}>
+                    <td>
+                      <strong>{row.name}</strong>
+                      <small>{row.id}</small>
+                    </td>
+                    <td>{row.program}</td>
+                    <td>{row.date}</td>
+                    <td>
+                      <span className={`affiliate-badge status-${row.statusClass}`}>{row.status}</span>
+                    </td>
+                    <td>{row.reward}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }
 
 function RenewalScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const [plan, setPlan] = useState<"lms" | "sensei">("lms");
   const [rewardApplied, setRewardApplied] = useState(false);
   const query = `?membership=${membership}`;
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="profile" /><main className="supporting-main renewal-page"><header className="supporting-header"><p className="dash-kicker">MEMBERSHIP RENEWAL</p><h1>Lanjutkan akses tanpa kehilangan progres</h1><p>Harga dan periode baru tampil setelah plan dipilih; data berasal dari konfigurasi admin.</p></header><section className="renewal-current"><span>Membership Aktif</span><h2>Belajar Mandiri • N4</h2><p>Tanggal berakhir dan sisa hari ditampilkan dari backend. Progres tetap tersimpan setelah renewal.</p></section><section className="renewal-plans"><h2>Pilih plan lanjutan</h2><div><button className={plan === "lms" ? "active" : ""} type="button" onClick={() => setPlan("lms")}><small>LMS</small><strong>Belajar Mandiri</strong><span>Journey penuh, try out, review, sertifikat, dan community write.</span><b>Harga dinamis setelah pilihan</b></button><button className={plan === "sensei" ? "active" : ""} type="button" onClick={() => setPlan("sensei")}><small>{membership === "sensei" ? "SENSEI" : "LMS + Zoom"}</small><strong>Belajar dengan Sensei</strong><span>Semua LMS ditambah cohort, jadwal Zoom, Sensei, dan replay.</span><b>Harga dinamis setelah pilihan</b></button></div></section><section className="renewal-reward"><p className="dash-kicker">REWARD REFERRAL TERSEDIA</p><h2>Gunakan reward diskon pada invoice renewal berikutnya</h2><p>Nilai, batas penggunaan, dan masa berlaku dihitung backend.</p><button type="button" aria-pressed={rewardApplied} onClick={() => setRewardApplied(true)}>{rewardApplied ? "Reward Diterapkan" : "Gunakan Reward"}</button></section><section className="renewal-summary"><p className="dash-kicker">RINGKASAN RENEWAL</p><h2>{plan === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"} • periode baru</h2><p>{rewardApplied && "Reward referral diterapkan. "}Nominal dan tanggal aktif baru mengikuti pilihan dan verifikasi invoice.</p><button className="button button-primary disabled" type="button" aria-disabled="true">Buat Invoice &amp; Buka WhatsApp</button></section><aside className="renewal-announcement"><strong>Pengumuman</strong><p>Membership aktif setelah pembayaran via WhatsApp dan invoice diverifikasi Admin.</p></aside><Link className="sensei-back" href={`/profile${query}`}>← Kembali ke Profil</Link></main></div>;
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="profile" />
+      <main className="supporting-main renewal-page">
+        <header className="supporting-header">
+          <p className="dash-kicker">MEMBERSHIP RENEWAL</p>
+          <h1>Lanjutkan akses tanpa kehilangan progres</h1>
+          <p>Harga dan periode baru tampil setelah plan dipilih; data berasal dari paket resmi HIRU Academy.</p>
+        </header>
+        <section className="renewal-current">
+          <span>Membership Aktif</span>
+          <h2>Belajar Mandiri • N4</h2>
+          <p>Akses aktif hingga 31 Desember 2026. Progres tetap tersimpan setelah perpanjangan.</p>
+        </section>
+        <section className="renewal-plans">
+          <h2>Pilih plan lanjutan</h2>
+          <div>
+            <button className={plan === "lms" ? "active" : ""} type="button" onClick={() => setPlan("lms")}>
+              <small>LMS</small>
+              <strong>Belajar Mandiri</strong>
+              <span>Journey penuh, try out, review, sertifikat, dan community write.</span>
+              <b>Harga dinamis setelah pilihan</b>
+            </button>
+            <button className={plan === "sensei" ? "active" : ""} type="button" onClick={() => setPlan("sensei")}>
+              <small>{membership === "sensei" ? "SENSEI" : "LMS + Zoom"}</small>
+              <strong>Belajar dengan Sensei</strong>
+              <span>Semua LMS ditambah cohort, jadwal Zoom, Sensei, dan replay.</span>
+              <b>Harga dinamis setelah pilihan</b>
+            </button>
+          </div>
+        </section>
+        <section className="renewal-reward">
+          <p className="dash-kicker">REWARD REFERRAL TERSEDIA</p>
+          <h2>Gunakan reward diskon pada invoice renewal berikutnya</h2>
+          <p>Saldo reward aktif dapat langsung memotong total pembayaranmu.</p>
+          <button type="button" aria-pressed={rewardApplied} onClick={() => setRewardApplied(true)}>
+            {rewardApplied ? "Reward Diterapkan" : "Gunakan Reward"}
+          </button>
+        </section>
+        <section className="renewal-summary">
+          <p className="dash-kicker">RINGKASAN RENEWAL</p>
+          <h2>{plan === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"} • periode baru</h2>
+          <p>{rewardApplied && "Reward referral diterapkan. "}Nominal dan tanggal aktif baru mengikuti pilihan dan verifikasi invoice.</p>
+          <button className="button button-primary disabled" type="button" aria-disabled="true">Buat Invoice &amp; Buka WhatsApp</button>
+        </section>
+        <aside className="renewal-announcement">
+          <strong>Pengumuman</strong>
+          <p>Membership aktif setelah pembayaran via WhatsApp dan invoice diverifikasi Admin.</p>
+        </aside>
+        <Link className="sensei-back" href={`/profile${query}`}>← Kembali ke Profil</Link>
+      </main>
+    </div>
+  );
 }
 
 function NotificationScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
@@ -36,16 +440,21 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
   const [allRead, setAllRead] = useState(false);
   const [page, setPage] = useState(1);
   const query = `?membership=${membership}`;
-  const third = membership === "sensei" ? { icon: "再", category: "Kelas", title: "Replay kelas sudah dipublikasikan", description: "Replay dapat ditonton selama entitlement aktif.", action: "Buka Replay", href: `/replay${query}`, isRead: false } : membership === "lms" ? { icon: "再", category: "Kelas", title: "Feedback materi sudah diperbarui", description: "Perubahan feedback mengikuti proses review tim akademik.", action: "Buka Feedback", href: undefined, isRead: false } : { icon: "再", category: "Kelas", title: "Progress chapter diperbarui", description: "Perubahan progress mengikuti aktivitas dan data backend.", action: "Buka Progress", href: `/progress${query}`, isRead: false };
+  const third =
+    membership === "sensei"
+      ? { icon: LuRotateCcw, category: "Kelas", title: "Replay kelas sudah dipublikasikan", description: "Replay dapat ditonton selama masa aktif cohort.", action: "Buka Replay", href: `/replay${query}`, isRead: false }
+      : membership === "lms"
+      ? { icon: LuBookOpen, category: "Kelas", title: "Feedback materi sudah diperbarui", description: "Penjelasan tata bahasa Bab 12 telah dilengkapi contoh kalimat baru.", action: "Buka Feedback", href: undefined, isRead: false }
+      : { icon: LuRoute, category: "Kelas", title: "Progress chapter diperbarui", description: "Catatan progres chapter aktifmu berhasil diperbarui.", action: "Buka Progress", href: `/progress${query}`, isRead: false };
   const today = [
-    { icon: "章", category: "Belajar", title: "Materi Chapter 4 tersedia", description: "Lanjutkan video, modul, dan latihan pada journey aktif.", action: "Buka Chapter", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}${query}`, isRead: false },
-    { icon: "時", category: "Kelas", title: "Pengingat sesi Zoom", description: "Jadwal, Sensei, dan link mengikuti konfigurasi admin.", action: "Lihat Jadwal", href: membership === "sensei" ? `/schedule${query}` : undefined, isRead: false },
+    { icon: LuBookOpen, category: "Belajar", title: "Materi Chapter 4 tersedia", description: "Lanjutkan video, modul, dan latihan pada journey aktif.", action: "Buka Chapter", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}${query}`, isRead: false },
+    { icon: LuCalendar, category: "Kelas", title: "Pengingat sesi Zoom", description: "Sesi bimbingan mingguan bersama Sensei akan dimulai besok malam.", action: "Lihat Jadwal", href: membership === "sensei" ? `/schedule${query}` : undefined, isRead: false },
     third,
   ];
   const previous = [
-    { icon: "火", category: "Achievement", title: "Achievement baru terbuka", description: "Streak belajar berhasil mencapai milestone baru.", action: "Lihat Achievement", href: `/progress${query}`, isRead: true },
-    { icon: "期", category: "Akun", title: "Periode membership akan berakhir", description: "Tanggal dan opsi renewal mengikuti data backend.", action: "Lihat Membership", href: `/profile${query}`, isRead: true },
-    { icon: "証", category: "Achievement", title: "Sertifikat digital tersedia", description: "Sertifikat dapat dilihat dan diunduh dari Certificate Center.", action: "Buka Sertifikat", href: membership === "free" ? undefined : `/certificate${query}`, isRead: true },
+    { icon: LuFlame, category: "Achievement", title: "Achievement baru terbuka", description: "Streak belajar berhasil mencapai milestone baru.", action: "Lihat Achievement", href: `/progress${query}`, isRead: true },
+    { icon: LuClock, category: "Akun", title: "Periode membership akan berakhir", description: "Masa aktif belajarmu tersisa 30 hari. Perpanjang untuk mempertahankan streak.", action: "Lihat Membership", href: `/profile${query}`, isRead: true },
+    { icon: LuAward, category: "Achievement", title: "Sertifikat digital tersedia", description: "Sertifikat dapat dilihat dan diunduh dari Certificate Center.", action: "Buka Sertifikat", href: membership === "free" ? undefined : `/certificate${query}`, isRead: true },
   ];
   const matches = (item: { category: string; isRead?: boolean }) => {
     if (filter === "Semua") return true;
@@ -55,19 +464,161 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
   };
   const visibleToday = today.filter(matches);
   const visiblePrevious = previous.filter(matches);
-  const renderItem = (item: typeof today[number]) => <article className={allRead || item.isRead ? "read" : "unread"} key={item.title}><span className="notification-icon">{item.icon}</span><div><small>{item.category} • Waktu dari backend</small><h2>{item.title}</h2><p>{item.description}</p></div>{item.href ? <Link href={item.href}>{item.action}</Link> : <span className="notification-locked" aria-disabled="true">{item.action}</span>}</article>;
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="notifications" /><main className="supporting-main notification-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">NOTIFICATION CENTER</p><h1>Informasi penting tanpa mengganggu fokus</h1><p>Notifikasi, status baca, trigger, waktu, dan delivery berasal dari backend serta preference akun.</p></header><Link href={`/profile${query}`}>Profil</Link></div><div className="notification-toolbar"><div>{["Semua","Belum Dibaca","Belajar","Kelas","Akun"].map((item) => <button className={filter === item ? "active" : ""} type="button" onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><button type="button" onClick={() => setAllRead(true)}>Tandai Semua Dibaca</button></div>{visibleToday.length || visiblePrevious.length ? <><section className="notification-group"><h2>Hari ini</h2>{visibleToday.map(renderItem)}</section><section className="notification-group"><h2>Sebelumnya</h2>{visiblePrevious.map(renderItem)}</section></> : <section className="library-empty"><h2>Tidak ada notifikasi</h2><p>Tidak ada data fixture untuk filter ini.</p></section>}<div className="notification-pagination"><span>Menampilkan 1–20 dari 148 data</span><nav aria-label="Pagination">{["‹","1","2","3","…","8","›"].map((item, index) => <button className={String(page) === item ? "active" : ""} type="button" onClick={() => { if (item === "‹") setPage((value) => Math.max(1, value - 1)); else if (item === "›") setPage((value) => Math.min(8, value + 1)); else { const value = Number(item); if (value) setPage(value); } }} key={`${item}-${index}`}>{item}</button>)}</nav></div><section className="notification-preferences"><header><h2>Preferensi notifikasi</h2><p>Channel dan kategori mengikuti pengaturan akun.</p></header><div>{[["知","In-App","Pengumuman dan aktivitas aplikasi.","Aktif"],["郵","Email","Kelas, akun, dan transaksi.","Aktif"],["章","Belajar","Journey, latihan, dan achievement.","Aktif"],["話","Community","Balasan dan aktivitas thread.","Opsional"],["営","Promosi","Konten marketing opsional.","Off"]].map(([icon,title,description,state]) => <article key={title}><span>{icon}</span><div><strong>{title}</strong><small>{description}</small></div><b>{state}</b></article>)}</div></section><aside className="notification-announcement"><strong>Pengumuman</strong><p>Notifikasi transaksi dan keamanan tertentu tetap dikirim sesuai kebutuhan sistem.</p></aside></main></div>;
+  const renderItem = (item: typeof today[number]) => {
+    const Icon = item.icon;
+    return (
+      <article className={allRead || item.isRead ? "read" : "unread"} key={item.title}>
+        <span className="notification-icon" aria-hidden="true"><Icon /></span>
+        <div>
+          <small>{item.category} • Hari ini</small>
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+        </div>
+        {item.href ? <Link href={item.href}>{item.action}</Link> : <span className="notification-locked" aria-disabled="true">{item.action}</span>}
+      </article>
+    );
+  };
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="notifications" />
+      <main className="supporting-main notification-page">
+        <div className="progress-title-row">
+          <header className="supporting-header">
+            <p className="dash-kicker">NOTIFICATION CENTER</p>
+            <h1>Informasi penting tanpa mengganggu fokus</h1>
+            <p>Notifikasi pengingat belajar, pembaruan materi, dan informasi kelas penting.</p>
+          </header>
+          <Link href={`/profile${query}`}>Profil</Link>
+        </div>
+        <div className="notification-toolbar">
+          <div>
+            {["Semua", "Belum Dibaca", "Belajar", "Kelas", "Akun"].map((item) => (
+              <button className={filter === item ? "active" : ""} type="button" onClick={() => setFilter(item)} key={item}>{item}</button>
+            ))}
+          </div>
+          <button type="button" onClick={() => setAllRead(true)}>Tandai Semua Dibaca</button>
+        </div>
+        {visibleToday.length || visiblePrevious.length ? (
+          <>
+            <section className="notification-group"><h2>Hari ini</h2>{visibleToday.map(renderItem)}</section>
+            <section className="notification-group"><h2>Sebelumnya</h2>{visiblePrevious.map(renderItem)}</section>
+          </>
+        ) : (
+          <section className="library-empty"><h2>Tidak ada notifikasi</h2><p>Belum ada notifikasi pada filter ini.</p></section>
+        )}
+        <div className="notification-pagination">
+          <span>Menampilkan 1–20 dari 148 data</span>
+          <nav aria-label="Pagination">
+            {["‹", "1", "2", "3", "…", "8", "›"].map((item, index) => (
+              <button
+                className={String(page) === item ? "active" : ""}
+                type="button"
+                onClick={() => {
+                  if (item === "‹") setPage((value) => Math.max(1, value - 1));
+                  else if (item === "›") setPage((value) => Math.min(8, value + 1));
+                  else {
+                    const value = Number(item);
+                    if (value) setPage(value);
+                  }
+                }}
+                key={`${item}-${index}`}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
+        </div>
+        <section className="notification-preferences">
+          <header><h2>Preferensi notifikasi</h2><p>Channel dan kategori mengikuti pengaturan akun.</p></header>
+          <div>
+            {[
+              { icon: LuBell, title: "In-App", desc: "Pengumuman dan aktivitas belajar di aplikasi.", status: "Aktif" },
+              { icon: LuMail, title: "Email", desc: "Kelas, akun, dan transaksi.", status: "Aktif" },
+              { icon: LuBookOpen, title: "Belajar", desc: "Journey, latihan, dan achievement.", status: "Aktif" },
+              { icon: LuMessagesSquare, title: "Community", desc: "Balasan dan aktivitas thread.", status: "Opsional" },
+              { icon: LuTag, title: "Promosi", desc: "Konten informasi promo dan reward.", status: "Off" },
+            ].map(({ icon: Icon, title, desc, status }) => (
+              <article key={title}>
+                <span aria-hidden="true"><Icon /></span>
+                <div><strong>{title}</strong><small>{desc}</small></div>
+                <b>{status}</b>
+              </article>
+            ))}
+          </div>
+        </section>
+        <aside className="notification-announcement"><strong>Pengumuman</strong><p>Notifikasi transaksi dan keamanan akun tetap dikirim ke email terdaftar.</p></aside>
+      </main>
+    </div>
+  );
 }
 
 function CertificateScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const query = `?membership=${membership}`;
-  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">AKSES PREMIUM</p><h1>Akses ini belum aktif pada Free Member</h1><p>Sertifikat tersedia sesuai membership dan eligibility yang telah diverifikasi.</p><div className="status-actions"><Link className="button button-primary" href={`/renewal${query}`}>Lihat Membership</Link><Link className="button button-secondary" href={`/dashboard${query}`}>Kembali Dashboard</Link></div></section></main></div>;
+  if (membership === "free") return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="certificate" />
+      <main className="supporting-main">
+        <section className="sensei-status-panel">
+          <p className="dash-kicker">AKSES PREMIUM</p>
+          <h1>Akses ini belum aktif pada Free Member</h1>
+          <p>Sertifikat tersedia sesuai program belajar dan kelulusan yang telah diverifikasi.</p>
+          <div className="status-actions">
+            <Link className="button button-primary" href={`/renewal${query}`}>Lihat Membership</Link>
+            <Link className="button button-secondary" href={`/dashboard${query}`}>Kembali Dashboard</Link>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+
   const certificates = [
-    { icon: "証", title: "Sertifikat JLPT N5", program: "Program JLPT N5", recipient: "Member •••1", status: "Diterbitkan", href: `/certificate/n5${query}`, action: "Lihat Sertifikat", available: true },
-    { icon: "鍵", title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N4", status: "Eligible • Pending", action: "Lihat Kriteria", href: `/certificate/n4${query}`, available: false },
-    { icon: "鍵", title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N3", status: "Belum Eligible", action: "Lihat Kriteria", href: `/certificate/n3${query}`, available: false },
+    { icon: LuAward, title: "Sertifikat JLPT N5", program: "Program JLPT N5", recipient: "Hilmi", status: "Diterbitkan", href: `/certificate/n5${query}`, action: "Lihat Sertifikat", available: true },
+    { icon: LuLock, title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N4", status: "Dalam Proses", action: "Lihat Kriteria", href: `/certificate/n4${query}`, available: false },
+    { icon: LuLock, title: "Sertifikat belum tersedia", program: "Sertifikat JLPT N3", status: "Belum Memenuhi", action: "Lihat Kriteria", href: `/certificate/n3${query}`, available: false },
   ];
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main certificate-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">CERTIFICATE CENTER</p><h1>Sertifikat digital dari milestone yang tervalidasi</h1><p>Eligibility, issuance, download, dan status sertifikat berasal dari backend. Scope menggunakan sertifikat digital saja.</p></header><Link href={`/profile${query}`}>Profil</Link></div><section className="certificate-summary"><p className="dash-kicker">DIGITAL CREDENTIALS</p><h2>Satu sertifikat telah diterbitkan</h2><p>Jumlah, program, dan eligibility mengikuti progres serta assessment yang valid.</p><div className="certificate-flow"><span>Selesaikan journey</span><span>Penuhi assessment</span><span>Sertifikat terbit</span><span>Download / share</span></div></section><section className="certificate-grid">{certificates.map((item, index) => <article key={index} className={item.available ? "available" : "locked"}><span aria-hidden="true">{item.icon}</span><small>{item.available ? "DIGITAL" : ""}</small><h2>{item.title}</h2><p>{item.recipient ? `${item.recipient} • ` : ""}{item.program}</p><b>{item.status}</b>{item.href ? <Link href={item.href}>{item.action} →</Link> : <button className="disabled" type="button" aria-disabled="true">{item.action} →</button>}</article>)}</section><aside className="certificate-notice"><strong>Pengumuman</strong><p>Sertifikat diterbitkan otomatis atau melalui review setelah semua kriteria backend terpenuhi.</p></aside></main></div>;
+
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="certificate" />
+      <main className="supporting-main certificate-page">
+        <div className="progress-title-row">
+          <header className="supporting-header">
+            <p className="dash-kicker">CERTIFICATE CENTER</p>
+            <h1>Sertifikat digital dari milestone yang tervalidasi</h1>
+            <p>Kelulusan, penerbitan, unduh, dan status sertifikat resmi digital HIRU Academy.</p>
+          </header>
+          <Link href={`/profile${query}`}>Profil</Link>
+        </div>
+        <section className="certificate-summary">
+          <p className="dash-kicker">DIGITAL CREDENTIALS</p>
+          <h2>Satu sertifikat telah diterbitkan</h2>
+          <p>Jumlah, program, dan kelulusan mengikuti progres serta assessment yang valid.</p>
+          <div className="certificate-flow">
+            <span>Selesaikan journey</span>
+            <span>Penuhi assessment</span>
+            <span>Sertifikat terbit</span>
+            <span>Download / share</span>
+          </div>
+        </section>
+        <section className="certificate-grid">
+          {certificates.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <article key={index} className={item.available ? "available" : "locked"}>
+                <span aria-hidden="true"><Icon /></span>
+                <small>{item.available ? "DIGITAL" : ""}</small>
+                <h2>{item.title}</h2>
+                <p>{item.recipient ? `${item.recipient} • ` : ""}{item.program}</p>
+                <b>{item.status}</b>
+                {item.href ? <Link href={item.href}>{item.action} →</Link> : <button className="disabled" type="button" aria-disabled="true">{item.action} →</button>}
+              </article>
+            );
+          })}
+        </section>
+        <aside className="certificate-notice"><strong>Pengumuman</strong><p>Sertifikat diterbitkan otomatis setelah seluruh kriteria kelulusan terpenuhi.</p></aside>
+      </main>
+    </div>
+  );
 }
 
 function CommunityScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
@@ -77,33 +628,237 @@ function CommunityScreen({ membership }: { membership: "free" | "lms" | "sensei"
   const canWrite = membership !== "free";
   const posts = [
     { id: "post-1", tag: isSensei ? "Tanya Sensei" : "Diskusi Member", title: "Perbedaan penggunaan に dan で untuk tempat?", summary: "Pertanyaan grammar untuk memahami konteks aktivitas dan lokasi.", href: `/community/post-1${query}` },
-    { id: "post-2", tag: "Semua Akses", title: "Pengingat jadwal dan materi minggu ini", summary: "Info dari Hiru untuk pembelajar.", href: undefined },
+    { id: "post-2", tag: "Semua Akses", title: "Pengingat jadwal dan materi minggu ini", summary: "Info dari HIRU untuk seluruh pembelajar.", href: undefined },
     { id: "post-3", tag: "Diskusi Member", title: "Tips menjaga konsistensi flashcard N4", summary: "Forum diskusi dengan sesama pembelajar.", href: undefined },
   ];
   const visible = posts.filter((p) => p.title.toLowerCase().includes(search.toLowerCase()));
 
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main community-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">FORUM KOMUNITAS</p><h1>Berdiskusi, bertanya, dan berbagi perjalanan belajar</h1><p>{isSensei ? "Belajar dengan Sensei dapat membuat post, membalas komentar, dan menggunakan Tanya Sensei sesuai entitlement." : canWrite ? "Belajar Mandiri dapat membuat post, membalas komentar, dan melaporkan konten sesuai entitlement." : "Free Member dapat membaca. Post, komentar, dan Tanya Sensei tetap terkunci sesuai entitlement."}</p></header>{canWrite && <Link className="button button-dark" href={`/community/create${query}`}>Buat Postingan</Link>}</div><section className="community-access-grid">{[["Tanya Sensei", "Pertanyaan untuk pengajar pada plan Belajar dengan Sensei."],["Diskusi Member", "Forum diskusi dengan sesama pembelajar."],["Info dari Hiru", "Pengumuman, event, dan informasi akademi."],["Kerja ke Jepang", "Informasi karier dan persiapan profesional."]].map(([title, desc]) => <article key={title}><strong>{title}</strong><p>{desc}</p></article>)}</section><section className="community-feed-head"><div><p className="dash-kicker">Diskusi terbaru</p><small>Urutan dan engagement berasal dari data backend.</small></div><label className="library-search"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari diskusi atau topik" /></label></section><section className="community-list">{visible.map((post) => <article key={post.id}><div><span>{post.tag}</span><h2>{post.title}</h2><p>{post.summary}</p></div>{post.href ? <Link className="button button-primary" href={post.href}>Buka</Link> : <span className="button button-secondary disabled" aria-disabled="true">Belum tersedia</span>}</article>)}</section></main></div>;
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="community" />
+      <main className="supporting-main community-page">
+        <div className="progress-title-row">
+          <header className="supporting-header">
+            <p className="dash-kicker">FORUM KOMUNITAS</p>
+            <h1>Berdiskusi, bertanya, dan berbagi perjalanan belajar</h1>
+            <p>
+              {isSensei
+                ? "Belajar dengan Sensei dapat membuat post, membalas komentar, dan menggunakan Tanya Sensei."
+                : canWrite
+                ? "Belajar Mandiri dapat membuat post, membalas komentar, dan berdiskusi di forum."
+                : "Free Member dapat membaca seluruh diskusi aktif. Post dan komentar terbuka setelah upgrade."}
+            </p>
+          </header>
+          {canWrite && <Link className="button button-dark" href={`/community/create${query}`}>Buat Postingan</Link>}
+        </div>
+        <section className="community-access-grid">
+          {[
+            ["Tanya Sensei", "Pertanyaan untuk pengajar pada plan Belajar dengan Sensei."],
+            ["Diskusi Member", "Forum diskusi dengan sesama pembelajar."],
+            ["Info dari HIRU", "Pengumuman, event, dan informasi akademi."],
+            ["Kerja ke Jepang", "Informasi karier dan persiapan profesional."],
+          ].map(([title, desc]) => (
+            <article key={title}><strong>{title}</strong><p>{desc}</p></article>
+          ))}
+        </section>
+        <section className="community-feed-head">
+          <div><p className="dash-kicker">Diskusi terbaru</p><small>Aktivitas diskusi pembelajar aktif.</small></div>
+          <label className="library-search">
+            <span aria-hidden="true"><LuSearch /></span>
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari diskusi atau topik" />
+          </label>
+        </section>
+        <section className="community-list">
+          {visible.map((post) => (
+            <article key={post.id}>
+              <div>
+                <span>{post.tag}</span>
+                <h2>{post.title}</h2>
+                <p>{post.summary}</p>
+              </div>
+              {post.href ? <Link className="button button-primary" href={post.href}>Buka</Link> : <span className="button button-secondary disabled" aria-disabled="true">Belum tersedia</span>}
+            </article>
+          ))}
+        </section>
+      </main>
+    </div>
+  );
 }
 
 function CreatePostScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const [submitted, setSubmitted] = useState(false);
   const query = `?membership=${membership}`;
-  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">COMMUNITY • READ ONLY</p><h1>Postingan baru belum tersedia</h1><p>Free Member dapat membaca thread. Hak membuat postingan mengikuti entitlement.</p><Link className="button button-secondary" href={`/community${query}`}>Kembali ke Community</Link></section></main></div>;
-  if (submitted) return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">COMMUNITY</p><h1>Postingan siap ditinjau</h1><p>Postingan fixture mengikuti aturan komunitas dan dapat melalui moderasi.</p><Link className="button button-primary" href={`/community${query}`}>Kembali ke Community</Link></section></main></div>;
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main"><header className="supporting-header"><p className="dash-kicker">BUAT POSTINGAN</p><h1>Bagikan pertanyaan atau pengalaman belajar</h1></header><form className="form-stack" onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}><label><span>Kategori</span><select><option>Diskusi Member</option></select></label><label><span>Judul</span><input required placeholder="Tulis judul postingan" /><small>Teks bantuan opsional</small></label><label><span>Ringkasan</span><textarea required /></label><p>Postingan mengikuti aturan komunitas dan dapat melalui moderasi.</p><div className="button-group"><button type="submit" className="button button-primary">Publikasikan</button><Link href={`/community${query}`} className="button button-secondary">Batal</Link></div></form></main></div>;
+  if (membership === "free") return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="community" />
+      <main className="supporting-main">
+        <section className="sensei-status-panel">
+          <p className="dash-kicker">COMMUNITY • READ ONLY</p>
+          <h1>Postingan baru belum tersedia</h1>
+          <p>Free Member dapat membaca thread. Hak membuat postingan tersedia pada paket Belajar Mandiri atau Sensei.</p>
+          <Link className="button button-secondary" href={`/community${query}`}>Kembali ke Community</Link>
+        </section>
+      </main>
+    </div>
+  );
+
+  if (submitted) return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="community" />
+      <main className="supporting-main">
+        <section className="sensei-status-panel">
+          <p className="dash-kicker">COMMUNITY</p>
+          <h1>Postingan siap ditinjau</h1>
+          <p>Postingan berhasil dikirim dan dapat melalui proses moderasi.</p>
+          <Link className="button button-primary" href={`/community${query}`}>Kembali ke Community</Link>
+        </section>
+      </main>
+    </div>
+  );
+
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="community" />
+      <main className="supporting-main">
+        <header className="supporting-header">
+          <p className="dash-kicker">BUAT POSTINGAN</p>
+          <h1>Bagikan pertanyaan atau pengalaman belajar</h1>
+        </header>
+        <form className="form-stack" onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}>
+          <label><span>Kategori</span><select><option>Diskusi Member</option><option>Tanya Sensei</option></select></label>
+          <label><span>Judul</span><input required placeholder="Tulis judul postingan" /><small>Tulis judul yang spesifik agar mudah ditemukan.</small></label>
+          <label><span>Ringkasan</span><textarea required rows={4} /></label>
+          <p>Postingan mengikuti aturan komunitas dan tata krama belajar.</p>
+          <div className="button-group">
+            <button type="submit" className="button button-primary">Publikasikan</button>
+            <Link href={`/community${query}`} className="button button-secondary">Batal</Link>
+          </div>
+        </form>
+      </main>
+    </div>
+  );
 }
 
 function ProgressScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const query = `?membership=${membership}`;
-  const milestones = [["o","Fondasi N4","Chapter awal dan checkpoint","Selesai"],["o","Rutinitas Harian","Video, modul, dan latihan","Selesai"],["03","Pola Kalimat","Chapter aktif","Aktif"],["04","Try Out N4","Tersedia setelah journey","Terkunci"],["05","Sertifikat N4","Mengikuti eligibility","Terkunci"]];
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="progress" /><main className="supporting-main progress-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">PROGRES &amp; ACHIEVEMENT</p><h1>Rayakan progres tanpa kehilangan fokus</h1><p>Progress, streak, mastery, dan achievement dihitung dari journey serta aktivitas backend.</p></header><Link href={`/profile${query}`}>Profil</Link></div><section className="progress-summary"><div><p className="dash-kicker">MEMBER  LEVEL N4</p><h2>Perjalanan belajar terus bertumbuh</h2><p>Persentase dan milestone mengikuti completion serta assessment yang valid.</p><span>12 Hari Streak</span></div><div className="progress-stats">{[["65%","Journey N4"],["450","Kanji mastered"],["?","Latihan selesai"],["?","Try Out terbaik"]].map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></section><section className="progress-milestones"><h2>Milestone journey</h2>{milestones.map(([number,title,description,status]) => <article key={title}><span>{number}</span><div><strong>{title}</strong><small>{description}</small></div><b>{status}</b></article>)}</section><section className="progress-achievements"><div className="progress-tabs"><button className="active" type="button">Achievement</button><Link href={`/leaderboard${query}`}>Leaderboard</Link></div><div>{[["?","Streak 7 Hari","Belajar konsisten selama tujuh hari.","Terbuka"],["o-","Flashcard Master","Menyelesaikan target flashcard.","Terbuka"],["c","Try Out Finisher","Menyelesaikan Try Out pertama.","Belum terbuka"],["\"","Certificate Ready","Memenuhi eligibility sertifikat.","Belum terbuka"]].map(([icon,title,description,status]) => <article key={title}><span>{icon}</span><h2>{title}</h2><p>{description}</p><b>{status}</b></article>)}</div></section></main></div>;
+  const milestones = [
+    ["1", "Fondasi N4", "Chapter awal dan checkpoint", "Selesai"],
+    ["2", "Rutinitas Harian", "Video, modul, dan latihan", "Selesai"],
+    ["3", "Pola Kalimat", "Chapter aktif", "Aktif"],
+    ["4", "Try Out N4", "Tersedia setelah journey", "Terkunci"],
+    ["5", "Sertifikat N4", "Mengikuti kelulusan milestone", "Terkunci"],
+  ];
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="progress" />
+      <main className="supporting-main progress-page">
+        <div className="progress-title-row">
+          <header className="supporting-header">
+            <p className="dash-kicker">PROGRES &amp; ACHIEVEMENT</p>
+            <h1>Rayakan progres tanpa kehilangan fokus</h1>
+            <p>Progress, streak, mastery, dan pencapaian dihitung dari journey serta aktivitas belajarmu.</p>
+          </header>
+          <Link href={`/profile${query}`}>Profil</Link>
+        </div>
+        <section className="progress-summary">
+          <div>
+            <p className="dash-kicker">MEMBER LEVEL N4</p>
+            <h2>Perjalanan belajar terus bertumbuh</h2>
+            <p>Persentase dan milestone mengikuti progres belajar yang valid.</p>
+            <span>12 Hari Streak</span>
+          </div>
+          <div className="progress-stats">
+            {[["65%", "Journey N4"], ["450", "Kanji mastered"], ["18", "Latihan selesai"], ["82%", "Akurasi"]].map(([value, label]) => (
+              <div key={label}><strong>{value}</strong><span>{label}</span></div>
+            ))}
+          </div>
+        </section>
+        <section className="progress-milestones">
+          <h2>Milestone journey</h2>
+          {milestones.map(([number, title, description, status]) => (
+            <article key={title}>
+              <span>{number}</span>
+              <div><strong>{title}</strong><small>{description}</small></div>
+              <b>{status}</b>
+            </article>
+          ))}
+        </section>
+        <section className="progress-achievements">
+          <div className="progress-tabs">
+            <button className="active" type="button">Achievement</button>
+            <Link href={`/leaderboard${query}`}>Leaderboard</Link>
+          </div>
+          <div>
+            {[
+              { icon: LuFlame, title: "Streak 7 Hari", desc: "Belajar konsisten selama tujuh hari.", status: "Terbuka" },
+              { icon: LuLayers3, title: "Flashcard Master", desc: "Menyelesaikan target flashcard.", status: "Terbuka" },
+              { icon: LuClipboardCheck, title: "Try Out Finisher", desc: "Menyelesaikan Try Out pertama.", status: "Belum terbuka" },
+              { icon: LuAward, title: "Certificate Ready", desc: "Memenuhi syarat sertifikat.", status: "Belum terbuka" },
+            ].map(({ icon: Icon, title, desc, status }) => (
+              <article key={title}>
+                <span aria-hidden="true"><Icon /></span>
+                <h2>{title}</h2>
+                <p>{desc}</p>
+                <b>{status}</b>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }
 
 function LeaderboardScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const [period, setPeriod] = useState("Mingguan");
   const query = `?membership=${membership}`;
-  const rows = [["04","Member 4","Member community","+ 2"],["05","Member 5","Member community","?"],["06","Member 6","Member community","+ 1"],["07","Kamu","Posisimu saat ini","+ 3"],["08","Member 8","Member community","?"]];
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="leaderboard" /><main className="supporting-main leaderboard-page"><div className="progress-title-row"><header className="supporting-header"><p className="dash-kicker">LEADERBOARD</p><h1>Bandingkan konsistensi, bukan tekanan</h1><p>Poin, periode, cohort, rank, dan movement berasal dari backend serta dapat menggunakan nama samaran.</p></header><Link href={`/progress${query}`}>Progres</Link></div><div className="leaderboard-filters">{["Mingguan","Bulanan","N4","Cohort","Semua Member"].map((filter) => <button className={period === filter ? "active" : ""} type="button" onClick={() => setPeriod(filter)} key={filter}>{filter}</button>)}</div><section className="leaderboard-podium">{[["#02","Member 2"],["#01","Member 1"],["#03","Member 3"]].map(([rank,name]) => <article className={rank === "#01" ? "winner" : ""} key={rank}><strong>{rank}</strong><h2>{name}</h2><span>Poin ?</span></article>)}</section><section className="leaderboard-list">{rows.map(([rank,name,meta,movement]) => <article className={name === "Kamu" ? "current" : ""} key={rank}><strong>{rank}</strong><div><h2>{name}</h2><span>{meta}</span></div><div><b>Poin ?</b><small>Poin dinamis</small></div><i>{movement}</i></article>)}</section><aside className="leaderboard-notice"><strong>Pengumuman</strong><p>Leaderboard dapat menggunakan nama samaran dan hanya menampilkan aktivitas yang diizinkan.</p></aside></main></div>;
+  const rows = [
+    ["04", "Member 4", "Member community", "+ 2"],
+    ["05", "Member 5", "Member community", "—"],
+    ["06", "Member 6", "Member community", "+ 1"],
+    ["07", "Kamu", "Posisimu saat ini", "+ 3"],
+    ["08", "Member 8", "Member community", "—"],
+  ];
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="leaderboard" />
+      <main className="supporting-main leaderboard-page">
+        <div className="progress-title-row">
+          <header className="supporting-header">
+            <p className="dash-kicker">LEADERBOARD</p>
+            <h1>Bandingkan konsistensi, bukan tekanan</h1>
+            <p>Poin pengalaman (XP) dihitung dari latihan harian, chapter, dan review materi.</p>
+          </header>
+          <Link href={`/progress${query}`}>Progres</Link>
+        </div>
+        <div className="leaderboard-filters">
+          {["Mingguan", "Bulanan", "N4", "Cohort", "Semua Member"].map((filter) => (
+            <button className={period === filter ? "active" : ""} type="button" onClick={() => setPeriod(filter)} key={filter}>{filter}</button>
+          ))}
+        </div>
+        <section className="leaderboard-podium">
+          {[["#02", "Member 2", "11.200 XP"], ["#01", "Member 1", "12.450 XP"], ["#03", "Member 3", "10.850 XP"]].map(([rank, name, xp]) => (
+            <article className={rank === "#01" ? "winner" : ""} key={rank}>
+              <strong>{rank}</strong>
+              <h2>{name}</h2>
+              <span>{xp}</span>
+            </article>
+          ))}
+        </section>
+        <section className="leaderboard-list">
+          {rows.map(([rank, name, meta, movement]) => (
+            <article className={name === "Kamu" ? "current" : ""} key={rank}>
+              <strong>{rank}</strong>
+              <div><h2>{name}</h2><span>{meta}</span></div>
+              <div><b>9.120 XP</b><small>Skor aktif</small></div>
+              <i>{movement}</i>
+            </article>
+          ))}
+        </section>
+        <aside className="leaderboard-notice"><strong>Pengumuman</strong><p>Leaderboard dapat menggunakan nama samaran dan hanya menampilkan aktivitas yang diizinkan.</p></aside>
+      </main>
+    </div>
+  );
 }
 
 function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
@@ -112,22 +867,133 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
   const [type, setType] = useState("Semua");
   const [locked, setLocked] = useState(false);
   const materials = [
-    { icon: "-", type: "Tata Bahasa", title: "Pola Kalimat Sehari-hari", description: "Modul Chapter 4 yang terakhir dibuka.", status: "Tersimpan", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/grammar?membership=${membership}` },
-    { icon: "", type: "Kanji", title: "Keadaan, Waktu & Aktivitas", description: "Kanji chapter dengan bookmark dan catatan.", status: "Tersedia", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/kanji?membership=${membership}` },
-    { icon: "AUDIO", type: "Audio", title: "Simulasi Choukai N4", description: "Akses audio lengkap mengikuti membership.", status: "Terkunci" },
+    { icon: LuBookOpen, type: "Tata Bahasa", title: "Pola Kalimat Sehari-hari", description: "Modul Chapter 4 yang terakhir dibuka.", status: "Tersimpan", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/grammar?membership=${membership}` },
+    { icon: LuLayers3, type: "Kanji", title: "Keadaan, Waktu & Aktivitas", description: "Kanji chapter dengan bookmark dan catatan.", status: "Tersedia", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/kanji?membership=${membership}` },
+    { icon: LuBookOpen, type: "Audio", title: "Simulasi Choukai N4", description: "Akses audio lengkap mengikuti membership.", status: "Terkunci" },
   ];
   const visible = materials.filter((item) => (type === "Semua" || item.type === type) && item.title.toLowerCase().includes(search.toLowerCase()) && (level === "Semua" || level === "N4"));
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="library" /><main className="supporting-main library-page"><header className="supporting-header"><p className="dash-kicker">PERPUSTAKAAN MATERI</p><h1>Temukan kembali materi dari seluruh journey</h1><p>Akses material mengikuti level dan entitlement membership.</p></header><label className="library-search"><span aria-hidden="true">O </span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari materi, tata bahasa, kanji, atau audio" /></label><div className="library-filters">{["Semua","N5","N4","N3","SSW","Interview"].map((item) => <button className={level === item ? "active" : ""} type="button" onClick={() => setLevel(item)} key={item}>{item}</button>)}</div><div className="library-filters types">{["Semua","Tata Bahasa","Kanji","Kosakata","Audio","Reading"].map((item) => <button className={type === item ? "active" : ""} type="button" onClick={() => setType(item)} key={item}>{item}</button>)}</div>{visible.length ? <><section className="library-section-head"><h2>Rekomendasi N4</h2></section><section className="library-material-grid">{visible.map((item) => <article key={item.title}><span aria-hidden="true">{item.icon}</span><small>{item.type}</small><h2>{item.title}</h2><p>{item.description}</p><b>{item.status}</b>{item.href ? <Link aria-label={`${item.type}: ${item.title}`} href={item.href}>Buka materi</Link> : <button type="button" onClick={() => setLocked(true)} aria-label={`${item.type}: ${item.title}`}>Lihat status</button>}</article>)}</section><section className="library-recent"><p className="dash-kicker">Baru dibuka</p>{[["z","Flashcard Chapter 4","Kosakata"],["-","Reading Aktivitas Harian","Reading"],["c","Review Try Out 1","Try Out"]].map(([icon,title,meta]) => <div key={title}><span>{icon}</span><strong>{title}</strong><small>{meta}</small></div>)}</section></> : <section className="library-empty"><p className="dash-kicker">LIBRARY  EMPTY</p><h2>Belum ada materi pada filter ini</h2><span>c</span><p>Ubah level, kategori, atau kata kunci untuk menemukan materi yang tersedia.</p><small>Filter dapat direset  Entitlement tetap diperiksa  Data berasal dari backend</small><button type="button" onClick={() => { setSearch(""); setLevel("Semua"); setType("Semua"); }}>Reset Filter</button></section>}{locked && <div className="library-locked" role="dialog" aria-modal="true" aria-labelledby="library-locked-title"><section><p className="dash-kicker">CONTENT  LOCKED</p><h2 id="library-locked-title">Materi belum termasuk dalam aksesmu</h2><span></span><p>Akses mengikuti level dan plan membership. Progress yang sudah tersimpan tidak hilang.</p><small>Plan gated  Backend authority  Renewal atau upgrade tersedia</small><div><Link href={`/renewal?membership=${membership}`}>Lihat Membership</Link><button type="button" onClick={() => setLocked(false)}>Kembali ke Library</button></div></section></div>}</main></div>;
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="library" />
+      <main className="supporting-main library-page">
+        <header className="supporting-header">
+          <p className="dash-kicker">PERPUSTAKAAN MATERI</p>
+          <h1>Temukan kembali materi dari seluruh journey</h1>
+          <p>Akses arsip materi, tata bahasa, kanji, dan audio pembelajaran yang telah dipelajari.</p>
+        </header>
+        <label className="library-search">
+          <span aria-hidden="true"><LuSearch /></span>
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari materi, tata bahasa, kanji, atau audio" />
+        </label>
+        <div className="library-filters">{["Semua", "N5", "N4", "N3", "SSW", "Interview"].map((item) => (
+          <button className={level === item ? "active" : ""} type="button" onClick={() => setLevel(item)} key={item}>{item}</button>
+        ))}</div>
+        <div className="library-filters types">{["Semua", "Tata Bahasa", "Kanji", "Kosakata", "Audio", "Reading"].map((item) => (
+          <button className={type === item ? "active" : ""} type="button" onClick={() => setType(item)} key={item}>{item}</button>
+        ))}</div>
+        {visible.length ? (
+          <>
+            <section className="library-section-head"><h2>Rekomendasi N4</h2></section>
+            <section className="library-material-grid">{visible.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article key={item.title}>
+                  <span aria-hidden="true"><Icon /></span>
+                  <small>{item.type}</small>
+                  <h2>{item.title}</h2>
+                  <p>{item.description}</p>
+                  <b>{item.status}</b>
+                  {item.href ? (
+                    <Link aria-label={`${item.type}: ${item.title}`} href={item.href}>Buka materi</Link>
+                  ) : (
+                    <button type="button" onClick={() => setLocked(true)} aria-label={`${item.type}: ${item.title}`}>Lihat status</button>
+                  )}
+                </article>
+              );
+            })}</section>
+          </>
+        ) : (
+          <section className="library-empty">
+            <p className="dash-kicker">LIBRARY EMPTY</p>
+            <h2>Belum ada materi pada filter ini</h2>
+            <p>Ubah level, kategori, atau kata kunci untuk menemukan materi yang tersedia.</p>
+            <button type="button" onClick={() => { setSearch(""); setLevel("Semua"); setType("Semua"); }}>Reset Filter</button>
+          </section>
+        )}
+        {locked && (
+          <div className="library-locked" role="dialog" aria-modal="true" aria-labelledby="library-locked-title">
+            <section>
+              <p className="dash-kicker">CONTENT LOCKED</p>
+              <h2 id="library-locked-title">Materi belum termasuk dalam aksesmu</h2>
+              <p>Akses mengikuti level dan paket membership aktif. Progress yang sudah tersimpan tidak hilang.</p>
+              <div>
+                <Link href={`/renewal?membership=${membership}`}>Lihat Membership</Link>
+                <button type="button" onClick={() => setLocked(false)}>Kembali ke Library</button>
+              </div>
+            </section>
+          </div>
+        )}
+      </main>
+    </div>
+  );
 }
 
 function PaidPractice({ membership }: { membership: "lms" | "sensei" }) {
   const base = "/learn/n4/chapter-4";
   const query = `?membership=${membership}`;
   const modes = [
-    ["o-", "REKOMENDASI", "Flashcard Review", "Ulangi kosakata dan pola dengan confidence state.", "5-10 menit  deck level aktif", `${base}/flashcards${query}`],
-    ["AUDIO", "TERSEDIA", "Audio Drill", "Latihan listening dari Chapter aktif.", "10 soal  hasil langsung", `${base}/audio${query}`],
-    ["-", "TERSEDIA", "Reading Drill", "Bacaan pendek dengan penjelasan jawaban.", "8 soal  fokus Dokkai", `${base}/reading${query}`],
-    ["c", "TERSEDIA", "Checkpoint Retry", "Ulangi checkpoint sesuai attempt rule Chapter.", "Nilai terbaru tersimpan", `${base}/checkpoint${query}`],
+    { icon: LuLayers3, status: "REKOMENDASI", title: "Flashcard Review", description: "Ulangi kosakata dan pola dengan tingkat keyakinan.", meta: "5-10 menit • deck level aktif", href: `${base}/flashcards${query}` },
+    { icon: LuBookOpen, status: "TERSEDIA", title: "Audio Drill", description: "Latihan listening dari Chapter aktif.", meta: "10 soal • hasil langsung", href: `${base}/audio${query}` },
+    { icon: LuBookOpen, status: "TERSEDIA", title: "Reading Drill", description: "Bacaan pendek dengan penjelasan jawaban.", meta: "8 soal • fokus Dokkai", href: `${base}/reading${query}` },
+    { icon: LuClipboardCheck, status: "TERSEDIA", title: "Checkpoint Retry", description: "Ulangi checkpoint sesuai target Chapter.", meta: "Nilai terbaru tersimpan", href: `${base}/checkpoint${query}` },
   ];
-  return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="supporting" /><main className="supporting-main practice-page"><header className="supporting-header"><p className="dash-kicker">LATIHAN HARIAN • {membership === "sensei" ? "BELAJAR DENGAN SENSEI" : "BELAJAR MANDIRI"}</p><h1>Latihan singkat berdasarkan progresmu</h1><p>Aktivitas harian terpisah dari Try Out. Soal latihan dapat memuat gambar yang diunggah Admin.</p><span className="supporting-badge practice-active">AKTIF</span></header><section className="practice-recommendation"><div><p className="dash-kicker">REKOMENDASI HARI INI</p><h2>Perkuat Chapter 4 dalam 15-20 menit</h2><p>Urutan latihan dibuat dari kesalahan terakhir, confidence flashcard, dan checkpoint yang perlu diulang.</p><div><Link className="button button-primary" href={`${base}/flashcards${query}`}>Mulai Rekomendasi</Link><Link className="button button-dark" href={`/tryout${query}`}>Buka Daftar Try Out</Link></div></div><div className="practice-metrics">{[["4 aktivitas","Target harian"],["12 hari","Hari beruntun"],["18","Selesai minggu ini"],["82%","Akurasi"]].map(([value,label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></section><section className="practice-section-head"><p className="dash-kicker">PILIH MODE</p><h2>Latihan Harian</h2><p>Pilih aktivitas singkat tanpa masuk ke alur Try Out.</p></section><section className="practice-mode-grid">{modes.map(([icon,status,title,description,meta,href]) => <article key={title}><span className="supporting-icon" aria-hidden="true">{icon}</span><small>{status}</small><h2>{title}</h2><p>{description}</p><b>{meta}</b><Link href={href}>Buka +</Link></article>)}</section><section className="practice-history"><p className="dash-kicker">RIWAYAT HARIAN</p><h2>Aktivitas terakhir</h2><p>Riwayat latihan tetap terpisah dari hasil Try Out.</p><div><span>Hari ini  Flashcard Review  86% akurasi</span><span>Kemarin  Audio Drill  8/10 benar</span><span>2 hari lalu  Reading Drill  7/8 benar</span></div></section></main></div>;
+  return (
+    <div className="supporting-shell student-shell">
+      <StudentNavigation membership={membership} current="supporting" />
+      <main className="supporting-main practice-page">
+        <header className="supporting-header">
+          <p className="dash-kicker">LATIHAN HARIAN • {membership === "sensei" ? "BELAJAR DENGAN SENSEI" : "BELAJAR MANDIRI"}</p>
+          <h1>Latihan singkat berdasarkan progresmu</h1>
+          <p>Aktivitas harian terpisah dari Try Out untuk memperkuat pemahaman materi setiap hari.</p>
+          <span className="supporting-badge practice-active">AKTIF</span>
+        </header>
+        <section className="practice-recommendation">
+          <div>
+            <p className="dash-kicker">REKOMENDASI HARI INI</p>
+            <h2>Perkuat Chapter 4 dalam 15-20 menit</h2>
+            <p>Urutan latihan disusun dari kartu flashcard yang perlu diulang dan soal latihan terakhir.</p>
+            <div>
+              <Link className="button button-primary" href={`${base}/flashcards${query}`}>Mulai Rekomendasi</Link>
+              <Link className="button button-dark" href={`/tryout${query}`}>Buka Daftar Try Out</Link>
+            </div>
+          </div>
+          <div className="practice-metrics">
+            {[["4 aktivitas", "Target harian"], ["12 hari", "Hari beruntun"], ["18", "Selesai minggu ini"], ["82%", "Akurasi"]].map(([value, label]) => (
+              <div key={label}><strong>{value}</strong><span>{label}</span></div>
+            ))}
+          </div>
+        </section>
+        <section className="practice-section-head">
+          <p className="dash-kicker">PILIH MODE</p>
+          <h2>Latihan Harian</h2>
+          <p>Pilih aktivitas latihan singkat tanpa memulai simulasi Try Out resmi.</p>
+        </section>
+        <section className="practice-mode-grid">
+          {modes.map((mode) => {
+            const Icon = mode.icon;
+            return (
+              <article key={mode.title}>
+                <span className="supporting-icon" aria-hidden="true"><Icon /></span>
+                <small>{mode.status}</small>
+                <h2>{mode.title}</h2>
+                <p>{mode.description}</p>
+                <b>{mode.meta}</b>
+                <Link href={mode.href}>Buka +</Link>
+              </article>
+            );
+          })}
+        </section>
+      </main>
+    </div>
+  );
 }
