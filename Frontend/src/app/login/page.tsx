@@ -17,12 +17,12 @@ export default function LoginPage() {
   return (
     <AuthShell
       eyebrow="KEMBALI KE PERJALANAN BELAJARMU"
-      title="Dashboard yang dibuka setelah login mengikuti membership dan entitlement akun."
+      title="Lanjutkan Belajarmu dari Progres Terakhir"
       description=""
     >
       <div className="auth-card-inner">
         <h2>Masuk ke Hiru Academy</h2>
-        <p className="auth-description">Gunakan email atau nomor WhatsApp dan kata sandi yang terhubung dengan membership-mu.</p>
+        <p className="auth-description">Gunakan email atau nomor WhatsApp dan kata sandimu.</p>
 
         <form className="auth-form" onSubmit={submit}>
           <div className="auth-field">
@@ -46,10 +46,6 @@ export default function LoginPage() {
           <p className="auth-switch">Belum punya akun? <Link className="text-link" href="/register">Daftar</Link></p>
         </form>
 
-        <div className="auth-announcement" style={{ marginTop: "28px" }}>
-          <strong>Pengumuman</strong>
-          <p>Akses setelah login mengikuti Free, LMS, atau LMS + Zoom pada akun.</p>
-        </div>
       </div>
     </AuthShell>
   );

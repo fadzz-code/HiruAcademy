@@ -29,8 +29,8 @@ function RegisterForm() {
         <div className="register-sidebar-inner">
           <p className="kicker">DAFTAR DAN SIMPAN REKOMENDASI</p>
           <h2>Simpan hasil dan mulai perjalananmu</h2>
-          <p>Target ujian dapat diubah. Kode referral bersifat opsional dan divalidasi sebelum invoice dibuat.</p>
-          <p>Akun digunakan untuk progres, entitlement, invoice, community, dan rekomendasi belajar.</p>
+          <p>Target ujian dapat diubah. Kode referral bersifat opsional.</p>
+          <p>Simpan progres dan rekomendasi belajar dalam satu akun.</p>
           <hr />
           <ol className="register-steps">
             <li>
@@ -44,7 +44,7 @@ function RegisterForm() {
               <strong>02</strong>
               <div>
                 <h3>Konfirmasi target &amp; program</h3>
-                <p>Target ujian, level, dan plan dapat diperiksa kembali.</p>
+                <p>Target ujian, level dan program dapat diubah setelah mendaftar.</p>
               </div>
             </li>
             <li>
@@ -95,16 +95,13 @@ function RegisterForm() {
             </label>
 
             {plan !== "Free Member" && <label className="referral-field">Kode Referral (Opsional)<input name="referral" type="text" placeholder="Masukkan kode referral" />
-              <small>Opsional • divalidasi backend<br/>Kode valid memberi diskon pada pembelian ini. Pemilik kode menerima reward diskon setelah invoice diverifikasi Admin.</small>
+              <small>Kode valid memberi diskon pada pembelian ini.</small>
             </label>}
           </div>
 
           <div className="register-actions">
             <p className="register-notice">Progres placement dan rekomendasi level akan disimpan pada akun.</p>
-            <div className="runner-actions">
-              <button className="button button-primary" type="submit">Buat Akun &amp; Lanjut</button>
-              <Link className="button button-dark" href="/program">Kembali ke Program</Link>
-            </div>
+            <button className="button button-primary" type="submit">Buat Akun</button>
             <p className="auth-switch">Sudah punya akun? <Link className="text-link" href="/login">Masuk</Link></p>
           </div>
         </form>
