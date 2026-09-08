@@ -19,7 +19,7 @@ export function FlashcardSession({ cards, membership, level, chapter }: { cards:
     if (isAnimating) return;
     setIsAnimating(true);
     surfaceRef.current?.classList.add("is-flipping");
-    flipTimer.current = setTimeout(() => setFlipped((current) => !current), 175);
+    flipTimer.current = setTimeout(() => setFlipped((current) => !current), 300);
   }
 
   function move(direction: -1 | 1) {
