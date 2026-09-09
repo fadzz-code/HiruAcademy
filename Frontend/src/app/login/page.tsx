@@ -18,7 +18,7 @@ export default function LoginPage() {
     <AuthShell
       eyebrow="KEMBALI KE PERJALANAN BELAJARMU"
       title="Lanjutkan Belajarmu dari Progres Terakhir"
-      description=""
+      description="Lanjutkan belajarmu dari progres terakhir. Materi, latihan, rekaman kelas, dan evaluasimu tersimpan rapi dalam satu akun Hiru Academy."
     >
       <div className="auth-card-inner">
         <h2>Masuk ke Hiru Academy</h2>

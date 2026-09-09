@@ -27,11 +27,8 @@ function RegisterForm() {
     <div className="register-layout">
       <aside className="register-sidebar">
         <div className="register-sidebar-inner">
-          <p className="kicker">DAFTAR DAN SIMPAN REKOMENDASI</p>
-          <h2>Simpan hasil dan mulai perjalananmu</h2>
-          <p>Target ujian dapat diubah. Kode referral bersifat opsional.</p>
-          <p>Simpan progres dan rekomendasi belajar dalam satu akun.</p>
-          <hr />
+          <p className="kicker">LANGKAH PENDAFTARAN</p>
+          <h2>Alur Pendaftaran</h2>
           <ol className="register-steps">
             <li>
               <strong>01</strong>
@@ -61,8 +58,7 @@ function RegisterForm() {
       <section className="register-card">
         <header>
           <p className="kicker">BUAT AKUN</p>
-          <h1>Daftar dan simpan rekomendasi</h1>
-          <p>Isi data untuk melanjutkan. Rekomendasi placement: {defaultTarget} • Target ujian tetap dapat disesuaikan oleh pengguna.</p>
+          <h1>Pendaftaran Akun Baru</h1>
         </header>
 
         <form className="public-form register-form" onSubmit={submit}>
