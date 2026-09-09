@@ -10,6 +10,13 @@ type Item = { label: string; href?: string; current: string; children?: Child[] 
 
 const items: Item[] = [
   { label: "Dashboard", href: "/admin", current: "dashboard" },
+  { label: "Content Studio", current: "content-studio", children: [
+    { label: "Studio Overview", href: "/admin/content-studio" },
+    { label: "Student Dashboards", href: "/admin/content-studio/dashboards" },
+    { label: "Levels", href: "/admin/content-studio/levels" },
+    { label: "Lessons", href: "/admin/content-studio/lessons" },
+    { label: "Flashcards", href: "/admin/content-studio/flashcards" },
+  ] },
   { label: "Program", href: "/admin/program", current: "program" },
   { label: "Content Builder", current: "content", children: [
     { label: "Chapter Builder", href: "/admin/program/n4/chapters" },

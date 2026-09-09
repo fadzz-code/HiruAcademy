@@ -25,7 +25,7 @@
 - Entitlement: **client/query controlled**; belum aman untuk production.
 - Assessment: **local preview**; timer, score, attempt, persistence, dan submit belum server-authoritative.
 - Backend: **belum dibuat**; `Backend/` hanya `.gitkeep`.
-- Admin: **belum dibuat**.
+- Admin: **frontend console + Content Studio terpasang (30+ routes; persistence backend belum ada)**.
 - Production readiness: **belum siap**.
 
 ## Fitur/screens selesai
