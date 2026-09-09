@@ -169,6 +169,263 @@ rt { color: var(--secondary); }
 .admin-filters button.active { background: var(--secondary); }
 .admin-action-card:hover, .admin-program-card:hover { box-shadow: var(--ambient-shadow); }
 
+/* Pricing Grid & Cards (Matching landingpage.html) */
+.landing-pricing {
+  padding-block: 96px;
+  background: var(--canvas);
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 1140px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.pricing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 36px 28px;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--clay-shadow);
+  transition: all .25s ease;
+}
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ambient-shadow);
+  border-color: #f2bb91;
+}
+.pricing-card-popular {
+  border: 2px solid var(--orange);
+  background: #fff;
+  box-shadow: 0 20px 48px rgba(244, 130, 32, .14), 0 4px 14px rgba(42, 49, 61, .06);
+}
+@media (min-width: 1024px) {
+  .pricing-card-popular {
+    transform: translateY(-12px);
+  }
+  .pricing-card-popular:hover {
+    transform: translateY(-16px);
+  }
+}
+.pricing-floating-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--orange);
+  color: #5a2a00;
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(244, 130, 32, .3);
+  white-space: nowrap;
+}
+.pricing-badge-pill {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #fff1e6;
+  color: var(--orange-dark);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  width: max-content;
+}
+.pricing-title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.pricing-subtitle {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--orange-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+.pricing-desc {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.pricing-price-box {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.pricing-amount {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+.pricing-card-popular .pricing-amount {
+  color: var(--orange-dark);
+}
+.pricing-period {
+  font-size: 13px;
+  color: var(--secondary);
+  font-weight: 600;
+}
+.pricing-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+  flex-grow: 1;
+}
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.feature-check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff1e6;
+  color: var(--orange-dark);
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+}
+.pricing-card-popular .feature-check {
+  background: var(--orange);
+  color: #5a2a00;
+}
+.pricing-card-footer {
+  margin-top: auto;
+}
+.pricing-cta-btn {
+  width: 100%;
+  min-height: 48px;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 12px;
+}
+@media (max-width: 900px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    gap: 36px;
+  }
+}
+
+/* LMS showcase preview image */
+.lms-preview-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--canvas);
+}
+.lms-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+
+/* Sensei Grid & Cards (Compact portrait matching learning flow cards) */
+.sensei-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.sensei-card {
+  width: 270px;
+  flex: 0 0 270px;
+  min-height: 410px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--clay-shadow);
+  transition: all .25s ease;
+}
+.sensei-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ambient-shadow);
+  border-color: #f2bb91;
+}
+.sensei-avatar {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: hidden;
+  background: #edf0f5;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.sensei-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.sensei-card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+}
+.sensei-card h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.sensei-card ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+.sensei-card li {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #fff1e6;
+  color: var(--orange-dark);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
 /* Program badge pills & summary card */
 .program-card-head span, .plan-badge-pill {
   display: inline-flex;

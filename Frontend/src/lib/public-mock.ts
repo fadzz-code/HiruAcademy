@@ -24,9 +24,9 @@ export const programComparison = [
   { badge: "LMS + Zoom", title: "Belajar dengan Sensei", description: "Semua LMS ditambah cohort, kelas langsung, Sensei, dan replay." },
 ];
 export const testimonials = [
-  { initials: "RI", avatarSrc: "", videoSrc: "", quote: "Journey membantu saya tahu apa yang harus dipelajari setelah menyelesaikan satu materi.", name: "Rina", membership: "Free Member → LMS" },
-  { initials: "DI", avatarSrc: "", videoSrc: "", quote: "Checkpoint dan review membuat progres lebih mudah dipantau tanpa merasa terburu-buru.", name: "Dimas", membership: "Belajar Mandiri" },
-  { initials: "AY", avatarSrc: "", videoSrc: "", quote: "Jadwal, replay, dan learning journey terasa menyatu dalam satu alur belajar.", name: "Ayu", membership: "Belajar dengan Sensei" },
+  { initials: "RI", avatarSrc: "/testimonials/remaja3.png", videoSrc: "", quote: "Journey membantu saya tahu apa yang harus dipelajari setelah menyelesaikan satu materi.", name: "Rina", membership: "Free Member → LMS" },
+  { initials: "DI", avatarSrc: "/testimonials/remaja1.png", videoSrc: "", quote: "Checkpoint dan review membuat progres lebih mudah dipantau tanpa merasa terburu-buru.", name: "Dimas", membership: "Belajar Mandiri" },
+  { initials: "AY", avatarSrc: "/testimonials/remaja2.png", videoSrc: "", quote: "Jadwal, replay, dan learning journey terasa menyatu dalam satu alur belajar.", name: "Ayu", membership: "Belajar dengan Sensei" },
 ];
 export const testimonialVideos = testimonials.slice(0, 2).map(({ name, membership, videoSrc }) => ({ name, membership, videoSrc, posterSrc: "" }));
 export const supportingValues = [

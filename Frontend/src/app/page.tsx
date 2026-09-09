@@ -25,9 +25,60 @@ function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconName }) 
 }
 
 const offers = [
-  { icon: "book" as const, badge: "COBA GRATIS", title: "Mulai Gratis", description: "Coba pengalaman belajar di Hiru Academy sebelum memilih program yang paling cocok untukmu.", points: ["Akses materi pertama untuk level N5–N1", "Progres belajar tersimpan otomatis", "Lihat diskusi dan aktivitas komunitas"], cta: "Coba Gratis Sekarang →", href: "/register" },
-  { icon: "users" as const, badge: "FLEKSIBEL & HEMAT", title: "LMS Belajar Mandiri", description: "Belajar bahasa Jepang secara terstruktur, kapan pun dan di mana pun sesuai kecepatanmu sendiri.", points: ["Akses materi dan latihan lengkap sesuai level", "Try out lengkap dengan pembahasan", "Sertifikat dan akses diskusi komunitas"], cta: "Pilih Paket Mandiri →", href: "/register" },
-  { icon: "target" as const, badge: "PALING LENGKAP", title: "Belajar dengan Sensei", popular: true, description: "Dapatkan seluruh fasilitas LMS sekaligus bimbingan langsung dari Sensei agar belajarmu lebih terarah dan konsisten.", points: ["Semua fasilitas LMS Belajar Mandiri", "Live class melalui Zoom bersama Sensei", "Rekaman kelas dan kesempatan bertanya"], cta: "Gabung Kelas Sensei →", href: "/register" },
+  {
+    id: "free",
+    badge: "GRATIS",
+    title: "Coba Gratis",
+    subTitle: "Free Trial",
+    description: "Cocok untuk kamu yang ingin mencoba sistem belajar Hiru sebelum berlangganan.",
+    price: "Rp 0",
+    period: "/selamanya",
+    popular: false,
+    points: [
+      "Akses 1 chapter lengkap setiap level",
+      "Progres belajar tersimpan otomatis",
+      "Akses membaca diskusi komunitas",
+    ],
+    cta: "Mulai Coba Gratis →",
+    href: "/register?plan=free",
+    buttonClass: "button-dark",
+  },
+  {
+    id: "sensei",
+    badge: "POPULER",
+    title: "LMS プラス (Plus)",
+    subTitle: "N5 Kelas bersama Sensei",
+    description: "Cocok untuk kamu yang membutuhkan jadwal rutin, bimbingan dan evaluasi langsung.",
+    price: "Mulai Rp 350k",
+    period: "/bulan",
+    popular: true,
+    points: [
+      "Semua fasilitas Belajar Mandiri",
+      "10x live Zoom ・ 90 menit/bulan",
+      "Rekaman kelas dan evaluasi hasil belajar",
+    ],
+    cta: "Pilih Kelas bersama Sensei →",
+    href: "/register?plan=sensei",
+    buttonClass: "button-primary",
+  },
+  {
+    id: "lms",
+    badge: "BELAJAR FLEKSIBEL",
+    title: "LMS のみ (Only)",
+    subTitle: "N5 Belajar Mandiri",
+    description: "Cocok untuk kamu yang ingin belajar menyesuaikan waktu dan kecepatan sendiri.",
+    price: "Mulai Rp 99k",
+    period: "/6 bulan",
+    popular: false,
+    points: [
+      "Alur belajar dan latihan lengkap",
+      "Try Out dan pembahasan jawaban",
+      "Akses komunitas serta sertifikat digital",
+    ],
+    cta: "Pilih Belajar Mandiri →",
+    href: "/register?plan=lms",
+    buttonClass: "button-dark",
+  },
 ];
 
 const proofItems = [
@@ -44,15 +95,32 @@ const learningFlow = [
 ];
 
 const lmsPreviews = [
-  { key: "dashboard", icon: "layers" as const, label: "Dashboard" },
-  { key: "journey", icon: "compass" as const, label: "Learning Journey" },
-  { key: "lesson", icon: "play" as const, label: "Materi / Video Lesson" },
-  { key: "flashcard", icon: "book" as const, label: "Flashcard" },
-  { key: "evaluation", icon: "target" as const, label: "Try Out / Evaluasi" },
+  { key: "dashboard", icon: "layers" as const, label: "Dashboard", imageSrc: "/showcase/dashboard-showcase.png" },
+  { key: "journey", icon: "compass" as const, label: "Learning Journey", imageSrc: "/showcase/dashboard-showcase.png" },
+  { key: "lesson", icon: "play" as const, label: "Materi / Video Lesson", imageSrc: "/showcase/dashboard-showcase.png" },
+  { key: "flashcard", icon: "book" as const, label: "Flashcard", imageSrc: "/showcase/dashboard-showcase.png" },
+  { key: "evaluation", icon: "target" as const, label: "Try Out / Evaluasi", imageSrc: "/showcase/dashboard-showcase.png" },
 ];
 
 function LmsPreview({ preview }: { preview: (typeof lmsPreviews)[number] }) {
-  return <figure className={`lms-preview lms-preview-${preview.key}`} aria-label={`Tampilan LMS Hiru Academy: ${preview.label}`}><figcaption>{preview.label}</figcaption><div className="lms-preview-empty" role="img" aria-label={`No image: ${preview.label}`}>No image</div></figure>;
+  return (
+    <figure className={`lms-preview lms-preview-${preview.key}`} aria-label={`Tampilan LMS Hiru Academy: ${preview.label}`}>
+      <figcaption>{preview.label}</figcaption>
+      {preview.imageSrc ? (
+        <div className="lms-preview-image-wrap">
+          <Image
+            src={preview.imageSrc}
+            alt={`Tampilan antarmuka ${preview.label} Hiru Academy`}
+            width={860}
+            height={480}
+            className="lms-preview-img"
+          />
+        </div>
+      ) : (
+        <div className="lms-preview-empty" role="img" aria-label={`No image: ${preview.label}`}>No image</div>
+      )}
+    </figure>
+  );
 }
 
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
@@ -68,7 +136,58 @@ export default function Home() {
 
         <aside className="proof-strip" aria-label="Pencapaian HIRU Academy" data-reveal><div className="container proof-strip-grid">{proofItems.map((item, index) => <div className="proof-item reveal-item" key={item.value} style={{ "--reveal-index": index } as React.CSSProperties}><span><Icon name={item.icon} width="24" height="24" /></span><p><strong {...(item.label ? { "data-counter": item.value.replace(/\D/g, ""), "data-suffix": item.value.replace(/\d/g, "") } : {})}>{item.value}</strong>{item.label && <small>{item.label}</small>}</p></div>)}</div></aside>
 
-        <section className="section" id="program" data-reveal><div className="container"><div className="section-heading"><h2>Pilih cara belajar yang paling sesuai</h2><p>Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem.</p></div><div className="offer-grid">{offers.map((offer, index) => <article className="offer-card reveal-item" key={offer.title} style={{ "--reveal-index": index } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={offer.icon} width="28" height="28" /></div><span className="offer-badge">{offer.badge}</span>{offer.popular && <span className="popular-badge">Populer</span>}<h3>{offer.title}</h3><p>{offer.description}</p><ul className="offer-points">{offer.points.map((point) => <li key={point}>{point}</li>)}</ul><a href={offer.href}>{offer.cta}</a></article>)}</div></div></section>
+        <section className="section landing-pricing" id="program" data-reveal>
+          <div className="container">
+            <div className="section-heading">
+              <span className="eyebrow" style={{ margin: "0 auto 16px" }}>INVESTASI BELAJAR</span>
+              <h2>Pilih cara belajar yang paling sesuai</h2>
+              <p>Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem.</p>
+            </div>
+            <div className="pricing-grid">
+              {offers.map((offer, index) => (
+                <article
+                  className={`pricing-card reveal-item${offer.popular ? " pricing-card-popular" : ""}`}
+                  key={offer.id}
+                  style={{ "--reveal-index": index } as React.CSSProperties}
+                >
+                  {offer.popular && (
+                    <div className="pricing-floating-badge" aria-label="Paket paling populer">
+                      Paling Populer
+                    </div>
+                  )}
+                  <div className="pricing-card-header">
+                    {!offer.popular && <span className="pricing-badge-pill">{offer.badge}</span>}
+                    <h3 className="pricing-title">{offer.title}</h3>
+                    <span className="pricing-subtitle">{offer.subTitle}</span>
+                    <p className="pricing-desc">{offer.description}</p>
+                  </div>
+
+                  <div className="pricing-price-box">
+                    <span className="pricing-amount">{offer.price}</span>
+                    <span className="pricing-period">{offer.period}</span>
+                  </div>
+
+                  <ul className="pricing-features" aria-label={`Fitur paket ${offer.title}`}>
+                    {offer.points.map((point) => (
+                      <li key={point}>
+                        <span className="feature-check" aria-hidden="true">
+                          <Icon name="check" width="14" height="14" />
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="pricing-card-footer">
+                    <Link className={`button ${offer.buttonClass} pricing-cta-btn`} href={offer.href}>
+                      {offer.cta}
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <section className="section soft-section" id="cara-belajar" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Terarah dari Menentukan Level hingga Mencapai Target</h2><p>Mulai dari mengetahui kemampuan awal, mempelajari materi secara bertahap, hingga mengukur kesiapan menghadapi JLPT—semuanya tersedia dalam satu alur belajar yang terstruktur.</p></div><div className="offer-grid learning-flow-grid">{learningFlow.map((item, index) => <article className="offer-card reveal-item" key={item.title} style={{ "--reveal-index": Math.min(index, 2) } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={item.icon} width="28" height="28" /></div><span className="card-number">{item.eyebrow.replace(" — ", " · ")}</span><h3>{item.title}</h3><p>{item.description}</p>{item.href ? <a href={item.href}>{item.cta}</a> : <span className="footer-disabled offer-disabled" aria-disabled="true">{item.cta}</span>}</article>)}</div></div></section>
 
