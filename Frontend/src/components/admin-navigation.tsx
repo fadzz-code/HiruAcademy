@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 
 type Child = { label: string; href: string };
@@ -59,6 +59,33 @@ export function AdminNavigation({ current }: { current: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expanded, setExpanded] = useState<Record<string,string | undefined>>({});
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const sidebarRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    sidebarRef.current?.querySelector<HTMLElement>("a,button")?.focus();
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        window.setTimeout(() => triggerRef.current?.focus(), 0);
+      }
+      if (event.key !== "Tab" || !sidebarRef.current) return;
+      const focusable = [...sidebarRef.current.querySelectorAll<HTMLElement>("a,button")];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
+
+  function closeMobile() {
+    setMobileOpen(false);
+    window.setTimeout(() => triggerRef.current?.focus(), 0);
+  }
 
   function groupOpen(item: Item) {
     const manual = expanded[item.current];
@@ -66,18 +93,18 @@ export function AdminNavigation({ current }: { current: string }) {
   }
 
   return <>
-    <button className="admin-mobile-toggle" type="button" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-label="Toggle admin navigation"><span aria-hidden="true">≡</span></button>
-    <aside className={`admin-sidebar ${mobileOpen ? "open" : ""}`}>
+    <button ref={triggerRef} className="admin-mobile-toggle" type="button" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-controls="admin-sidebar" aria-label={mobileOpen ? "Tutup navigasi admin" : "Buka navigasi admin"}><span aria-hidden="true">≡</span></button>
+    <aside ref={sidebarRef} id="admin-sidebar" className={`admin-sidebar ${mobileOpen ? "open" : ""}`}>
       <div className="admin-brand"><BrandLogo /><p>ADMIN CONSOLE</p></div>
       <nav aria-label="Navigasi admin">{items.map((item) => {
         if (item.children) {
           const open = groupOpen(item);
-          return <div className="admin-nav-group" key={item.current}><button className={current === item.current ? "admin-nav-parent current" : "admin-nav-parent"} type="button" aria-expanded={open} onClick={() => setExpanded((state) => ({ ...state, [item.current]: open ? "closed" : "open" }))}><span>{item.label}</span><Chevron open={open}/></button>{open && <div className="admin-submenu">{item.children.map((child) => <Link className={pathname === child.href ? "active" : ""} href={child.href} onClick={() => setMobileOpen(false)} key={child.href}>{child.label}</Link>)}</div>}</div>;
+          return <div className="admin-nav-group" key={item.current}><button className={current === item.current ? "admin-nav-parent current" : "admin-nav-parent"} type="button" aria-expanded={open} onClick={() => setExpanded((state) => ({ ...state, [item.current]: open ? "closed" : "open" }))}><span>{item.label}</span><Chevron open={open}/></button>{open && <div className="admin-submenu">{item.children.map((child) => <Link className={pathname === child.href ? "active" : ""} href={child.href} aria-current={pathname === child.href ? "page" : undefined} onClick={() => setMobileOpen(false)} key={child.href}>{child.label}</Link>)}</div>}</div>;
         }
-        return item.href ? <Link key={item.current} href={item.href} className={`admin-nav-item ${current === item.current ? "active" : ""}`} onClick={() => setMobileOpen(false)}>{item.label}</Link> : <span key={item.current} className="admin-nav-item disabled" aria-disabled="true">{item.label}</span>;
+        return item.href ? <Link key={item.current} href={item.href} className={`admin-nav-item ${current === item.current ? "active" : ""}`} aria-current={current === item.current ? "page" : undefined} onClick={() => setMobileOpen(false)}>{item.label}</Link> : <span key={item.current} className="admin-nav-item disabled" aria-disabled="true">{item.label}</span>;
       })}</nav>
       <div className="admin-nav-footer"><Link href="/" className="admin-nav-item logout">Keluar Admin</Link></div>
     </aside>
-    {mobileOpen && <button className="admin-mobile-backdrop" type="button" onClick={() => setMobileOpen(false)} aria-label="Tutup navigasi admin"/>}
+    {mobileOpen && <button className="admin-mobile-backdrop" type="button" onClick={closeMobile} aria-label="Tutup navigasi admin"/>}
   </>;
 }

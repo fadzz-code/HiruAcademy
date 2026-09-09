@@ -12,7 +12,14 @@ export default function PlacementQuestionPage() {
   const [answers, setAnswers] = useState<Record<number, string>>(() => {
     if (typeof window === "undefined") return {};
     const saved = sessionStorage.getItem(storageKey);
-    return saved ? JSON.parse(saved) : {};
+    if (!saved) return {};
+    try {
+      const parsed: unknown = JSON.parse(saved);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed as Record<number, string> : {};
+    } catch {
+      sessionStorage.removeItem(storageKey);
+      return {};
+    }
   });
   const question = placementQuestions[index];
 

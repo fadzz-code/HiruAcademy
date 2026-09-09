@@ -65,6 +65,9 @@ rt { color: var(--secondary); }
 .student-nav-desktop nav { gap: 8px; margin-top: 32px; scrollbar-width: thin; }
 .student-nav-item { gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; font-weight: 500; color: var(--muted); }
 .student-nav-item > span { width: 24px; flex: 0 0 24px; }
+.student-submenu { margin-left: 28px; border-color: var(--line); }
+.student-submenu a, .student-submenu button { min-height: 44px; font-size: 12px; }
+.student-submenu a.active { border-right: 4px solid var(--orange-dark); background: rgb(244 130 32 / 10%); color: var(--orange-dark); }
 .student-nav-item.state-active { background: var(--secondary); color: #fff; }
 .student-nav-item.state-active:hover { background: var(--secondary); color: #fff; }
 .student-nav-item.state-locked { opacity: 1; color: var(--secondary); }
@@ -114,7 +117,14 @@ rt { color: var(--secondary); }
 .learning-activity-card h3, .lesson-activity h3 { font-size: 20px; line-height: 1.4; }
 .learning-activity-card p, .lesson-activity p { font-size: 14px; line-height: 1.6; }
 .document-paper { padding: 32px; }
-.learning-shell:has(.flashcard-page), .learning-shell:has(.flashcard-collection), .supporting-shell:has(.library-page), .supporting-shell:has(.practice-page) { background: #fff7ef; }
+.learning-shell:has(.flashcard-page), .learning-shell:has(.flashcard-collection), .supporting-shell:has(.library-page), .supporting-shell:has(.practice-page), .supporting-shell:has(.progress-page) { background: var(--canvas); }
+.library-material-grid article, .library-recent, .practice-mode-grid article, .practice-history, .progress-summary, .progress-milestones, .progress-achievements > div:last-child article { background: #fff; border-color: var(--line); box-shadow: var(--clay-shadow); }
+.practice-recommendation { background: var(--navy); color: #fff; border-color: var(--navy); }
+.practice-recommendation > div:first-child > p:not(.dash-kicker) { color: var(--surface-highest); }
+.practice-recommendation .dash-kicker { color: #ffb786; }
+.practice-recommendation .button-dark { border: 1px solid var(--outline); }
+.progress-summary { background: #fff; border-color: var(--line); }
+.progress-stats div { background: var(--soft); }
 .flashcard-page { max-width: 816px; padding-top: 48px; }
 .flashcard-head h1 { font-size: 32px; letter-spacing: -.02em; }
 .flashcard-surface { height: 400px; }

@@ -63,10 +63,10 @@ export type DashboardData = {
 
 const defaultLeaderboard: LeaderboardEntry[] = [
   { rank: 1, name: "Siti Aisyah", xp: "Konsisten" },
-  { rank: 2, name: "Budi Santoso", xp: "Konsisten" },
-  { rank: 3, name: "Rina Wati", xp: "Konsisten" },
-  { rank: 4, name: "Dian Indra", xp: "Konsisten" },
-  { rank: 5, name: "Hilmi (Kamu)", xp: "Level N4", isCurrentUser: true },
+  { rank: 2, name: "Hilmi (Kamu)", xp: "Level N4", isCurrentUser: true },
+  { rank: 3, name: "Budi Santoso", xp: "Konsisten" },
+  { rank: 4, name: "Rina Wati", xp: "Konsisten" },
+  { rank: 5, name: "Dian Indra", xp: "Konsisten" },
 ];
 
 const quickActionsFor = (membership: Membership): DashboardAction[] => {
