@@ -1,7 +1,7 @@
 export const plans = [
   { id: "free", badge: "GRATIS", title: "Coba Gratis", description: "Cocok untuk kamu yang ingin mencoba sistem belajar Hiru sebelum berlangganan.", points: ["Akses 1 chapter lengkap setiap level", "Progres belajar tersimpan", "Akses membaca komunitas"], price: "Rp0", period: "" },
-  { id: "lms", badge: "BELAJAR FLEKSIBEL", title: "Belajar Mandiri", description: "Cocok untuk kamu yang ingin belajar menyesuaikan waktu dan kecepatan sendiri.", points: ["Alur belajar dan latihan lengkap", "Try Out dan pembahasan jawaban", "Akses komunitas serta sertifikat digital"], price: "Mulai Rp99.000/6 bulan", period: "6 bulan" },
-  { id: "sensei", badge: "POPULER", title: "Kelas bersama Sensei", description: "Cocok untuk kamu yang membutuhkan jadwal rutin, bimbingan dan evaluasi langsung.", points: ["Semua fasilitas Belajar Mandiri", "10x live Zoom ・ 90 menit/bulan", "Rekaman kelas dan evaluasi hasil belajar"], price: "Mulai Rp350.000/bulan", period: "Bulanan" },
+  { id: "lms", badge: "BELAJAR FLEKSIBEL", title: "Belajar Mandiri", description: "Cocok untuk kamu yang ingin belajar menyesuaikan waktu dan kecepatan sendiri.", points: ["Alur belajar dan latihan lengkap", "Try Out dan pembahasan jawaban", "Akses komunitas serta sertifikat digital"], price: "Mulai Rp99k/6 bulan", period: "6 bulan" },
+  { id: "sensei", badge: "POPULER", title: "Kelas bersama Sensei", description: "Cocok untuk kamu yang membutuhkan jadwal rutin, bimbingan dan evaluasi langsung.", points: ["Semua fasilitas Belajar Mandiri", "10x live Zoom ・ 90 menit/bulan", "Rekaman kelas dan evaluasi hasil belajar"], price: "Mulai Rp350k/bulan", period: "Bulanan" },
 ];
 export const levelCatalog = [
   { code: "N5", name: "JLPT N5", title: "Dasar Bahasa Jepang", description: "Cocok untuk pemula yang ingin menguasai huruf Jepang, kosakata, dan pola kalimat dasar.", topics: ["Hiragana & Katakana", "Pola kalimat dasar"] },
@@ -38,7 +38,7 @@ export const blogDetailSlug = "strategi-rutinitas-belajar-n4";
 const blogPublisher = "Hiru Academy";
 export const blogFeatured = {
   slug: blogDetailSlug,
-  marker: "道",
+  marker: "",
   label: "ARTIKEL UNGGULAN",
   category: "Tips Belajar",
   author: blogPublisher,
@@ -47,9 +47,9 @@ export const blogFeatured = {
   description: "Susun ritme belajar mingguan dengan video, modul, flashcard, latihan, dan checkpoint tanpa kehilangan fokus.",
 };
 export const blogArticles = [
-  { marker: "文", category: "Grammar / Bunpou", author: blogPublisher, publishedAt: "18 Agustus 2026", title: "Cara memahami pola kalimat tanpa menghafal berlebihan", description: "Gunakan konteks, ilustrasi, dan latihan singkat untuk memperkuat pemahaman." },
-  { marker: "聴", category: "Listening / Choukai", author: blogPublisher, publishedAt: "15 Agustus 2026", title: "Latihan listening yang efektif untuk pemula", description: "Bangun kebiasaan mendengar melalui audio pendek dan pengulangan terarah." },
-  { marker: "試", category: "JLPT", author: blogPublisher, publishedAt: "12 Agustus 2026", title: "Mempersiapkan try out pertama dengan tenang", description: "Kenali struktur soal, manajemen waktu, dan cara membaca hasil evaluasi." },
+  { marker: "", category: "Grammar / Bunpou", author: blogPublisher, publishedAt: "18 Agustus 2026", title: "Cara memahami pola kalimat tanpa menghafal berlebihan", description: "Gunakan konteks, ilustrasi, dan latihan singkat untuk memperkuat pemahaman." },
+  { marker: "", category: "Listening / Choukai", author: blogPublisher, publishedAt: "15 Agustus 2026", title: "Latihan listening yang efektif untuk pemula", description: "Bangun kebiasaan mendengar melalui audio pendek dan pengulangan terarah." },
+  { marker: "", category: "JLPT", author: blogPublisher, publishedAt: "12 Agustus 2026", title: "Mempersiapkan try out pertama dengan tenang", description: "Kenali struktur soal, manajemen waktu, dan cara membaca hasil evaluasi." },
 ];
 export const blogDetail = {
   ...blogFeatured,

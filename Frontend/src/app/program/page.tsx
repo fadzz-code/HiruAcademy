@@ -50,45 +50,95 @@ export default function ProgramPage() {
           </div>
         </section>
 
-        <section className="public-section">
+        <section className="public-section program-pricing-section">
           <div className="public-section-head program-section-title">
-            <span aria-hidden="true">本</span>
             <div>
               <p className="kicker">METODE BELAJAR</p>
               <h2>Pilih metode belajar</h2>
               <p>Sesuaikan dengan waktu dan kebutuhan bimbinganmu.</p>
             </div>
           </div>
-          <div className="public-cards">
-            {plans.map((plan) => (
-              <button
-                type="button"
-                className={`public-card program-plan-card${selectedPlan.id === plan.id ? " selected" : ""}${plan.id === "sensei" ? " recommended" : ""}`}
-                onClick={() => setSelectedPlan(plan)}
-                aria-pressed={selectedPlan.id === plan.id}
-                key={plan.id}
-              >
-                <div className="program-card-head">
-                  <small>METODE BELAJAR</small>
-                  <span className={plan.id === "sensei" ? "popular-badge-pill" : "plan-badge-pill"}>{plan.badge}</span>
-                </div>
-                <h3>{plan.title}</h3>
-                <p>{plan.description}</p>
-                <ul>
-                  {plan.points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-                <strong className="program-price">{plan.price}</strong>
-              </button>
-            ))}
+          <div className="pricing-grid">
+            {plans.map((plan) => {
+              const isSelected = selectedPlan.id === plan.id;
+              const isPopular = plan.id === "sensei";
+              const displayPrice = plan.price.replace(/99\.000/g, "99k").replace(/350\.000/g, "350k");
+              const [amount, period] = displayPrice.includes("/")
+                ? displayPrice.split("/")
+                : [displayPrice, ""];
+
+              return (
+                <article
+                  key={plan.id}
+                  className={`pricing-card${isPopular ? " pricing-card-popular" : ""}${isSelected ? " selected-pricing-card" : ""}`}
+                  onClick={() => setSelectedPlan(plan)}
+                  style={{ cursor: "pointer" }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedPlan(plan);
+                    }
+                  }}
+                  aria-pressed={isSelected}
+                >
+                  {isPopular && (
+                    <div className="pricing-floating-badge" aria-label="Paket paling populer">
+                      Paling Populer
+                    </div>
+                  )}
+
+                  <div className="pricing-card-header">
+                    {!isPopular && <span className="pricing-badge-pill">{plan.badge}</span>}
+                    {isPopular && <span className="pricing-badge-pill" style={{ visibility: "hidden" }}>&nbsp;</span>}
+                    <h3 className="pricing-title">{plan.title}</h3>
+                    <p className="pricing-desc">{plan.description}</p>
+                  </div>
+
+                  <div className="pricing-price-box">
+                    <span className="pricing-amount">{amount}</span>
+                    {period && <span className="pricing-period">/{period}</span>}
+                  </div>
+
+                  <ul className="pricing-features" aria-label={`Fitur paket ${plan.title}`}>
+                    {plan.points.map((point) => (
+                      <li key={point}>
+                        <span className="feature-check" aria-hidden="true">
+                          <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" viewBox="0 0 24 24" width="14" height="14">
+                            <path d="m5 12 4 4L19 6" />
+                          </svg>
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="pricing-card-footer">
+                    <button
+                      type="button"
+                      className={`button ${isSelected ? "button-primary" : "button-secondary"} pricing-cta-btn`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedPlan(plan);
+                      }}
+                    >
+                      {plan.id === "free"
+                        ? "Pilih Coba Gratis"
+                        : plan.id === "lms"
+                          ? "Pilih Mandiri"
+                          : "Pilih Bersama Sensei"}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
         <section className="public-section level-section">
           <div className="public-section-head level-section-head">
             <div className="program-section-title">
-              <span aria-hidden="true">道</span>
               <div>
                 <p className="kicker">PILIH LEVEL</p>
                 <h2>Pilih level sesuai kemampuanmu.</h2>
@@ -143,7 +193,7 @@ export default function ProgramPage() {
             <div className="summary-meta-grid">
               <div className="summary-meta-card price-highlight">
                 <span className="meta-label">BIAYA INVESTASI</span>
-                <strong className="meta-value">{selectedPlan.price}</strong>
+                <strong className="meta-value">{selectedPlan.price.replace(/99\.000/g, "99k").replace(/350\.000/g, "350k")}</strong>
                 <small className="meta-note">{selectedPlan.id === "free" ? "Akses Chapter 1 Gratis" : "Investasi pendidikan terarah"}</small>
               </div>
               {selectedPlan.period && (
