@@ -45,7 +45,8 @@ export default function PlacementPage() {
   const [whatsapp, setWhatsapp] = useState("");
   const [target, setTarget] = useState("");
   const [privacy, setPrivacy] = useState(false);
-  const valid = Boolean(name.trim() && whatsapp.trim() && target && privacy);
+  const [whatsappConsent, setWhatsappConsent] = useState(false);
+  const valid = Boolean(name.trim() && whatsapp.trim() && target && privacy && whatsappConsent);
 
   return (
     <PublicPage active="Placement Test">
@@ -99,7 +100,10 @@ export default function PlacementPage() {
             </aside>
           </div>
 
-          <form className="public-form" action="/placement/question">
+            <form className="public-form" action="/placement/question" method="get">
+              <input type="hidden" name="name" value={name} />
+              <input type="hidden" name="whatsapp" value={whatsapp} />
+              <input type="hidden" name="target" value={target} />
             <p className="kicker">DATA SEBELUM TES</p>
             <label>
               Nama
@@ -123,7 +127,7 @@ export default function PlacementPage() {
               <span>Saya menyetujui pemrosesan data sesuai <Link href="/kebijakan-privasi">Kebijakan Privasi</Link>.</span>
             </label>
             <label className="consent">
-              <input type="checkbox" name="whatsappConsent" />
+              <input type="checkbox" name="whatsappConsent" checked={whatsappConsent} onChange={(event) => setWhatsappConsent(event.target.checked)} />
               <span>Saya bersedia menerima penjelasan hasil dan informasi program Hiru Academy melalui WhatsApp.</span>
             </label>
             <button className="button button-primary" type="submit" disabled={!valid}>Mulai Placement Test Gratis</button>

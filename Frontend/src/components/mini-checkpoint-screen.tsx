@@ -24,7 +24,7 @@ export function MiniCheckpointScreen() {
   const [selected, setSelected] = useState(defaultItem);
   const [answer, setAnswer] = useState("b");
   const [marked, setMarked] = useState(false);
-  const [filter, setFilter] = useState("SEMUA COHORT");
+  const [selectedLevel, setSelectedLevel] = useState<"N5" | "N4" | "N3" | "N2">("N5");
   const [question, setQuestion] = useState(4);
   const [reviewFilter, setReviewFilter] = useState("SEMUA 10");
   const [reviewQuestion, setReviewQuestion] = useState(4);
@@ -380,83 +380,79 @@ export function MiniCheckpointScreen() {
     );
   }
 
-  const levelFilterOptions = ["SEMUA COHORT", "N5", "N4", "N3", "N2", "TERSEDIA", "SELESAI"];
-
   return (
     <>
       <div className="mini-list-head">
         <header className="sensei-page-head">
           <p className="dash-kicker">MINI CHECKPOINT • KELAS SENSEI</p>
           <h1>Mini Checkpoint per level, sesi, dan part</h1>
-          <p>Khusus member Belajar dengan Sensei. Mini Checkpoint terstruktur untuk N5, N4, N3, dan N2.</p>
+          <p>Khusus member Belajar dengan Sensei. Evaluasi pemahaman berjenjang per sesi dan part.</p>
         </header>
-        <span>COHORT SENSEI</span>
+        <span className="mini-cohort-badge">COHORT SENSEI</span>
       </div>
 
-      <div className="mini-filters">
-        <span>FILTER TINGKAT</span>
-        {levelFilterOptions.map((item) => (
-          <button
-            className={filter === item ? "active" : ""}
-            type="button"
-            onClick={() => setFilter(item)}
-            key={item}
-          >
-            {item}
-          </button>
-        ))}
+      <div className="mini-dropdown-container">
+        <label htmlFor="mini-level-select">Pilih Level:</label>
+        <select
+          id="mini-level-select"
+          className="mini-level-dropdown"
+          value={selectedLevel}
+          onChange={(event) => setSelectedLevel(event.target.value as "N5" | "N4" | "N3" | "N2")}
+        >
+          <option value="N5">Level N5</option>
+          <option value="N4">Level N4</option>
+          <option value="N3">Level N3</option>
+          <option value="N2">Level N2</option>
+        </select>
       </div>
 
-      <section className="mini-list">
-        <header>
-          <p className="dash-kicker">DAFTAR MINI CHECKPOINT</p>
-          <h2>Pilih level, sesi, dan part</h2>
-          <p>Struktur berjenjang level &rarr; sesi &rarr; part dengan target kelulusan &ge; 75%.</p>
-        </header>
+      <section className="mini-vertical-cards-section" aria-label={`Daftar Mini Checkpoint ${selectedLevel}`}>
+        {[
+          { session: 1, part: 1 },
+          { session: 1, part: 2 },
+          { session: 2, part: 1 },
+          { session: 2, part: 2 },
+          { session: 3, part: 1 },
+          { session: 3, part: 2 },
+        ].map(({ session, part }) => {
+          const title = `${selectedLevel} sesi ${session} part ${part}`;
+          const existing = miniCheckpoints
+            .find((g) => g.level === selectedLevel)
+            ?.items.find((it) => it.session === `sesi ${session}` && it.part === `part ${part}`);
 
-        {miniCheckpoints
-          .filter((group) => {
-            if (filter === "SEMUA COHORT") return true;
-            if (filter === "TERSEDIA" || filter === "SELESAI") return true;
-            return group.level === filter;
-          })
-          .map((group) => (
-            <section className="mini-level-group" key={group.level}>
-              <div>
-                <h2>{group.level}</h2>
-                <span>{group.status}</span>
-              </div>
-              <div>
-                {group.items
-                  .filter((item, index) => {
-                    if (filter === "TERSEDIA") return !(group.level === "N4" && (index === 1 || index === 3)) && item.id !== defaultItem.id;
-                    if (filter === "SELESAI") return item.id === defaultItem.id || (group.level === "N4" && index === 3);
-                    return true;
-                  })
-                  .map((item) => {
-                    const index = group.items.findIndex((candidate) => candidate.id === item.id);
-                    const unavailable = group.level === "N4" && index === 1;
-                    const reviewUnavailable = group.level === "N4" && index === 3;
-                    const completed = item.id === defaultItem.id || reviewUnavailable;
+          const currentItem = existing || {
+            id: `mc-${selectedLevel.toLowerCase()}-s${session}p${part}`,
+            level: selectedLevel,
+            session: `sesi ${session}`,
+            part: `part ${part}`,
+            status: "Tersedia",
+          };
 
-                    return (
-                      <button
-                        className={unavailable ? "unavailable" : completed ? "completed" : ""}
-                        type="button"
-                        onClick={() => {
-                          setSelected(item);
-                          setView(unavailable ? "unavailable" : reviewUnavailable ? "review-unavailable" : completed ? "result" : "info");
-                        }}
-                        key={item.id}
-                      >
-                        {item.level} {item.session} {item.part}
-                        <small>{unavailable ? "Belum Terbuka" : completed ? "Selesai • 80%" : "Tersedia"}</small>
-                      </button>
-                    );
-                  })}
+          return (
+            <article className="mini-checkpoint-card" key={title}>
+              <div className="mini-checkpoint-card-left">
+                <span className="mini-card-icon" aria-hidden="true"><LuFileCheck /></span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>10 soal singkat • passing score 75% • timer ±10 menit</p>
+                </div>
               </div>
-            </section>
-          ))}
+              <div className="mini-checkpoint-card-right">
+                <span className="mini-card-status-badge">Tersedia</span>
+                <button
+                  type="button"
+                  className="button button-primary"
+                  onClick={() => {
+                    setSelected(currentItem);
+                    setView("info");
+                  }}
+                >
+                  Mulai Checkpoint
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </section>
     </>
   );

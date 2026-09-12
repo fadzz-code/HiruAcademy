@@ -169,7 +169,7 @@ export default function LevelsContentStudioPage() {
     setFeedback(
       "Draft level " +
         selectedLevel.level +
-        " disimpan secara lokal. Perubahan editor frontend belum dipersist ke server."
+        " disimpan sementara di halaman ini."
     );
   }
 
@@ -197,11 +197,11 @@ export default function LevelsContentStudioPage() {
     setFeedback(
       "Level " +
         selectedLevel.level +
-        " dipublikasikan secara lokal. Perubahan editor frontend belum dipersist ke server."
+        " dipublikasikan sebagai contoh. Perubahan tersimpan sementara di halaman ini."
     );
   }
 
-  function handleCancel() {
+  function handleBatal() {
     setTitle(selectedLevel.title);
     setDescription(selectedLevel.description);
     setTagsInput(selectedLevel.tags.join(", "));
@@ -231,20 +231,14 @@ export default function LevelsContentStudioPage() {
             >
               Kembali ke Content Studio
             </Link>
-            <Link
-              className="button button-primary"
-              href={"/admin/program/" + selectedLevel.level.toLowerCase() + "/chapters"}
-            >
-              Chapter Builder {selectedLevel.level}
-            </Link>
           </div>
         </header>
 
         <section className="admin-kpi-grid">
           <article className="admin-kpi-card">
             <h2>Status Penyimpanan</h2>
-            <strong>Frontend only</strong>
-            <small>Perubahan editor frontend belum dipersist ke server.</small>
+            <strong>Draft Lokal</strong>
+            <small>Perubahan tersimpan sementara di browser sebelum dipublikasikan.</small>
           </article>
           <article className="admin-kpi-card">
             <h2>Total Level</h2>
@@ -415,23 +409,16 @@ export default function LevelsContentStudioPage() {
               <button
                 type="button"
                 className="button button-secondary"
-                onClick={handleSaveDraft}
+                onClick={handleBatal}
               >
-                Save Draft
-              </button>
-              <button
-                type="button"
-                className="button button-primary"
-                onClick={handlePublish}
-              >
-                Publish / Update
+                Batal
               </button>
               <button
                 type="button"
                 className="button button-secondary"
-                onClick={handleCancel}
+                onClick={handleSaveDraft}
               >
-                Cancel / Back
+                Simpan Draft
               </button>
               <button
                 type="button"
@@ -440,12 +427,13 @@ export default function LevelsContentStudioPage() {
               >
                 {previewOpen ? "Tutup Preview" : "Preview"}
               </button>
-              <Link
-                className="button button-secondary"
-                href={"/admin/program/" + selectedLevel.level.toLowerCase() + "/chapters"}
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={handlePublish}
               >
-                Buka Chapter Builder
-              </Link>
+                Publish / Update
+              </button>
             </div>
 
             {previewOpen && (
@@ -481,15 +469,7 @@ export default function LevelsContentStudioPage() {
 
             <aside className="admin-product-rules">
               <p>
-                Aturan akses dan entitlement dikontrol penuh oleh sistem backend.
-                Pengaturan hak akses sistem tidak diizinkan pada editor konten ini.
-              </p>
-            </aside>
-
-            <aside className="admin-product-rules">
-              <p>
-                Status penyimpanan: Frontend only. Perubahan editor frontend belum
-                dipersist ke server.
+                Pengaturan hak akses dan paket pembelajaran dikelola melalui menu Program &amp; Entitlement.
               </p>
             </aside>
           </section>

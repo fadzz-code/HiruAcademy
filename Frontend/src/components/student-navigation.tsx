@@ -13,7 +13,6 @@ type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
 type NavChild = { label: string; href: string; entitlement: Entitlement };
 type NavItem = { label: string; icon: IconType; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean; children?: NavChild[] };
-// TEMP FRONTEND MVP: remove notImplemented modal states as real feature routes are added.
 type ModalState = { feature: string; variant: "membershipLock" | "notImplemented" };
 
 function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {

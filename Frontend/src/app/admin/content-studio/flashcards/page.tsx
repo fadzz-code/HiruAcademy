@@ -401,7 +401,7 @@ export default function FlashcardsStudioPage() {
   const archivedCount = cards.filter((c) => c.status === "archived").length;
 
   return (
-    <AdminShell current="content-studio">
+    <AdminShell current="content">
       <main className="admin-page admin-a2-page">
         <header className="admin-header">
           <div>
@@ -459,7 +459,7 @@ export default function FlashcardsStudioPage() {
               Penyimpanan server belum tersedia
             </strong>
             <span style={{ fontSize: "12px", color: "var(--muted)" }}>
-              Semua operasi dan manipulasi kartu berjalan pada state lokal frontend.
+              Semua perubahan kartu tersimpan sementara selama halaman ini terbuka.
             </span>
           </div>
           {feedback && <span className="admin-local-feedback">{feedback}</span>}
@@ -814,15 +814,15 @@ export default function FlashcardsStudioPage() {
                 </div>
 
                 <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
-                  <button className="button button-primary" type="submit">
-                    Simpan Kartu
-                  </button>
                   <button
                     className="button button-secondary"
                     type="button"
                     onClick={() => setEditorMode("none")}
                   >
                     Batal
+                  </button>
+                  <button className="button button-primary" type="submit">
+                    Simpan Kartu
                   </button>
                 </div>
               </form>

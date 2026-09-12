@@ -15,10 +15,10 @@ const items: Item[] = [
     { label: "Student Dashboards", href: "/admin/content-studio/dashboards" },
     { label: "Levels", href: "/admin/content-studio/levels" },
     { label: "Lessons", href: "/admin/content-studio/lessons" },
-    { label: "Flashcards", href: "/admin/content-studio/flashcards" },
   ] },
   { label: "Program", href: "/admin/program", current: "program" },
   { label: "Content Builder", current: "content", children: [
+    { label: "Flashcards", href: "/admin/content-studio/flashcards" },
     { label: "Chapter Builder", href: "/admin/program/n4/chapters" },
     { label: "Quiz Builder", href: "/admin/program/n4/chapters/chapter-4/quiz" },
     { label: "Try Out Builder", href: "/admin/program/n4/tryout" },

@@ -34,7 +34,7 @@ const senseiLevels: JourneyLevel[] = [
   { slug: "n3", code: "N3", title: "JLPT N3", description: "Level aktif kedua dengan journey dan cohort yang disimpan terpisah.", access: "owned", cohort: "active", progression: "available", statusLabel: "LEVEL & COHORT AKTIF", actionLabel: "Buka Journey N3" },
   { slug: "n2", code: "N2", title: "JLPT N2", description: "Dapat ditambahkan tanpa menyelesaikan N3; jadwal dibuat setelah aktivasi.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket N2" },
   { slug: "ssw-pengolahan-makanan", code: "SSW", title: "SSW Pengolahan Makanan", description: "Kosakata kerja, sanitasi higienis, dan standar keselamatan industri makanan.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket SSW" },
-  { slug: "interview", code: "INTERVIEW", title: "Interview", description: "Persiapan wawancara kerja, etika profesional, dan simulasi tanya jawab.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket Interview" },
+  { slug: "interview", code: "INTERVIEW", title: "Persiapan Interview", description: "Persiapan wawancara kerja, etika profesional, dan simulasi tanya jawab.", access: "notPurchased", cohort: "none", progression: "available", statusLabel: "BELUM DIBELI", actionLabel: "Lihat Paket Interview" },
 ];
 
 const baseLevels = [
@@ -44,7 +44,7 @@ const baseLevels = [
   ["n3", "N3", "JLPT N3", "Tata bahasa menengah, teks umum, dan kemampuan komunikasi."],
   ["n2", "N2", "JLPT N2", "Tata bahasa kompleks, artikel opini, dan pemahaman profesional."],
   ["ssw-pengolahan-makanan", "SSW", "SSW Pengolahan Makanan", "SOP industri makanan Jepang, higienitas, dan instruksi lapangan."],
-  ["interview", "INTERVIEW", "Interview", "Etika wawancara kerja, motivasi, dan simulasi profesional."],
+  ["interview", "INTERVIEW", "Persiapan Interview", "Etika wawancara kerja, motivasi, dan simulasi profesional."],
 ] as const;
 
 export function getJourneyLevels(membership: Membership): JourneyLevel[] {
@@ -106,7 +106,7 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
         description: "Video • 2 modul • flashcard • audio • reading • checkpoint",
         state,
         statusLabel,
-        href: state === "current" ? `/learn/${level.slug}/chapter-4?membership=sensei` : undefined,
+        href: state === "completed" ? `/learn/${level.slug}/${key}?membership=sensei` : state === "current" ? `/learn/${level.slug}/chapter-4?membership=sensei` : undefined,
       })),
       { key: "chapter-12", orderLabel: "12", title: "Chapter Terakhir — Penyelesaian Level", description: "Selesaikan seluruh aktivitas untuk membuka Feedback Akhir Level.", state: "finalPreview", statusLabel: "Simulasi Akhir" },
     ];
@@ -124,7 +124,7 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
       description: "Video • modul • flashcard • audio • reading • checkpoint",
       state,
       statusLabel: state === "completed" ? "Selesai" : state === "current" ? "Lanjutkan" : state === "entitlementLocked" ? "Terkunci • Upgrade" : "Terkunci",
-      href: state === "current" ? `/learn/${level.slug}/chapter-${number}?membership=${membership}` : undefined,
+      href: state === "completed" || state === "current" ? `/learn/${level.slug}/chapter-${number}?membership=${membership}` : undefined,
     };
   });
 }
@@ -134,6 +134,7 @@ export function findJourneyLevel(membership: Membership, slug: string): JourneyL
 }
 
 export function canAccessLearning(membership: Membership, levelSlug: string, chapterKey: string): boolean {
+  if (chapterKey === "chapter-1") return true;
   const level = findJourneyLevel(membership, levelSlug);
   if (!level || level.access === "notPurchased") return false;
   if (level.access === "freePreview") return chapterKey === "chapter-1";

@@ -5,13 +5,13 @@ import { AdminShell } from "@/components/admin-shell";
 
 type Template = { id:string; glyph:string; name:string; channel:string; trigger:string; audience:string; subject:string; body:string; fallback:string; status:"Active"|"Testing"|"Draft"; tested:boolean; revision:boolean };
 type Dialog = "variables"|"processed"|"blocked"|"activate"|"activated"|null;
-const variables = ["{{user_name}}","{{plan_name}}","{{level}}","{{access_start}}","{{access_end}}","{{invoice_id}}"];
+const variables = ["Nama Siswa","Nama Paket","Level Belajar","Tanggal Mulai","Tanggal Berakhir","Nomor Invoice"];
 const fixtures:Template[] = [
-  {id:"n1",glyph:"知",name:"Membership berhasil aktif",channel:"In-App + Email",trigger:"invoice.verified",audience:"User terkait",subject:"Membership {{plan_name}} sudah aktif",body:"Halo {{user_name}}, akses {{level}} kamu sudah aktif. Periode akses mengikuti data backend.",fallback:"Membership sudah aktif.",status:"Active",tested:false,revision:false},
-  {id:"n2",glyph:"時",name:"Pengingat Zoom",channel:"In-App + Email",trigger:"class.reminder",audience:"Student terkait",subject:"Pengingat kelas",body:"Halo {{user_name}}, kelas kamu akan segera dimulai.",fallback:"Kelas akan segera dimulai.",status:"Active",tested:true,revision:false},
+  {id:"n1",glyph:"知",name:"Membership berhasil aktif",channel:"In-App + Email",trigger:"invoice.verified",audience:"User terkait",subject:"Membership Belajar Mandiri sudah aktif",body:"Halo Ayu, akses Belajar Mandiri N4 kamu sudah aktif. Masa belajar berlaku sampai 31 Desember 2026.",fallback:"Membership sudah aktif.",status:"Active",tested:false,revision:false},
+  {id:"n2",glyph:"時",name:"Pengingat Zoom",channel:"In-App + Email",trigger:"class.reminder",audience:"Student terkait",subject:"Pengingat kelas",body:"Halo Ayu, kelas kamu akan segera dimulai.",fallback:"Kelas akan segera dimulai.",status:"Active",tested:true,revision:false},
   {id:"n3",glyph:"再",name:"Replay tersedia",channel:"In-App",trigger:"replay.published",audience:"Student terkait",subject:"Replay tersedia",body:"Replay kelas sudah tersedia.",fallback:"Replay tersedia.",status:"Active",tested:true,revision:false},
-  {id:"n4",glyph:"試",name:"Try Out selesai",channel:"In-App",trigger:"assessment.completed",audience:"Student terkait",subject:"Try Out selesai",body:"Hasil Try Out {{level}} sudah tersedia.",fallback:"Hasil assessment tersedia.",status:"Testing",tested:false,revision:false},
-  {id:"n5",glyph:"期",name:"Membership akan berakhir",channel:"Email",trigger:"membership.expiring",audience:"User terkait",subject:"Membership akan berakhir",body:"Halo {{user_name}}, masa akses kamu akan berakhir.",fallback:"",status:"Draft",tested:false,revision:false},
+  {id:"n4",glyph:"試",name:"Try Out selesai",channel:"In-App",trigger:"assessment.completed",audience:"Student terkait",subject:"Try Out selesai",body:"Hasil Try Out N4 sudah tersedia.",fallback:"Hasil assessment tersedia.",status:"Testing",tested:false,revision:false},
+  {id:"n5",glyph:"期",name:"Membership akan berakhir",channel:"Email",trigger:"membership.expiring",audience:"User terkait",subject:"Membership akan berakhir",body:"Halo Ayu, masa membership kamu akan berakhir pada 31 Desember 2026.",fallback:"",status:"Draft",tested:false,revision:false},
 ];
 export default function NotificationTemplatesPage() {
   const [items,setItems] = useState(fixtures),[selectedId,setSelectedId] = useState("n1"),[query,setQuery] = useState(""),[dialog,setDialog] = useState<Dialog>(null),[newMode,setNewMode] = useState(false),[notice,setNotice] = useState("");

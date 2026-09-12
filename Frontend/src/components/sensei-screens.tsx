@@ -6,10 +6,12 @@ import {
   LuArrowLeft,
   LuBookOpen,
   LuCircleHelp,
+  LuInfo,
   LuLayers3,
   LuMaximize,
   LuPause,
   LuPlay,
+  LuSearch,
   LuVolume2,
 } from "react-icons/lu";
 import { replayMarkers, replays, scheduleSessions } from "@/lib/sensei-mock";
@@ -102,10 +104,138 @@ export function ReplayScreen() {
   const [filter, setFilter] = useState("Semua");
   const [search, setSearch] = useState("");
   const [processing, setProcessing] = useState(false);
-  const visible = useMemo(() => replays.filter((item) => (filter === "Semua" || item.category === filter) && item.title.toLowerCase().includes(search.toLowerCase())), [filter, search]);
+  const visible = useMemo(
+    () =>
+      replays.filter(
+        (item) =>
+          (filter === "Semua" || item.category === filter) &&
+          item.title.toLowerCase().includes(search.toLowerCase())
+      ),
+    [filter, search]
+  );
   const featured = replays[0];
-  if (processing) return <SenseiState eyebrow="REPLAY • PROCESSING" title="Replay sedang diproses" status="Processing" description="Rekaman, transkrip, dan materi sedang disiapkan sebelum dipublikasikan." facts={["Status sistem", "Jadwal resmi", "Verifikasi paket"]} primary={{ label: "Kembali ke Replay", onClick: () => setProcessing(false) }} secondary={{ label: "Lihat Jadwal", href: "/schedule?membership=sensei" }} />;
-  return <><div className="sensei-title-row"><PageHead eyebrow="BELAJAR DENGAN SENSEI • REPLAY KELAS" title="Tonton kembali sesi yang telah dipublikasikan" description="Rekaman video kelas bimbingan Sensei dengan transkrip dan penanda waktu." /><Link href="/schedule?membership=sensei">Lihat Jadwal</Link></div><label className="replay-search">Cari replay, chapter, atau Sensei<input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari replay, chapter, atau Sensei" /></label><div className="replay-filters">{["Semua","Chapter 4","Tersimpan"].map((item) => <button type="button" className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div><section className="replay-featured"><button className="replay-processing-trigger" type="button" onClick={() => setProcessing(true)}><p className="dash-kicker">Replay terbaru</p><span>REPLAY TERBARU • Dipublikasikan • Cohort Aktif</span><h2>{featured.title}</h2><p>{featured.description}</p><small>Sesi bimbingan Sensei • Rekaman video terstandarisasi</small></button><Link href="/replay/chapter-4?membership=sensei">Putar Replay</Link></section><h2 className="replay-section-title">Replay lainnya</h2>{visible.length ? <section className="replay-grid">{visible.filter((item) => !item.featured).map((item) => <article key={item.id}><small>REPLAY • Dipublikasikan • Cohort Aktif</small><h2>{item.title}</h2><p>{item.description}</p><small>Sesi bimbingan Sensei • Rekaman video terstandarisasi</small><Link href="/replay/chapter-4?membership=sensei">Buka Replay</Link></article>)}</section> : <section className="library-empty"><h2>Tidak ada replay ditemukan</h2><p>Ubah pencarian atau filter untuk melihat rekaman lain.</p></section>}<section className="sensei-announcement"><strong>Pengumuman</strong><p>Replay tampil setelah rekaman sesi selesai diverifikasi dan dipublikasikan.</p></section></>;
+
+  if (processing) {
+    return (
+      <SenseiState
+        eyebrow="REPLAY • PROCESSING"
+        title="Replay sedang diproses"
+        status="Processing"
+        description="Rekaman, transkrip, dan materi sedang disiapkan sebelum dipublikasikan."
+        facts={["Status sistem", "Jadwal resmi", "Verifikasi paket"]}
+        primary={{ label: "Kembali ke Replay", onClick: () => setProcessing(false) }}
+        secondary={{ label: "Lihat Jadwal", href: "/schedule?membership=sensei" }}
+      />
+    );
+  }
+
+  return (
+    <div className="replay-page-container">
+      <div className="sensei-title-row replay-head-row">
+        <PageHead
+          eyebrow="BELAJAR DENGAN SENSEI • REPLAY KELAS"
+          title="Rekaman Sesi Kelas Bersama Sensei"
+          description="Tonton kembali penjelasan materi, pembahasan latihan, dan sesi tanya jawab interaktif."
+        />
+        <Link href="/schedule?membership=sensei" className="button button-secondary replay-schedule-btn">
+          Lihat Jadwal Kelas
+        </Link>
+      </div>
+
+      <div className="replay-filter-bar">
+        <label className="replay-search-input">
+          <span aria-hidden="true"><LuSearch /></span>
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Cari judul rekaman, chapter, atau topik..."
+          />
+        </label>
+        <div className="replay-tabs-group">
+          {["Semua", "Chapter 4", "Tersimpan"].map((item) => (
+            <button
+              type="button"
+              className={`replay-tab-btn ${filter === item ? "active" : ""}`}
+              onClick={() => setFilter(item)}
+              key={item}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {featured && (
+        <section className="replay-featured-card">
+          <div className="replay-featured-preview">
+            <span className="replay-play-icon" aria-hidden="true"><LuPlay /></span>
+            <span className="replay-duration-pill">90 Menit</span>
+          </div>
+          <div className="replay-featured-info">
+            <div className="replay-featured-badges">
+              <span className="replay-badge-status">Rekaman Terbaru</span>
+              <span className="replay-badge-cohort">Cohort Aktif</span>
+            </div>
+            <h2>{featured.title}</h2>
+            <p>{featured.description}</p>
+            <div className="replay-featured-actions">
+              <Link className="button button-primary" href="/replay/chapter-4?membership=sensei">
+                Putar Rekaman
+              </Link>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => setProcessing(true)}
+              >
+                Cek Status Sesi
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="replay-section-header">
+        <h2>Daftar Rekaman Sesi</h2>
+        <span>{visible.length} rekaman tersedia</span>
+      </div>
+
+      {visible.length ? (
+        <section className="replay-cards-grid">
+          {visible.map((item) => (
+            <article key={item.id} className="replay-session-card">
+              <div className="replay-card-thumb">
+                <LuPlay aria-hidden="true" />
+                <span className="replay-time-tag">90 Menit</span>
+              </div>
+              <div className="replay-card-body">
+                <span className="replay-category-tag">{item.category || "Kelas Rutin"}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <div className="replay-card-footer">
+                  <Link href="/replay/chapter-4?membership=sensei" className="button button-primary">
+                    Buka Replay
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+      ) : (
+        <section className="library-empty">
+          <h2>Tidak ada rekaman ditemukan</h2>
+          <p>Ubah kata kunci pencarian atau filter untuk menemukan rekaman lain.</p>
+        </section>
+      )}
+
+      <aside className="sensei-announcement replay-announcement-centered">
+        <div className="replay-announcement-header">
+          <LuInfo aria-hidden="true" />
+          <strong>Pengumuman</strong>
+        </div>
+        <p>Replay tampil setelah rekaman sesi selesai diverifikasi dan dipublikasikan.</p>
+      </aside>
+    </div>
+  );
 }
 
 export function ReplayPlayerScreen({ youtubeVideoId }: { youtubeVideoId?: string }) {

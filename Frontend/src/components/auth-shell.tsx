@@ -10,7 +10,7 @@ export function AuthShell({ eyebrow, title, description, children }: { eyebrow: 
         <div className="auth-story-copy">
           <p>{eyebrow}</p>
           <h2>{title}</h2>
-          {description ? <p style={{ color: "var(--muted)", textTransform: "none", fontWeight: "normal", letterSpacing: "normal", fontSize: "14px", marginTop: "-5px" }}>{description}</p> : null}
+          {description ? <p className="auth-story-description">{description}</p> : null}
           <div className="auth-japanese" style={{ marginTop: "18px" }}><span lang="ja"><ruby>あ<rt></rt></ruby><ruby>い<rt></rt></ruby><ruby className="active">う<rt></rt></ruby><ruby>え<rt></rt></ruby><ruby>お<rt></rt></ruby></span></div>
         </div>
         <div className="auth-landscape" aria-hidden="true"><i className="auth-sun" /><i className="auth-cloud cloud-a" /><i className="auth-cloud cloud-b" /><span className="auth-torii"><i /><b /><em /><strong /></span><span className="auth-hill back" /><span className="auth-hill front" /></div>

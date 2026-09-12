@@ -9,11 +9,11 @@ export default function AdminProgramPage() {
   const [filter, setFilter] = useState("Independen");
 
   const programs = [
-    { level: "N5", title: "N5 — Dasar", price: "Harga aktif", status: "Dipublikasikan", meta: "Dari admin" },
-    { level: "N4", title: "N4 — Pemula Lanjutan", price: "Harga aktif", status: "Dipublikasikan", meta: "Dari admin" },
-    { level: "N3", title: "N3 — Menengah", price: "Harga aktif", status: "Dipublikasikan", meta: "Dari admin" },
-    { level: "N2", title: "N2 — Lanjut", price: "Harga aktif", status: "Draft", meta: "Menunggu konfigurasi atau review" },
-    { level: "N1", title: "N1 — Mahir", price: "Harga aktif", status: "Draft", meta: "Menunggu konfigurasi atau review" },
+    { level: "N5", title: "N5 — Dasar Bahasa Jepang", price: "Mulai Rp 99.000", status: "Dipublikasikan", meta: "30 Bab Lengkap" },
+    { level: "N4", title: "N4 — Pemula Lanjutan", price: "Mulai Rp 149.000", status: "Dipublikasikan", meta: "35 Bab Lengkap" },
+    { level: "N3", title: "N3 — Menengah", price: "Mulai Rp 199.000", status: "Dipublikasikan", meta: "40 Bab Lengkap" },
+    { level: "N2", title: "N2 — Tingkat Lanjut", price: "Mulai Rp 249.000", status: "Draft", meta: "Dalam Peninjauan Materi" },
+    { level: "N1", title: "N1 — Mahir", price: "Mulai Rp 299.000", status: "Draft", meta: "Dalam Penyusunan Materi" },
   ];
 
   const visible = programs.filter(
@@ -33,30 +33,29 @@ export default function AdminProgramPage() {
           </div>
           <div className="admin-header-actions">
             <button className="button button-primary disabled" aria-disabled="true" type="button">Tambah Program</button>
-            <Link className="button button-secondary" href="/admin">Dashboard</Link>
           </div>
         </header>
 
         <section className="admin-kpi-grid">
           <article className="admin-kpi-card">
             <h2>Program aktif</h2>
-            <strong>Dinamis</strong>
-            <small>Dihitung dari status publikasi.</small>
+            <strong>3 Program</strong>
+            <small>N5, N4, dan N3 siap dipelajari.</small>
           </article>
           <article className="admin-kpi-card">
             <h2>Program draft</h2>
-            <strong>Dinamis</strong>
-            <small>Menunggu konfigurasi atau review.</small>
+            <strong>2 Program</strong>
+            <small>N2 dan N1 dalam penyusunan.</small>
           </article>
           <article className="admin-kpi-card">
-            <h2>Harga aktif</h2>
-            <strong>Dari admin</strong>
-            <small>Tidak memakai harga hardcoded.</small>
+            <h2>Rentang harga</h2>
+            <strong>Rp 99rb – 350rb</strong>
+            <small>Biaya paket mandiri dan kelas Sensei.</small>
           </article>
           <article className="admin-kpi-card">
             <h2>Akses level</h2>
-            <strong>Independen</strong>
-            <small>Bisa membeli level mana pun tanpa prerequisite antarlevel.</small>
+            <strong>Fleksibel</strong>
+            <small>Siswa dapat memilih level target secara langsung.</small>
           </article>
         </section>
 
@@ -106,7 +105,7 @@ export default function AdminProgramPage() {
                 ))}
               </div>
               <aside className="admin-product-rules">
-                <p>Harga dinamis • Backend authority • Publish state • Audit perubahan</p>
+                <p>Pengaturan Harga • Akses Siswa • Status Publikasi • Riwayat Perubahan</p>
               </aside>
             </section>
           </div>
@@ -114,37 +113,43 @@ export default function AdminProgramPage() {
           <aside className="admin-side-col">
             <section className="admin-section admin-entitlement-matrix">
               <h2>Entitlement Matrix</h2>
-              <div className="matrix-table">
-                <div className="matrix-row matrix-header">
-                  <span>Fitur</span>
-                  <span>Free Member</span>
-                  <span>Belajar Mandiri</span>
-                  <span>Belajar dengan Sensei</span>
-                </div>
-                <div className="matrix-row">
-                  <span>Akses Chapter</span>
-                  <span data-label="Free Member">Chapter 1</span>
-                  <span data-label="Belajar Mandiri">Seluruh Chapter</span>
-                  <span data-label="Belajar dengan Sensei">Seluruh Chapter</span>
-                </div>
-                <div className="matrix-row">
-                  <span>Try Out & Ulasan</span>
-                  <span data-label="Free Member">Preview</span>
-                  <span data-label="Belajar Mandiri">Penuh</span>
-                  <span data-label="Belajar dengan Sensei">Penuh</span>
-                </div>
-                <div className="matrix-row">
-                  <span>Community write</span>
-                  <span data-label="Free Member">Terkunci</span>
-                  <span data-label="Belajar Mandiri">Aktif</span>
-                  <span data-label="Belajar dengan Sensei">Aktif</span>
-                </div>
-                <div className="matrix-row">
-                  <span>Jadwal, Kelas & Replay</span>
-                  <span data-label="Free Member">Terkunci</span>
-                  <span data-label="Belajar Mandiri">Terkunci</span>
-                  <span data-label="Belajar dengan Sensei">Aktif</span>
-                </div>
+              <div className="admin-table-container">
+                <table className="matrix-straight-table">
+                  <thead>
+                    <tr>
+                      <th>Fitur</th>
+                      <th>Free Member</th>
+                      <th>Belajar Mandiri</th>
+                      <th>Belajar dengan Sensei</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Akses Chapter</strong></td>
+                      <td>Chapter 1</td>
+                      <td>Seluruh Chapter</td>
+                      <td>Seluruh Chapter</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Try Out &amp; Ulasan</strong></td>
+                      <td>Preview Singkat</td>
+                      <td>Akses Penuh</td>
+                      <td>Akses Penuh</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Forum Komunitas</strong></td>
+                      <td>Hanya Baca</td>
+                      <td>Tulis &amp; Balas</td>
+                      <td>Tulis &amp; Balas</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Jadwal, Kelas &amp; Replay</strong></td>
+                      <td>Tidak Tersedia</td>
+                      <td>Tidak Tersedia</td>
+                      <td>Akses Penuh + Live Zoom</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </section>
           </aside>

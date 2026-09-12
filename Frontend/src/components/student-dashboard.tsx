@@ -10,9 +10,9 @@ import {
   LuFlag,
   LuHandshake,
   LuLibrary,
+  LuBookOpen,
   LuMessageCircleQuestion,
   LuMessagesSquare,
-  LuPlay,
   LuRotateCcw,
   LuRoute,
 } from "react-icons/lu";
@@ -96,7 +96,6 @@ export function StudentDashboard({
               <p className="dash-subgreeting">{config.subgreeting}</p>
             </div>
             <div className="dash-badge-group">
-              <span className="dash-badge-level">{config.level}</span>
               <span className="dash-badge-target">
                 <LuFlag aria-hidden="true" /> {config.target}
               </span>
@@ -105,41 +104,27 @@ export function StudentDashboard({
 
           {/* 2. Continue Journey & Progress */}
           <div className="dashboard-bento">
+            <div className="dashboard-bento-left">
             <section className="lms-continue sensei-continue">
-              <div>
-                <p className="dash-kicker">
-                  <LuPlay aria-hidden="true" /> {config.continue.label}
-                </p>
+              <div className="lms-continue-main">
+                <p className="dash-kicker">{config.continue.label}</p>
                 <h2>{config.continue.title}</h2>
                 <p>{config.continue.description}</p>
-                <div className="continue-actions">
+                <div className="continue-actions continue-actions-centered">
                   <Link className="continue-button" href={config.continue.primaryHref}>
                     {config.continue.primary}{" "}
                     <b aria-hidden="true">
                       <LuArrowRight />
                     </b>
                   </Link>
-                  <span className="continue-time-tag">{config.continue.timeRemaining}</span>
                 </div>
-              </div>
-              <div className="continue-progress">
-                <div>
-                  <span>Progress belajar</span>
-                  <strong>{config.continue.progress}</strong>
-                </div>
-                <div
-                  className="continue-progress-track"
-                  role="progressbar"
-                  aria-label="Progress belajar"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={config.continue.progressPercent}
-                >
-                  <i style={{ width: `${config.continue.progressPercent}%` }} />
-                </div>
-                <small>{config.continue.detail}</small>
               </div>
             </section>
+            <section className="dashboard-material-grid" aria-label="Progres materi">
+              <article className="dashboard-material-card"><span className="dashboard-material-icon" aria-hidden="true"><LuRoute /></span><p className="dash-kicker">PROGRES MATERI</p><strong>Level N4</strong><small>Journey aktif</small></article>
+              <article className="dashboard-material-card"><span className="dashboard-material-icon" aria-hidden="true"><LuBookOpen /></span><p className="dash-kicker">MODUL SELESAI</p><strong>14 modul</strong><small>Materi telah dipelajari</small></article>
+            </section>
+            </div>
 
             <section className="dash-progress-card">
               <p className="dash-kicker">{config.continue.progressLabel}</p>
@@ -159,45 +144,9 @@ export function StudentDashboard({
                   <strong>{config.continue.progress}</strong>
                 </div>
               </div>
-              <p className="dash-progress-desc">{config.continue.detail}</p>
-            </section>
-          </div>
-
-          {/* 3. Akses Cepat */}
-          <section className="lms-section-head">
-            <p className="dash-kicker">AKSES CEPAT</p>
-            <h2>Buka fitur belajar</h2>
-          </section>
-          <section className="lms-quick-grid" aria-label="Akses cepat">
-            {config.quickActions.map((action) => (
-              <Link href={action.href} key={action.title}>
-                <Glyph name={action.icon} />
-                <span>
-                  <strong>{action.title}</strong>
-                  <small>{action.detail}</small>
-                </span>
-              </Link>
-            ))}
-          </section>
-
-          {/* 4. Progres Ringkasan & Leaderboard */}
-          <div className="dashboard-bottom-grid">
-            <section className="dashboard-summary-section">
-              <div className="dashboard-summary-head">
-                <p className="dash-kicker">RINGKASAN</p>
-                <h2>Progres belajarmu</h2>
-              </div>
-              <div className="sensei-progress-grid" aria-label="Ringkasan progres">
-                {config.progressSummary.map((item) => (
-                  <article key={item.label}>
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </article>
-                ))}
-              </div>
             </section>
 
-            <section className="dash-leaderboard-section">
+            <section className="dash-leaderboard-section dashboard-bento-leaderboard">
               <div className="dash-leaderboard-head">
                 <div>
                   <p className="dash-kicker">KOMPETISI</p>
@@ -211,20 +160,30 @@ export function StudentDashboard({
                 {config.leaderboard.map((user) => (
                   <li key={user.rank} className={`dash-leaderboard-item${user.isCurrentUser ? " current-user" : ""}`}>
                     <span className={`dash-rank-badge rank-${user.rank}`}>{user.rank}</span>
-                    <div className="dash-leaderboard-info">
-                      <strong>{user.name}</strong>
-                      <small>{user.xp}</small>
-                    </div>
-                    {user.rank === 1 && (
-                      <span className="dash-rank-fire" aria-hidden="true">
-                        <LuFlame />
-                      </span>
-                    )}
+                    <div className="dash-leaderboard-info"><strong>{user.name}</strong><small>{user.rank === 1 ? "12.450 XP" : user.rank === 2 ? "10.820 XP" : user.rank === 3 ? "9.640 XP" : user.rank === 4 ? "8.930 XP" : "8.410 XP"}</small></div>
+                    {user.rank === 1 && <span className="dash-rank-fire" aria-hidden="true"><LuFlame /></span>}
                   </li>
                 ))}
               </ul>
             </section>
           </div>
+
+          {/* 3. Akses Cepat */}
+          <section className="lms-section-head dashboard-quick-heading">
+            <p className="dash-kicker">AKSES CEPAT</p>
+          </section>
+          <section className="lms-quick-grid" aria-label="Akses cepat">
+            {config.quickActions.map((action) => (
+              <Link href={action.href} key={action.title}>
+                <Glyph name={action.icon} />
+                <span>
+                  <strong>{action.title}</strong>
+                  <small>{action.detail}</small>
+                </span>
+              </Link>
+            ))}
+          </section>
+
         </main>
       </div>
     </div>

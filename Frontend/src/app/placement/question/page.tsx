@@ -87,20 +87,7 @@ function PlacementQuestionRunner() {
           <strong className="timer-clock">{timeFormatted}</strong>
         </div>
 
-        <div className="placement-topbar-right">
-          <span className="progress-counter">
-            Soal <strong>{question.number}</strong> dari {placementQuestions.length}
-          </span>
-          <div
-            className="placement-progress-bar"
-            role="progressbar"
-            aria-valuenow={question.number}
-            aria-valuemin={1}
-            aria-valuemax={placementQuestions.length}
-          >
-            <div style={{ width: `${(question.number / placementQuestions.length) * 100}%` }} />
-          </div>
-        </div>
+        <div className="placement-topbar-right" aria-hidden="true" />
       </header>
 
       <div className="assessment-layout">
@@ -149,6 +136,7 @@ function PlacementQuestionRunner() {
               className="button button-dark runner-prev-btn"
               disabled={index === 0}
               onClick={() => setIndex(index - 1)}
+              hidden={index === 0}
             >
               <LuArrowLeft aria-hidden="true" /> Sebelumnya
             </button>
@@ -158,7 +146,7 @@ function PlacementQuestionRunner() {
               disabled={!answers[question.number]}
               onClick={nextQuestion}
             >
-              {index === placementQuestions.length - 1 ? "Lihat Hasil Tes" : "Lanjut Soal"}{" "}
+              {index === placementQuestions.length - 1 ? "Selesaikan Test" : "Lanjut Soal"}{" "}
               <LuArrowRight aria-hidden="true" />
             </button>
           </div>

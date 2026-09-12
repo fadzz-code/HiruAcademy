@@ -86,10 +86,6 @@ export function ClientChapterBuilder({ params }: { params: Promise<{ level: stri
                 defaultValue={current.desc} 
                 aria-label="Deskripsi Chapter"
               />
-              <div className="builder-main-actions">
-                <button type="button" className="button button-secondary">Simpan Draft</button>
-                <button type="button" className="button button-primary">Publikasikan</button>
-              </div>
             </header>
 
             <div className="builder-section">
@@ -119,6 +115,11 @@ export function ClientChapterBuilder({ params }: { params: Promise<{ level: stri
                 ))}
               </div>
               <button type="button" className="module-add-button">+ Tambah Modul Baru</button>
+
+              <div className="chapter-bottom-actions" style={{ display: "flex", gap: "12px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid #dee1ea" }}>
+                <button type="button" className="button button-secondary">Simpan Draft</button>
+                <button type="button" className="button button-primary">Publikasikan</button>
+              </div>
             </div>
           </section>
         </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LuArrowRight, LuBookOpen, LuCheck, LuFlame, LuKey, LuLock, LuStar } from "react-icons/lu";
+import { LuArrowRight, LuBookOpen, LuCheck, LuKey, LuLock, LuStar } from "react-icons/lu";
 import type { JourneyChapter, JourneyLevel } from "@/lib/journey-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 
@@ -230,10 +230,7 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
         <aside className="chapter-milestone">
           <h2>Milestone berikutnya</h2>
           <p>Selesaikan Chapter 4 untuk membuka materi berikutnya dan menjaga konsistensi belajar.</p>
-          <article>
-            <span aria-hidden="true"><LuFlame /></span>
-            <div><small>Konsistensi Belajar</small><strong>Aktif</strong></div>
-          </article>
+
           <Link href="/journey?membership=sensei">Kembali ke Level</Link>
         </aside>
       </div>

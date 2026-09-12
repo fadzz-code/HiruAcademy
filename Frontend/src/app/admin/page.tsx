@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const kpis = [
-    { label: "Total Pengguna", value: "—", meta: "Data real-time dari backend" },
+    { label: "Total Pengguna", value: "—", meta: "Contoh data saat ini" },
     { label: "Membership Aktif", value: "—", meta: "Berdasarkan entitlement aktif" },
     { label: "Invoice Menunggu", value: "—", meta: "Perlu verifikasi admin" },
     { label: "Insight Bisnis", value: "Live", meta: "Dari transaksi terverifikasi" },
@@ -33,7 +33,7 @@ export default function AdminDashboardPage() {
           <div>
             <p className="admin-kicker">ADMIN • OPERATIONS OVERVIEW</p>
             <h1>Dashboard Admin</h1>
-            <p>Configure, publish, operate, review, dan report dalam satu workspace.</p>
+            <p>Kelola konten, publikasi, evaluasi, dan laporan dalam satu ruang kerja.</p>
           </div>
           <div className="admin-header-actions">
             <label className="admin-search-box">

@@ -14,6 +14,9 @@ import {
   LuCopy,
   LuFlame,
   LuFlag,
+  LuGift,
+  LuGraduationCap,
+  LuInfo,
   LuKey,
   LuLayers3,
   LuLock,
@@ -23,6 +26,7 @@ import {
   LuRoute,
   LuSearch,
   LuShare2,
+  LuShieldCheck,
   LuTag,
   LuUser,
 } from "react-icons/lu";
@@ -141,9 +145,8 @@ function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }
         <section className="profile-certificates">
           <div className="profile-section-header">
             <h2>Sertifikat</h2>
-            <Link href={`/certificate${query}`}>Lihat Semua Sertifikat →</Link>
           </div>
-          <div>
+          <div className="profile-cert-grid">
             <Link className="profile-cert-card" href={`/certificate/n5${query}`}>
               <div className="profile-cert-top">
                 <LuCircleCheck className="cert-check-icon" aria-hidden="true" />
@@ -159,6 +162,11 @@ function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }
               </div>
               <strong>Sertifikat JLPT N4</strong>
               <small>Program JLPT N4 • Menyelesaikan Journey N4</small>
+            </Link>
+          </div>
+          <div className="profile-cert-footer">
+            <Link className="button button-secondary profile-all-cert-btn" href={`/certificate${query}`}>
+              Lihat Semua Sertifikat →
             </Link>
           </div>
         </section>
@@ -384,13 +392,18 @@ function RenewalScreen({ membership }: { membership: "free" | "lms" | "sensei" }
     <div className="supporting-shell student-shell">
       <StudentNavigation membership={membership} current="profile" />
       <main className="supporting-main renewal-page">
+        <Link className="sensei-back renewal-top-back" href={`/profile${query}`}>← Kembali ke Profil</Link>
         <header className="supporting-header">
           <p className="dash-kicker">MEMBERSHIP RENEWAL</p>
           <h1>Lanjutkan akses tanpa kehilangan progres</h1>
           <p>Harga dan periode baru tampil setelah plan dipilih; data berasal dari paket resmi HIRU Academy.</p>
         </header>
         <section className="renewal-current">
-          <span>Membership Aktif</span>
+          <div className="renewal-badge-row">
+            <span className="renewal-status-badge">
+              <LuShieldCheck aria-hidden="true" /> Membership Aktif
+            </span>
+          </div>
           <h2>Belajar Mandiri • N4</h2>
           <p>Akses aktif hingga 31 Desember 2026. Progres tetap tersimpan setelah perpanjangan.</p>
         </section>
@@ -398,38 +411,46 @@ function RenewalScreen({ membership }: { membership: "free" | "lms" | "sensei" }
           <h2>Pilih plan lanjutan</h2>
           <div>
             <button className={plan === "lms" ? "active" : ""} type="button" onClick={() => setPlan("lms")}>
+              <div className="renewal-plan-icon"><LuBookOpen aria-hidden="true" /></div>
               <small>LMS</small>
               <strong>Belajar Mandiri</strong>
-              <span>Journey penuh, try out, review, sertifikat, dan community write.</span>
-              <b>Harga dinamis setelah pilihan</b>
+              <span>Journey penuh, try out, review, sertifikat, dan forum diskusi.</span>
+              <b>Rp 99.000 / 6 Bulan</b>
             </button>
             <button className={plan === "sensei" ? "active" : ""} type="button" onClick={() => setPlan("sensei")}>
+              <div className="renewal-plan-icon"><LuGraduationCap aria-hidden="true" /></div>
               <small>{membership === "sensei" ? "SENSEI" : "LMS + Zoom"}</small>
               <strong>Belajar dengan Sensei</strong>
-              <span>Semua LMS ditambah cohort, jadwal Zoom, Sensei, dan replay.</span>
-              <b>Harga dinamis setelah pilihan</b>
+              <span>Semua LMS ditambah cohort, jadwal Zoom, bimbingan Sensei, dan replay.</span>
+              <b>Rp 350.000 / Bulan</b>
             </button>
           </div>
         </section>
         <section className="renewal-reward">
-          <p className="dash-kicker">REWARD REFERRAL TERSEDIA</p>
+          <p className="dash-kicker">
+            <LuGift aria-hidden="true" /> REWARD REFERRAL TERSEDIA
+          </p>
           <h2>Gunakan reward diskon pada invoice renewal berikutnya</h2>
           <p>Saldo reward aktif dapat langsung memotong total pembayaranmu.</p>
-          <button type="button" aria-pressed={rewardApplied} onClick={() => setRewardApplied(true)}>
+          <button type="button" className="button button-orange" aria-pressed={rewardApplied} onClick={() => setRewardApplied(true)}>
             {rewardApplied ? "Reward Diterapkan" : "Gunakan Reward"}
           </button>
         </section>
         <section className="renewal-summary">
           <p className="dash-kicker">RINGKASAN RENEWAL</p>
           <h2>{plan === "lms" ? "Belajar Mandiri" : "Belajar dengan Sensei"} • periode baru</h2>
-          <p>{rewardApplied && "Reward referral diterapkan. "}Nominal dan tanggal aktif baru mengikuti pilihan dan verifikasi invoice.</p>
-          <button className="button button-primary disabled" type="button" aria-disabled="true">Buat Invoice &amp; Buka WhatsApp</button>
+          <p className="renewal-summary-desc">{rewardApplied && "Reward referral diterapkan. "}Rincian pembayaran dan tanggal aktif baru akan dikirimkan melalui WhatsApp.</p>
+          <div className="renewal-invoice-action">
+            <button className="button button-primary" type="submit">Buat Invoice &amp; Buka WhatsApp</button>
+          </div>
         </section>
-        <aside className="renewal-announcement">
-          <strong>Pengumuman</strong>
+        <aside className="renewal-announcement renewal-announcement-center">
+          <div className="renewal-announcement-header">
+            <LuInfo aria-hidden="true" />
+            <strong>Pengumuman</strong>
+          </div>
           <p>Membership aktif setelah pembayaran via WhatsApp dan invoice diverifikasi Admin.</p>
         </aside>
-        <Link className="sensei-back" href={`/profile${query}`}>← Kembali ke Profil</Link>
       </main>
     </div>
   );
@@ -615,7 +636,7 @@ function CertificateScreen({ membership }: { membership: "free" | "lms" | "sense
             );
           })}
         </section>
-        <aside className="certificate-notice"><strong>Pengumuman</strong><p>Sertifikat diterbitkan otomatis setelah seluruh kriteria kelulusan terpenuhi.</p></aside>
+        <aside className="certificate-notice"><strong>Pengumuman</strong><p>Sertifikat tersedia setelah seluruh kriteria kelulusan terpenuhi.</p></aside>
       </main>
     </div>
   );
@@ -758,28 +779,39 @@ function ProgressScreen({ membership }: { membership: "free" | "lms" | "sensei" 
             <h1>Rayakan progres tanpa kehilangan fokus</h1>
             <p>Progress, streak, mastery, dan pencapaian dihitung dari journey serta aktivitas belajarmu.</p>
           </header>
-          <Link href={`/profile${query}`}>Profil</Link>
+          <Link href={`/profile${query}`} className="button button-secondary progress-profile-btn">Profil</Link>
         </div>
         <section className="progress-summary">
-          <div>
+          <div className="progress-summary-info">
             <p className="dash-kicker">MEMBER LEVEL N4</p>
             <h2>Perjalanan belajar terus bertumbuh</h2>
             <p>Persentase dan milestone mengikuti progres belajar yang valid.</p>
-            <span>12 Hari Streak</span>
+            <span className="progress-streak-badge">
+              <LuFlame aria-hidden="true" /> 12 Hari Streak
+            </span>
           </div>
           <div className="progress-stats">
-            {[["65%", "Journey N4"], ["450", "Kanji mastered"], ["18", "Latihan selesai"], ["82%", "Akurasi"]].map(([value, label]) => (
-              <div key={label}><strong>{value}</strong><span>{label}</span></div>
+            {[
+              { value: "65%", label: "Journey N4", icon: LuRoute },
+              { value: "450", label: "Kanji mastered", icon: LuBookOpen },
+              { value: "18", label: "Latihan selesai", icon: LuCircleCheck },
+              { value: "82%", label: "Akurasi", icon: LuAward },
+            ].map(({ value, label, icon: Icon }) => (
+              <div key={label} className="progress-stat-card">
+                <span className="progress-stat-icon" aria-hidden="true"><Icon /></span>
+                <strong>{value}</strong>
+                <span className="progress-stat-label">{label}</span>
+              </div>
             ))}
           </div>
         </section>
         <section className="progress-milestones">
           <h2>Milestone journey</h2>
           {milestones.map(([number, title, description, status]) => (
-            <article key={title}>
-              <span>{number}</span>
-              <div><strong>{title}</strong><small>{description}</small></div>
-              <b>{status}</b>
+            <article key={title} className="milestone-item">
+              <span className="milestone-number">{number}</span>
+              <div className="milestone-info"><strong>{title}</strong><small>{description}</small></div>
+              <b className={`milestone-badge milestone-${status.toLowerCase()}`}>{status}</b>
             </article>
           ))}
         </section>
@@ -881,16 +913,30 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
           <h1>Temukan kembali materi dari seluruh journey</h1>
           <p>Akses arsip materi, tata bahasa, kanji, dan audio pembelajaran yang telah dipelajari.</p>
         </header>
-        <label className="library-search">
-          <span aria-hidden="true"><LuSearch /></span>
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari materi, tata bahasa, kanji, atau audio" />
-        </label>
-        <div className="library-filters">{["Semua", "N5", "N4", "N3", "SSW", "Interview"].map((item) => (
-          <button className={level === item ? "active" : ""} type="button" onClick={() => setLevel(item)} key={item}>{item}</button>
-        ))}</div>
-        <div className="library-filters types">{["Semua", "Tata Bahasa", "Kanji", "Kosakata", "Audio", "Reading"].map((item) => (
-          <button className={type === item ? "active" : ""} type="button" onClick={() => setType(item)} key={item}>{item}</button>
-        ))}</div>
+        <div className="library-filter-bar">
+          <label className="library-search">
+            <span aria-hidden="true"><LuSearch /></span>
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Cari materi, tata bahasa, kanji, atau audio" />
+          </label>
+          <div className="library-dropdowns">
+            <div className="library-select-item">
+              <label htmlFor="library-level-select">Level</label>
+              <select id="library-level-select" value={level} onChange={(event) => setLevel(event.target.value)}>
+                {["Semua", "N5", "N4", "N3", "SSW", "Interview"].map((item) => (
+                  <option key={item} value={item}>{item === "Interview" ? "Persiapan Interview" : item}</option>
+                ))}
+              </select>
+            </div>
+            <div className="library-select-item">
+              <label htmlFor="library-type-select">Kategori</label>
+              <select id="library-type-select" value={type} onChange={(event) => setType(event.target.value)}>
+                {["Semua", "Tata Bahasa", "Kanji", "Kosakata", "Audio", "Reading"].map((item) => (
+                  <option key={item} value={item}>{item}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
         {visible.length ? (
           <>
             <section className="library-section-head"><h2>Rekomendasi N4</h2></section>

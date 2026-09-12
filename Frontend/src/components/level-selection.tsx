@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { LuArrowRight, LuFlame, LuInfo, LuKey, LuLock, LuSparkles, LuStar } from "react-icons/lu";
+import { LuArrowRight, LuFlame, LuInfo, LuKey, LuLock, LuSparkles, LuStar, LuFlag, LuUsers } from "react-icons/lu";
 import type { JourneyLevel } from "@/lib/journey-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 
@@ -24,30 +24,51 @@ export function LevelSelection({ membership, levels }: { membership: Membership;
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [selected]);
 
-  if (membership !== "sensei") {
+  if (membership === "free" || membership === "lms" || membership === "sensei") {
     return (
       <section className="level-grid" aria-label="Pilihan level">
-        {levels.map((level) => (
-          <article className={`level-card level-${level.progression}`} key={level.slug}>
-            <div className="level-card-top">
-              <span className="level-code">{level.code}</span>
-              <span className="level-status">{level.statusLabel}</span>
-            </div>
-            <h2>{level.title}</h2>
-            <p>{level.description}</p>
-            {level.access === "notPurchased" ? (
-              <Link className="level-unavailable" href={`/renewal?membership=${membership}`}>
-                {level.actionLabel}
-                <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
-              </Link>
-            ) : (
-              <Link href={`/journey/${level.slug}?membership=${membership}`}>
-                {level.actionLabel}
-                <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
-              </Link>
-            )}
-          </article>
-        ))}
+        {levels.map((level) => {
+          const isLocked = level.access === "notPurchased";
+          return (
+            <article className={`level-card level-${level.progression} ${isLocked ? "is-locked" : ""}`} key={level.slug}>
+              {isLocked && (
+                <div className="level-card-lock-overlay" aria-hidden="true">
+                  <div className="level-card-lock-icon">
+                    <LuLock />
+                  </div>
+                </div>
+              )}
+              <div className="level-card-top">
+                <span className="level-code">
+                  {level.slug === "dasar" ? (
+                    <LuFlag aria-hidden="true" />
+                  ) : level.slug === "interview" ? (
+                    <LuUsers aria-hidden="true" />
+                  ) : (
+                    level.code
+                  )}
+                </span>
+                <span className="level-status">
+                  {isLocked && <LuLock aria-hidden="true" style={{ display: "inline-block", marginRight: "4px", verticalAlign: "middle" }} />}
+                  {level.statusLabel}
+                </span>
+              </div>
+              <h2>{level.title}</h2>
+              <p>{level.description}</p>
+              {level.access === "notPurchased" ? (
+                <Link className="level-unavailable" href={`/renewal?membership=${membership}`}>
+                  {level.actionLabel}
+                  <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
+                </Link>
+              ) : (
+                <Link href={`/journey/${level.slug}?membership=${membership}`}>
+                  {level.actionLabel}
+                  <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
+                </Link>
+              )}
+            </article>
+          );
+        })}
       </section>
     );
   }
@@ -83,36 +104,54 @@ export function LevelSelection({ membership, levels }: { membership: Membership;
         <p>Tidak ada prerequisite antarlevel. Status kelas aktif mengikuti entitlement dan cohort.</p>
       </header>
       <section className="level-grid sensei-level-grid" aria-label="Level berdasarkan pembelian">
-        {levels.map((level) => (
-          <article className={`level-card level-${level.access} level-${level.progression}`} key={level.slug}>
-            <div className="level-card-top">
-              <span className="level-code">{level.code}</span>
-              <span className="level-status">
-                {level.access === "notPurchased" && <LuLock aria-hidden="true" style={{ display: "inline-block", marginRight: "4px", verticalAlign: "middle" }} />}
-                {level.statusLabel}
-              </span>
-            </div>
-            <h2>{level.title}</h2>
-            <p>{level.description}</p>
-            {level.access === "owned" ? (
-              <Link href={`/journey/${level.slug}?membership=sensei`}>
-                {level.actionLabel}
-                <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={(event) => {
-                  triggerRef.current = event.currentTarget;
-                  setSelected(level);
-                }}
-              >
-                {level.actionLabel}
-                <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
-              </button>
-            )}
-          </article>
-        ))}
+        {levels.map((level) => {
+          const isLocked = level.access === "notPurchased";
+          return (
+            <article className={`level-card level-${level.access} level-${level.progression} ${isLocked ? "is-locked" : ""}`} key={level.slug}>
+              {isLocked && (
+                <div className="level-card-lock-overlay" aria-hidden="true">
+                  <div className="level-card-lock-icon">
+                    <LuLock />
+                  </div>
+                </div>
+              )}
+              <div className="level-card-top">
+                <span className="level-code">
+                  {level.slug === "dasar" ? (
+                    <LuFlag aria-hidden="true" />
+                  ) : level.slug === "interview" ? (
+                    <LuUsers aria-hidden="true" />
+                  ) : (
+                    level.code
+                  )}
+                </span>
+                <span className="level-status">
+                  {isLocked && <LuLock aria-hidden="true" style={{ display: "inline-block", marginRight: "4px", verticalAlign: "middle" }} />}
+                  {level.statusLabel}
+                </span>
+              </div>
+              <h2>{level.title}</h2>
+              <p>{level.description}</p>
+              {level.access === "owned" ? (
+                <Link href={`/journey/${level.slug}?membership=sensei`}>
+                  {level.actionLabel}
+                  <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    triggerRef.current = event.currentTarget;
+                    setSelected(level);
+                  }}
+                >
+                  {level.actionLabel}
+                  <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
+                </button>
+              )}
+            </article>
+          );
+        })}
       </section>
       <section className="journey-activity">
         <h2>Aktivitas minggu ini</h2>

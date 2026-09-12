@@ -30,6 +30,10 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
   return (
     <AdminShell current="content">
       <main className="admin-page builder-page">
+        <div className="builder-top-nav" style={{ marginBottom: "16px" }}>
+          <Link className="button button-secondary" href={`/admin/program/${level}/chapters`}>← Kembali ke Chapter</Link>
+        </div>
+
         <header className="admin-header">
           <div>
             <p className="admin-kicker">QUIZ BUILDER • {code} • {chapter.toUpperCase()}</p>
@@ -37,10 +41,8 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
             <p>Kelola soal, opsi jawaban, dan pengaturan kelulusan assessment.</p>
           </div>
           <div className="admin-header-actions">
-            {!isSaved && <span className="save-status unsaved">Unsaved Changes</span>}
-            {isSaved && <span className="save-status saved">Saved</span>}
-            <button type="button" className={`button ${isSaved ? "button-secondary" : "button-primary"}`} onClick={handleSave}>Simpan Soal</button>
-            <Link className="button button-secondary" href={`/admin/program/${level}/chapters`}>← Kembali</Link>
+            {!isSaved && <span className="save-status unsaved">Perubahan Belum Disimpan</span>}
+            {isSaved && <span className="save-status saved">Tersimpan</span>}
           </div>
         </header>
 
@@ -139,7 +141,7 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
 
                 <label className="admin-field">
                   <span>Penjelasan (Feedback)</span>
-                  <textarea defaultValue="Penjelasan fixture deterministik ditampilkan di halaman review." onChange={handleChange} rows={3}></textarea>
+                  <textarea defaultValue="Penjelasan materi dan pembahasan jawaban yang akan dibaca oleh siswa saat meninjau hasil kuis." onChange={handleChange} rows={3}></textarea>
                 </label>
               </div>
 
@@ -160,13 +162,21 @@ export function ClientQuizBuilder({ params }: { params: Promise<{ level: string;
                   <small>MP3 max 5MB.</small>
                 </div>
                 <aside className="admin-product-rules">
-                  <p>Upload dikendalikan secara lokal melalui frontend fixture. Tidak ada integrasi S3 yang diaktifkan.</p>
+                  <p>Format file yang didukung: JPG, PNG, atau MP3 dengan ukuran optimal.</p>
                 </aside>
               </div>
             </div>
           </section>
         </div>
-        <footer className="builder-footer"><Link className="button button-dark" href={`/admin/program/${level}/tryout`}>Penyusun Try Out</Link><p>Perubahan assessment aktif setelah disimpan dan dipublikasikan.</p></footer>
+        <footer className="builder-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "32px", paddingTop: "20px", borderTop: "1px solid #dee1ea" }}>
+          <p style={{ margin: 0, color: "var(--muted)", fontSize: "13px" }}>
+            Soal kuis dan aturan kelulusan akan langsung aktif pada chapter siswa setelah disimpan dan dipublikasikan.
+          </p>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <button type="button" className="button button-secondary" onClick={handleSave}>Simpan Soal</button>
+            <button type="button" className="button button-primary" onClick={handleSave}>Publikasikan</button>
+          </div>
+        </footer>
       </main>
     </AdminShell>
   );

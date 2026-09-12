@@ -189,27 +189,24 @@ export default function DashboardsStudioPage() {
             <h1>Pengelolaan Dasbor Siswa</h1>
             <p>Konfigurasi heading, description, announcement, dan kartu aksi dasbor untuk tiap plan membership.</p>
           </div>
-          <div className="admin-header-actions">
-            <Link className="button button-secondary" href="/admin/content-studio">
-              Kembali
-            </Link>
-            <button className="button button-secondary" type="button" onClick={handleCancel}>
-              Batal
-            </button>
-            <button className="button button-secondary" type="button" onClick={handleSaveDraft}>
-              Save Draft
-            </button>
-            <button className="button button-dark" type="button" onClick={() => setDialog("preview")}>
-              Preview
-            </button>
-            <button className="button button-primary" type="button" onClick={handlePublish}>
-              Publish/Update
-            </button>
-          </div>
         </header>
 
+        <section className="admin-context-info-card">
+          <div className="admin-context-info-badge">Target Tampilan Siswa</div>
+          <div className="admin-context-info-content">
+            <strong>Halaman yang diubah: /dashboard (Dashboard Utama Siswa)</strong>
+            <p>
+              Editor ini mengatur konten yang tampil langsung kepada siswa di dasbor utama sesuai paket membership ({planMeta[selectedPlan].label}):
+            </p>
+            <ul>
+              <li><strong>Bagian 1 (Teks Utama):</strong> Teks sapaan pembuka (Heading), kalimat penyemangat, dan pengumuman dasbor atas.</li>
+              <li><strong>Bagian 2 (Kartu Aksi):</strong> Tiga kartu pintasan menu cepat yang berada di bawah progres belajar siswa.</li>
+            </ul>
+          </div>
+        </section>
+
         <section className="admin-local-feedback" role="status">
-          Penyimpanan server belum tersedia. Perubahan pada workspace ini hanya untuk penyiapan integrasi.
+          Perubahan editor disimpan secara lokal. Klik &quot;Save Draft&quot; untuk menyimpan atau &quot;Publish/Update&quot; untuk menerapkan pembaruan.
         </section>
 
         <section className="admin-kpi-grid" aria-label="Status konfigurasi">
@@ -283,41 +280,45 @@ export default function DashboardsStudioPage() {
         </section>
 
         <section className="admin-section">
-          <h2>Daftar Kartu Aksi ({current.cards.length})</h2>
-          <div style={{ display: "grid", gap: "20px", maxWidth: "900px" }}>
+          <div className="admin-section-header">
+            <h2>Daftar Kartu Aksi ({current.cards.length})</h2>
+            <p style={{ margin: "4px 0 16px", color: "var(--muted)", fontSize: "13px" }}>
+              Tiga kartu aksi ini tampil berjajar horizontal pada baris menu cepat Dashboard siswa.
+            </p>
+          </div>
+          <div className="admin-dashboard-cards-grid">
             {current.cards.map((card, index) => (
               <article
                 key={card.id}
-                className="admin-action-card"
-                style={{ display: "grid", gap: "16px", padding: "20px" }}
+                className="admin-action-card studio-action-editor-card"
               >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 800, color: "var(--orange-dark)" }}>
+                <div className="studio-action-card-header">
+                  <span className="studio-card-number-badge">
                     KARTU {index + 1}
                   </span>
-                  <div style={{ display: "flex", gap: "8px" }}>
+                  <div className="studio-card-move-btns">
                     <button
                       type="button"
-                      className="button button-secondary"
+                      className="button button-secondary button-xs"
                       disabled={index === 0}
                       onClick={() => moveCard(index, -1)}
-                      aria-label={`Pindahkan kartu ${index + 1} ke atas`}
+                      aria-label={`Pindahkan kartu ${index + 1} ke kiri`}
                     >
-                      Naik ↑
+                      ←
                     </button>
                     <button
                       type="button"
-                      className="button button-secondary"
+                      className="button button-secondary button-xs"
                       disabled={index === current.cards.length - 1}
                       onClick={() => moveCard(index, 1)}
-                      aria-label={`Pindahkan kartu ${index + 1} ke bawah`}
+                      aria-label={`Pindahkan kartu ${index + 1} ke kanan`}
                     >
-                      Turun ↓
+                      →
                     </button>
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gap: "12px" }}>
+                <div className="studio-action-card-fields">
                   <label className="admin-field">
                     <span>Judul Kartu</span>
                     <input
@@ -336,50 +337,60 @@ export default function DashboardsStudioPage() {
                     />
                   </label>
 
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                      gap: "12px",
-                    }}
-                  >
-                    <label className="admin-field">
-                      <span>Label CTA</span>
-                      <input
-                        type="text"
-                        value={card.cta.label}
-                        onChange={(e) =>
-                          updateCard(index, {
-                            cta: { ...card.cta, label: e.target.value },
-                          })
-                        }
-                      />
-                    </label>
+                  <label className="admin-field">
+                    <span>Label CTA</span>
+                    <input
+                      type="text"
+                      value={card.cta.label}
+                      onChange={(e) =>
+                        updateCard(index, {
+                          cta: { ...card.cta, label: e.target.value },
+                        })
+                      }
+                    />
+                  </label>
 
-                    <label className="admin-field">
-                      <span>Destinasi Rute</span>
-                      <select
-                        value={card.cta.destination}
-                        onChange={(e) =>
-                          updateCard(index, {
-                            cta: {
-                              ...card.cta,
-                              destination: e.target.value as RouteDestinationKey,
-                            },
-                          })
-                        }
-                      >
-                        {destinationKeys.map((key) => (
-                          <option key={key} value={key}>
-                            {key} ({routeDestinations[key]})
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
+                  <label className="admin-field">
+                    <span>Destinasi Rute</span>
+                    <select
+                      value={card.cta.destination}
+                      onChange={(e) =>
+                        updateCard(index, {
+                          cta: {
+                            ...card.cta,
+                            destination: e.target.value as RouteDestinationKey,
+                          },
+                        })
+                      }
+                    >
+                      {destinationKeys.map((key) => (
+                        <option key={key} value={key}>
+                          {key} ({routeDestinations[key]})
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </div>
               </article>
             ))}
+          </div>
+
+          <div className="dashboard-editor-bottom-actions">
+            <Link className="button button-secondary" href="/admin/content-studio">
+              Kembali
+            </Link>
+            <button className="button button-secondary" type="button" onClick={handleCancel}>
+              Batal
+            </button>
+            <button className="button button-secondary" type="button" onClick={handleSaveDraft}>
+              Save Draft
+            </button>
+            <button className="button button-dark" type="button" onClick={() => setDialog("preview")}>
+              Preview
+            </button>
+            <button className="button button-primary" type="button" onClick={handlePublish}>
+              Publish/Update
+            </button>
           </div>
         </section>
 

@@ -1,59 +1,81 @@
 import Link from "next/link";
 import { AdminShell } from "@/components/admin-shell";
+import {
+  LuBell,
+  LuBookOpen,
+  LuCalendar,
+  LuCompass,
+  LuFileText,
+  LuFlag,
+  LuFolderTree,
+  LuGlobe,
+  LuGraduationCap,
+  LuCircleHelp,
+  LuLayers,
+  LuLayoutDashboard,
+  LuLibrary,
+  LuMessageSquare,
+  LuSettings,
+  LuShieldCheck,
+  LuSparkles,
+  LuUsers,
+} from "react-icons/lu";
 
 const groups = [
   {
     title: "Public Website",
     links: [
-      ["Landing Page", "/admin/landing-page"],
-      ["Blog", "/admin/blog"],
+      { label: "Landing Page", href: "/admin/landing-page", caption: "Kelola headline hero, banner promosi, dan urutan section landing page.", icon: LuGlobe },
+      { label: "Blog", href: "/admin/blog", caption: "Tulis dan kelola artikel panduan belajar bahasa Jepang dan tips JLPT.", icon: LuFileText },
     ],
   },
   {
     title: "Student Experience",
     links: [
-      ["Dashboards", "/admin/content-studio/dashboards"],
-      ["Levels", "/admin/content-studio/levels"],
+      { label: "Dashboards", href: "/admin/content-studio/dashboards", caption: "Atur sambutan, pengumuman, dan kartu aksi pada dashboard siswa.", icon: LuLayoutDashboard },
+      { label: "Levels", href: "/admin/content-studio/levels", caption: "Kelola level belajar N5–N1, prasyarat, dan status akses materi.", icon: LuLayers },
     ],
   },
   {
     title: "Learning Content",
     links: [
-      ["Lessons", "/admin/content-studio/lessons"],
-      ["Flashcards", "/admin/content-studio/flashcards"],
-      ["Chapter Builder", "/admin/program/n4/chapters"],
+      { label: "Lessons", href: "/admin/content-studio/lessons", caption: "Susun aktivitas video, modul tata bahasa, kanji, dan latihan bab.", icon: LuBookOpen },
+      { label: "Flashcards", href: "/admin/content-studio/flashcards", caption: "Kelola deck kartu kosakata, bacaan kanji, dan contoh kalimat.", icon: LuSparkles },
+      { label: "Chapter Builder", href: "/admin/program/n4/chapters", caption: "Atur urutan materi dan susunan bab pada learning journey.", icon: LuFolderTree },
     ],
   },
   {
     title: "Assessment",
     links: [
-      ["Quiz Builder", "/admin/program/n4/chapters/chapter-4/quiz"],
-      ["Try Out Builder", "/admin/program/n4/tryout"],
-      ["Placement", "/admin/placement"],
-      ["Mini Checkpoint", "/admin/mini-checkpoint"],
+      { label: "Quiz Builder", href: "/admin/program/n4/chapters/chapter-4/quiz", caption: "Susun bank soal latihan dan kuis evaluasi harian.", icon: LuCircleHelp },
+      { label: "Try Out Builder", href: "/admin/program/n4/tryout", caption: "Kelola simulasi ujian JLPT lengkap dengan timer dan penilaian.", icon: LuGraduationCap },
+      { label: "Placement", href: "/admin/placement", caption: "Konfigurasi placement test gratis dan pantau prospek pendaftar.", icon: LuCompass },
+      { label: "Mini Checkpoint", href: "/admin/mini-checkpoint", caption: "Kelola evaluasi berkala per sesi dan part untuk cohort Sensei.", icon: LuFlag },
     ],
   },
   {
     title: "People & Social Proof",
     links: [
-      ["Sensei", "/admin/sensei"],
-      ["Testimonials", "/admin/testimonials"],
+      { label: "Sensei", href: "/admin/sensei", caption: "Kelola data pengajar, penugasan cohort, dan ketersediaan bimbingan.", icon: LuUsers },
+      { label: "Testimonials", href: "/admin/testimonials", caption: "Moderasi dan seleksi cerita pengalaman nyata dari para siswa.", icon: LuMessageSquare },
     ],
   },
   {
     title: "Media",
-    links: [["Content Library", "/admin/content-library"]],
+    links: [
+      { label: "Content Library", href: "/admin/content-library", caption: "Pusat arsip media video, PDF modul materi, audio, dan dokumen.", icon: LuLibrary },
+    ],
   },
   {
     title: "Existing Management",
     links: [
-      ["Program", "/admin/program"],
-      ["Settings", "/admin/settings"],
-      ["Announcements", "/admin/announcements"],
-      ["Cohorts", "/admin/cohorts"],
+      { label: "Program", href: "/admin/program", caption: "Atur paket belajar, biaya program, dan matriks hak akses siswa.", icon: LuShieldCheck },
+      { label: "Settings", href: "/admin/settings", caption: "Pengaturan umum aplikasi, kontak resmi, dan preferensi sistem.", icon: LuSettings },
+      { label: "Announcements", href: "/admin/announcements", caption: "Kirim pesan informasi dan broadcast penting kepada seluruh siswa.", icon: LuBell },
+      { label: "Cohorts", href: "/admin/cohorts", caption: "Atur jadwal kelas tatap muka Sensei, kapasitas, dan sesi Zoom.", icon: LuCalendar },
     ],
   },
-] as const;
+];
 
 export default function ContentStudioPage() {
   return (
@@ -70,13 +92,13 @@ export default function ContentStudioPage() {
         <section className="admin-kpi-grid" aria-label="Status workspace">
           <article className="admin-kpi-card">
             <h2>Status penyimpanan</h2>
-            <strong>Frontend only</strong>
-            <small>Perubahan editor frontend belum dipersist ke server.</small>
+            <strong>Siap Disunting</strong>
+            <small>Perubahan editor tersimpan lokal sebelum dipublikasikan.</small>
           </article>
           <article className="admin-kpi-card">
-            <h2>Workspace</h2>
-            <strong>{groups.length}</strong>
-            <small>Area pengelolaan konten dan pengalaman.</small>
+            <h2>Workspace Aktif</h2>
+            <strong>{groups.length} Kategori</strong>
+            <small>Area pengelolaan konten dan pengalaman siswa.</small>
           </article>
         </section>
 
@@ -84,10 +106,18 @@ export default function ContentStudioPage() {
           <section className="admin-section" key={group.title}>
             <h2>{group.title}</h2>
             <div className="admin-quick-actions">
-              {group.links.map(([label, href]) => (
-                <article className="admin-action-card" key={href}>
-                  <h3>{label}</h3>
-                  <Link className="button button-dark" href={href}>Buka workspace</Link>
+              {group.links.map(({ label, href, caption, icon: Icon }) => (
+                <article className="admin-action-card studio-card" key={href}>
+                  <div className="studio-card-top">
+                    <span className="studio-card-icon" aria-hidden="true">
+                      <Icon />
+                    </span>
+                    <h3 className="studio-card-title">{label}</h3>
+                  </div>
+                  <p className="studio-card-caption">{caption}</p>
+                  <Link className="button button-dark studio-card-btn" href={href}>
+                    Buka workspace
+                  </Link>
                 </article>
               ))}
             </div>
@@ -97,3 +127,4 @@ export default function ContentStudioPage() {
     </AdminShell>
   );
 }
+

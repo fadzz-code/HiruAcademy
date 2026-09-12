@@ -9,7 +9,6 @@ import { defaultLessons, type LessonBlock, type LessonContent } from "@/lib/cont
 const levels: LessonContent["level"][] = ["N5", "N4", "N3", "N2", "N1"];
 const chapters = Array.from({ length: 12 }, (_, index) => `chapter-${index + 1}`);
 const statuses: LessonContent["status"][] = ["draft", "scheduled", "published", "archived"];
-const blockTypes: LessonBlock["type"][] = ["video", "document", "japanese", "image", "callout", "exerciseReference"];
 const videoAssets = ["/videos/pengenalan-hiragana.mp4", "/videos/partikel-dasar.mp4", "/videos/percakapan-harian.mp4"];
 const imageAssets = ["/images/lesson/hiragana-chart.webp", "/images/lesson/japanese-classroom.webp", "/images/lesson/daily-activity.webp"];
 const exerciseReferences = ["exercise-n5-chapter-1-01", "exercise-n5-chapter-1-02", "exercise-n4-chapter-2-01"];
@@ -45,14 +44,6 @@ const seeds: LessonContent[] = [
 ];
 
 const cloneLesson = (lesson: LessonContent): LessonContent => ({ ...lesson, blocks: lesson.blocks.map((block) => ({ ...block })) });
-const emptyBlock = (type: LessonBlock["type"]): LessonBlock => {
-  if (type === "video") return { type, src: videoAssets[0], title: "" };
-  if (type === "document") return { type, body: "" };
-  if (type === "japanese") return { type, professional: "", beginner: "" };
-  if (type === "image") return { type, src: imageAssets[0], alt: "" };
-  if (type === "callout") return { type, heading: "", body: "" };
-  return { type, exerciseId: exerciseReferences[0] };
-};
 
 export default function LessonStudioPage() {
   const [lessons, setLessons] = useState<LessonContent[]>(() => (defaultLessons.length ? defaultLessons : seeds).map(cloneLesson));
@@ -62,8 +53,7 @@ export default function LessonStudioPage() {
   const [levelFilter, setLevelFilter] = useState("all");
   const [chapterFilter, setChapterFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [blockType, setBlockType] = useState<LessonBlock["type"]>("document");
-  const [notice, setNotice] = useState("Perubahan hanya tersimpan selama halaman ini terbuka dan tidak dikirim ke server.");
+  const [notice, setNotice] = useState("Perubahan tersimpan sementara selama halaman ini terbuka.");
 
   const filteredLessons = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("id-ID");
@@ -156,6 +146,16 @@ export default function LessonStudioPage() {
           </div>
         </header>
 
+        <aside className="admin-context-info-card">
+          <div className="admin-context-info-badge">Target Tampilan Siswa</div>
+          <div className="admin-context-info-content">
+            <strong>Halaman yang diubah: /learn/[level]/[chapter] (Ruang Pembelajaran Siswa)</strong>
+            <p>
+              Editor ini mengatur konten materi yang dipelajari siswa di setiap bab (misalnya Video Pelajaran, Catatan Tata Bahasa, Kanji, dan Latihan).
+            </p>
+          </div>
+        </aside>
+
         <p className="admin-local-feedback" role="status">{notice}</p>
 
         <section className="admin-section" aria-labelledby="lesson-list-heading">
@@ -168,7 +168,14 @@ export default function LessonStudioPage() {
           </div>
           <div className="module-list">
             {filteredLessons.map((lesson, index) => <article className={`module-item ${selectedId === lesson.id ? "active" : ""}`} key={lesson.id}>
-              <div className="module-content"><small>{lesson.level} • {lesson.chapter} • Urutan {lesson.order}</small><strong>{lesson.title}</strong><span className={`admin-status status-${lesson.status === "published" ? "active" : "pending"}`}>{lesson.status}</span></div>
+              <div className="module-content">
+                <div className="module-meta-row">
+                  <small>{lesson.level} • {lesson.chapter} • Urutan {lesson.order}</small>
+                  <span className={`admin-status status-${lesson.status === "published" ? "active" : "pending"}`}>{lesson.status}</span>
+                </div>
+                <strong className="module-title-text">{lesson.title}</strong>
+                {lesson.description && <p className="module-desc-text">{lesson.description}</p>}
+              </div>
               <div className="module-actions">
                 <button className="button button-secondary" type="button" onClick={() => selectLesson(lesson)}>Edit</button>
                 <button className="button button-secondary" type="button" onClick={() => duplicate(lesson)}>Duplicate</button>
@@ -181,26 +188,22 @@ export default function LessonStudioPage() {
           </div>
         </section>
 
-        <div className="builder-layout">
+        <div className="builder-layout builder-layout-stacked">
           <section className="builder-main" aria-labelledby="editor-heading">
             <header className="builder-main-head"><p className="admin-kicker">EDITOR</p><h2 id="editor-heading">{draft.title || "Pelajaran tanpa judul"}</h2></header>
             <div className="builder-section">
               <div className="admin-form-grid">
-                <label className="admin-field"><span>Level</span><select value={draft.level} onChange={(event) => setDraft({ ...draft, level: event.target.value as LessonContent["level"] })}>{levels.map((level) => <option key={level}>{level}</option>)}</select></label>
-                <label className="admin-field"><span>Chapter</span><select value={draft.chapter} onChange={(event) => setDraft({ ...draft, chapter: event.target.value })}>{chapters.map((chapter) => <option key={chapter}>{chapter}</option>)}</select></label>
-                <label className="admin-field"><span>Order</span><input type="number" min="1" value={draft.order} onChange={(event) => setDraft({ ...draft, order: Math.max(1, Number(event.target.value) || 1) })} /></label>
-                <label className="admin-field"><span>Status</span><select value={draft.status} onChange={(event) => setDraft({ ...draft, status: event.target.value as LessonContent["status"] })}>{statuses.map((status) => <option key={status}>{status}</option>)}</select></label>
+                <label className="admin-field"><span>Level</span><select className="admin-shadow-select" value={draft.level} onChange={(event) => setDraft({ ...draft, level: event.target.value as LessonContent["level"] })}>{levels.map((level) => <option key={level}>{level}</option>)}</select></label>
+                <label className="admin-field"><span>Chapter</span><select className="admin-shadow-select" value={draft.chapter} onChange={(event) => setDraft({ ...draft, chapter: event.target.value })}>{chapters.map((chapter) => <option key={chapter}>{chapter}</option>)}</select></label>
+                <label className="admin-field"><span>Order</span><input className="admin-shadow-input" type="number" min="1" value={draft.order} onChange={(event) => setDraft({ ...draft, order: Math.max(1, Number(event.target.value) || 1) })} /></label>
+                <label className="admin-field"><span>Status</span><select className="admin-shadow-select" value={draft.status} onChange={(event) => setDraft({ ...draft, status: event.target.value as LessonContent["status"] })}>{statuses.map((status) => <option key={status}>{status}</option>)}</select></label>
               </div>
               <label className="admin-field"><span>Title</span><input value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} /></label>
               <label className="admin-field"><span>Description</span><textarea rows={3} value={draft.description} onChange={(event) => setDraft({ ...draft, description: event.target.value })} /></label>
             </div>
 
             <div className="builder-section">
-              <div className="builder-section-title"><div><h3>Blocks</h3><p>Gunakan blok terkontrol tanpa HTML, route, code, atau JSON bebas.</p></div></div>
-              <div className="admin-header-actions">
-                <label className="admin-field"><span>Block type</span><select value={blockType} onChange={(event) => setBlockType(event.target.value as LessonBlock["type"])}>{blockTypes.map((type) => <option key={type}>{type}</option>)}</select></label>
-                <button className="button button-dark" type="button" onClick={() => setDraft({ ...draft, blocks: [...draft.blocks, emptyBlock(blockType)] })}>Add Block</button>
-              </div>
+              <div className="builder-section-title"><div><h3>Blok Materi Pembelajaran</h3><p>Daftar media dan komponen pembelajaran pada bab ini.</p></div></div>
               <div className="module-list">
                 {draft.blocks.map((block, index) => <article className="module-item" key={`${block.type}-${index}`}>
                   <div className="module-content">
@@ -225,7 +228,7 @@ export default function LessonStudioPage() {
           </section>
 
           <aside className="builder-sidebar" aria-labelledby="preview-heading">
-            <div className="builder-section-title"><h2 id="preview-heading">Preview</h2></div>
+            <div className="builder-section-title"><h2 id="preview-heading">Pratinjau Materi Siswa (Preview)</h2></div>
             <article className="admin-action-card"><small>{draft.level} • {draft.chapter}</small><h3>{draft.title || "Pelajaran tanpa judul"}</h3><p>{draft.description}</p></article>
             {draft.blocks.map((block, index) => <article className="admin-action-card" key={`preview-${block.type}-${index}`}>
               {block.type === "video" && <><h3>{block.title || "Video"}</h3><video controls preload="metadata" src={block.src}>Browser tidak mendukung video.</video></>}
