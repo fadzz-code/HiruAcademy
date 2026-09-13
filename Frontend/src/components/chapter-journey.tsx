@@ -136,9 +136,14 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
           <h2>Chapter 4 dari {chapters.length}</h2>
           <p>Progress{membership === "sensei" ? ", kelas Sensei, dan replay" : " materi dan quiz"} level lain tetap disimpan secara terpisah.</p>
         </div>
-        <div className="journey-progress">
-          <span>Progress tersimpan</span>
-          <div><i /></div>
+        <div className="dash-progress-ring" style={{ position: "relative", width: "48px", height: "48px" }}>
+          <svg viewBox="0 0 36 36" className="dash-ring-svg">
+            <path className="dash-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path className="dash-ring-fill" strokeDasharray="33, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <div className="dash-ring-value" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>
+            <strong>33%</strong>
+          </div>
         </div>
       </section>
       <div className="chapter-journey-layout">

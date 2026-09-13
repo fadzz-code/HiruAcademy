@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   LuArrowRight,
   LuBookMarked,
@@ -43,15 +43,12 @@ function getStatusClass(statusLabel?: string) {
 export function LessonOverview({ data }: { data: LearningData }) {
   const query = `?membership=${data.membership}`;
   const checkpoint = data.activities.find((activity) => activity.key === "checkpoint");
+  const isDuplicateTitle = data.chapterTitle.toUpperCase() === (data.level + " • CHAPTER " + data.chapterNumber).toUpperCase();
 
   return (
     <>
-      <Link className="learning-back-button learning-top-back" href={`/journey/${data.levelSlug}${query}`}>
-        ← Kembali ke Journey
-      </Link>
-
       <header className="learning-page-head">
-        <p className="dash-kicker">{data.level} • CHAPTER {data.chapterNumber}</p>
+        {!isDuplicateTitle && <p className="dash-kicker">{data.level} • CHAPTER {data.chapterNumber}</p>}
         <h1>{data.chapterTitle}</h1>
         <p>{data.overviewDescription}</p>
       </header>
@@ -59,33 +56,41 @@ export function LessonOverview({ data }: { data: LearningData }) {
       <section className="learning-progress-card">
         <div>
           <p className="dash-kicker">CHAPTER PROGRESS</p>
-          <h2>2 dari 7 aktivitas selesai</h2>
-          <p>Lanjutkan video, dua modul, flashcard, audio, reading, lalu checkpoint.</p>
+          <h2>2 dari {data.activities.length} aktivitas selesai</h2>
         </div>
-        <div className="journey-progress">
-          <span>Progress tersimpan</span>
-          <div>
-            <i />
+        <div className="dash-progress-ring" style={{ position: "relative", width: "48px", height: "48px" }}>
+          <svg viewBox="0 0 36 36" className="dash-ring-svg">
+            <path
+              className="dash-ring-bg"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            <path
+              className="dash-ring-fill"
+              strokeDasharray="28, 100"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+          </svg>
+          <div className="dash-ring-value" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>
+            <strong>28%</strong>
           </div>
         </div>
       </section>
 
       <section className="learning-section-head">
         <h2>Aktivitas chapter</h2>
-        <span>Lanjutkan</span>
       </section>
 
       <section className="learning-activity-grid" aria-label="Aktivitas chapter">
         {data.activities
           .filter((activity) => activity.key !== "checkpoint")
           .map((activity) => (
-            <article className={`learning-activity-card activity-${activity.state}`} key={activity.key}>
+            <article className={"learning-activity-card activity-" + activity.state} key={activity.key}>
               <div className="learning-activity-top">
                 <span className="learning-activity-icon" aria-hidden="true">
                   {getActivityIcon(activity.key)}
                 </span>
                 {activity.statusLabel && (
-                  <span className={`learning-activity-status ${getStatusClass(activity.statusLabel)}`}>
+                  <span className={"learning-activity-status " + getStatusClass(activity.statusLabel)}>
                     {activity.statusLabel}
                   </span>
                 )}
@@ -93,12 +98,11 @@ export function LessonOverview({ data }: { data: LearningData }) {
               <h3>{activity.title}</h3>
               <p>{activity.description}</p>
               {activity.href ? (
-                <Link className="activity-action-button" href={activity.href}>
+                <Link className="activity-action-button" href={activity.href} style={{ display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
                   {activity.key === "video" ? "Lanjutkan" : "Buka"}
-                  <LuArrowRight aria-hidden="true" />
                 </Link>
               ) : (
-                <span className="learning-activity-unavailable">Belum tersedia</span>
+                <span className="learning-activity-unavailable" style={{ display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Belum tersedia</span>
               )}
             </article>
           ))}
@@ -130,4 +134,3 @@ export function LessonOverview({ data }: { data: LearningData }) {
     </>
   );
 }
-
