@@ -39,15 +39,7 @@ export function LevelSelection({ membership, levels }: { membership: Membership;
               <Link className="lms-secondary" href="/dashboard?membership=sensei">Kembali Dashboard</Link>
             </div>
           </div>
-          <div className="dash-progress-ring" style={{ position: "relative", width: "48px", height: "48px" }}>
-            <svg viewBox="0 0 36 36" className="dash-ring-svg">
-              <path className="dash-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path className="dash-ring-fill" strokeDasharray="65, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            </svg>
-            <div className="dash-ring-value" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>
-              <strong>65%</strong>
-            </div>
-          </div>
+
         </section>
       )}
 
