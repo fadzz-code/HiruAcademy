@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LuCheck, LuRotateCcw, LuZap } from "react-icons/lu";
 import type { FlashcardItem } from "@/lib/learning-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 
@@ -19,7 +20,7 @@ export function FlashcardSession({ cards, membership, level, chapter }: { cards:
     if (isAnimating) return;
     setIsAnimating(true);
     setFlipped((current) => !current);
-    flipTimer.current = setTimeout(() => setIsAnimating(false), 600);
+    flipTimer.current = setTimeout(() => setIsAnimating(false), 200);
   }
 
   function move(direction: -1 | 1) {
@@ -65,7 +66,11 @@ export function FlashcardSession({ cards, membership, level, chapter }: { cards:
          <div className="flashcard-inner"><div className="flash-face flash-front"><small>Japanese</small><ruby>{card.term}<rt>{card.reading}</rt></ruby></div><div className="flash-face flash-back"><span className="back-word"><small>Arti</small><strong>{card.meaning}</strong></span><span className="example-block"><small>Contoh kalimat</small><span className="example-japanese">{card.example.before}<ruby>{card.example.focus}<rt>{card.example.focusReading}</rt></ruby>{card.example.after}</span><em>{card.example.translation}</em></span></div></div>
       </div>
 
-      <div className="flash-controls"><button type="button" onClick={() => move(-1)} disabled={index === 0}><span aria-hidden="true">←</span> Sebelumnya</button><button className="flip-control" type="button" onClick={toggleCard}>{flipped ? "Lihat Depan" : "Balik Kartu"}</button><button type="button" onClick={() => move(1)} disabled={index === cards.length - 1}>Berikutnya <span aria-hidden="true">→</span></button></div><div className="flashcard-confidence" role="group" aria-label="Tingkat keyakinan">{["Ulangi","Sulit","Mudah"].map((label) => <button type="button" onClick={() => index === cards.length - 1 ? setCompleted(true) : move(1)} key={label}>{label}</button>)}</div><button className="flashcard-finish" type="button" onClick={() => setCompleted(true)}>{retrying ? "Selesaikan Ulang Kartu Sulit" : "Lihat State Selesai"}</button>
+      <div className="flash-controls"><button type="button" onClick={() => move(-1)} disabled={index === 0}><span aria-hidden="true">←</span> Sebelumnya</button><button className="flip-control" type="button" onClick={toggleCard}>{flipped ? "Lihat Depan" : "Balik Kartu"}</button><button type="button" onClick={() => move(1)} disabled={index === cards.length - 1}>Berikutnya <span aria-hidden="true">→</span></button></div><div className="flashcard-confidence" role="group" aria-label="Tingkat keyakinan">
+        <button type="button" onClick={() => index === cards.length - 1 ? setCompleted(true) : move(1)}><LuRotateCcw aria-hidden="true" /> Ulangi</button>
+        <button type="button" onClick={() => index === cards.length - 1 ? setCompleted(true) : move(1)}><LuZap aria-hidden="true" /> Sulit</button>
+        <button type="button" onClick={() => index === cards.length - 1 ? setCompleted(true) : move(1)}><LuCheck aria-hidden="true" /> Mudah</button>
+      </div><button className="flashcard-finish" type="button" onClick={() => setCompleted(true)}>{retrying ? "Selesaikan Ulang Kartu Sulit" : "Lihat State Selesai"}</button>
 
     </div>
   );
