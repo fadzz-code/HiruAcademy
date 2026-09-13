@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 import { StudentNavigation } from "@/components/student-navigation";
 import { parseMembership } from "@/lib/dashboard-mock";
 import { useState } from "react";
@@ -15,12 +16,13 @@ export function CommunityPostScreen() {
   const [state, setState] = useState<"detail" | "reply" | "attachment" | "reported">("detail");
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
-  if (state === "reported") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="community" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">COMMUNITY • LAPORAN</p><h1>Laporan berhasil dikirim</h1><p>Laporan tercatat dan akan ditinjau oleh tim moderasi kami.</p><div className="status-actions"><button className="button button-primary" type="button" onClick={() => setState("detail")}>Kembali ke Thread</button><Link className="button button-secondary" href={`/community${query}`}>Kembali ke Community</Link></div></section></main></div>;
+  if (state === "reported") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} /><main className="supporting-main"><StudentBreadcrumb items={[{ label: "Diskusi Member", href: `/community${query}` }, { label: "Detail Diskusi" }]} /><section className="sensei-status-panel"><p className="dash-kicker">COMMUNITY • LAPORAN</p><h1>Laporan berhasil dikirim</h1><p>Laporan tercatat dan akan ditinjau oleh tim moderasi kami.</p><div className="status-actions"><button className="button button-primary" type="button" onClick={() => setState("detail")}>Kembali ke Thread</button><Link className="button button-secondary" href={`/community${query}`}>Kembali ke Community</Link></div></section></main></div>;
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="community" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main community-thread-page">
+        <StudentBreadcrumb items={[{ label: "Diskusi Member", href: `/community${query}` }, { label: "Detail Diskusi" }]} />
         <div className="progress-title-row community-header-row">
           <header className="supporting-header">
             <p className="dash-kicker">COMMUNITY • DISKUSI MATERI</p>

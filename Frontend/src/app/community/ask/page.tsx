@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 import { StudentNavigation } from "@/components/student-navigation";
 
 export default function AskSenseiPage({ searchParams }: { searchParams: { membership?: string } }) {
@@ -6,8 +7,9 @@ export default function AskSenseiPage({ searchParams }: { searchParams: { member
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="supporting" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
+        <StudentBreadcrumb items={[{ label: "Diskusi Member", href: `/community?membership=${membership}` }, { label: "Tanya Sensei" }]} />
         <header className="supporting-header">
           <p className="dash-kicker">TANYA SENSEI</p>
           <h1>Kirim pertanyaan yang terhubung ke materi, Chapter, replay, atau soal.</h1>

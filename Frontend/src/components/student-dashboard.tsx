@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import {
   LuArrowRight,
   LuAward,
@@ -18,7 +19,7 @@ import {
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
 import { StudentNavigation } from "@/components/student-navigation";
-import type { DashboardData, DashboardIcon } from "@/lib/dashboard-mock";
+import { getStudentFeatureAccess, type DashboardData, type DashboardIcon } from "@/lib/dashboard-mock";
 
 const glyphs: Record<DashboardIcon | "bell", IconType> = {
   achievement: LuAward,
@@ -52,10 +53,11 @@ export function StudentDashboard({
   previewEnabled: boolean;
 }) {
   const config = data.config;
+  const [lockedFeature, setLockedFeature] = useState<string | null>(null);
 
   return (
     <div className="dashboard-shell student-shell">
-      <StudentNavigation membership={data.membership} current="dashboard" />
+      <StudentNavigation membership={data.membership} />
       <div className="dash-main">
         <header className="dash-topbar">
           <div className="dash-top-actions">
@@ -173,16 +175,13 @@ export function StudentDashboard({
             <p className="dash-kicker">AKSES CEPAT</p>
           </section>
           <section className="lms-quick-grid" aria-label="Akses cepat">
-            {config.quickActions.map((action) => (
-              <Link href={action.href} key={action.title}>
-                <Glyph name={action.icon} />
-                <span>
-                  <strong>{action.title}</strong>
-                  <small>{action.detail}</small>
-                </span>
-              </Link>
-            ))}
+            {config.quickActions.map((action) => {
+              const locked = getStudentFeatureAccess(data.membership, action.feature) === "locked";
+              const content = <><Glyph name={action.icon} /><span><strong>{action.title}</strong><small>{action.detail}</small></span></>;
+              return locked ? <button type="button" className="dashboard-quick-locked" key={action.title} aria-label={`${action.title}, akses terkunci`} onClick={() => setLockedFeature(action.title)}>{content}</button> : <Link href={action.href} key={action.title}>{content}</Link>;
+            })}
           </section>
+          {lockedFeature && <div className="locked-modal"><button className="locked-modal-backdrop" type="button" aria-label="Tutup" onClick={() => setLockedFeature(null)} /><section role="dialog" aria-modal="true" aria-labelledby="dashboard-locked-title"><button className="locked-modal-close" type="button" aria-label="Tutup" onClick={() => setLockedFeature(null)}>×</button><p>{lockedFeature}</p><h2 id="dashboard-locked-title">Akses Terkunci</h2><p>Fitur ini belum termasuk dalam membershipmu.</p><div className="locked-modal-actions"><button type="button" onClick={() => setLockedFeature(null)}>Tutup</button><Link href={`/#program`}>Upgrade</Link></div></section></div>}
 
         </main>
       </div>

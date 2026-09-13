@@ -78,6 +78,17 @@ rt { color: var(--secondary); }
 .dash-topbar, .journey-topbar, .learning-topbar, .sensei-topbar { border-color: var(--line); background: #fff; padding-inline: 24px; }
 .dash-avatar { border-radius: 50%; border: 2px solid var(--surface-highest); }
 .dash-content, .journey-content, .learning-content, .sensei-content, .supporting-main { max-width: 1280px; padding: 24px 24px 48px; }
+.student-breadcrumb { display: inline-block; max-width: 100%; margin-bottom: 24px; overflow-x: auto; }
+.learning-content > .student-breadcrumb { margin-left: -32px; }
+.learning-main:has(.flashcard-page) { position: relative; }
+.learning-main:has(.flashcard-page) > .learning-content { padding-top: 76px; }
+.learning-main:has(.flashcard-page) .student-breadcrumb { position: absolute; top: 92px; left: 24px; margin-left: 0; }
+.student-breadcrumb ol { display: flex; align-items: center; gap: 10px; min-width: max-content; margin: 0; padding: 8px 0; list-style: none; color: var(--muted); font-size: 14px; white-space: nowrap; }
+.student-breadcrumb li { display: flex; align-items: center; gap: 10px; }
+.student-breadcrumb a { color: var(--orange-dark); text-decoration: none; }
+.student-breadcrumb a:hover { color: var(--orange); }
+.student-breadcrumb li[aria-current="page"] { color: var(--orange-dark); font-weight: 700; }
+@media (max-width: 800px) { .student-breadcrumb { max-width: 100%; } .learning-content > .student-breadcrumb { margin-left: -16px; } .learning-main:has(.flashcard-page) > .learning-content { padding-top: 76px; } .learning-main:has(.flashcard-page) .student-breadcrumb { top: 84px; left: 16px; } }
 .dash-welcome h1, .journey-page-head h1, .chapter-hero h1, .learning-page-head h1, .sensei-page-head h1, .supporting-header h1, .flashcard-collection > header h1 { font-size: 48px; line-height: 1.2; letter-spacing: -.02em; }
 .dash-subgreeting, .dash-welcome > div > p:last-child, .journey-page-head > div > p:last-child { font-size: 18px; line-height: 1.6; }
 .dashboard-bento { gap: 12px; }
@@ -97,6 +108,10 @@ rt { color: var(--secondary); }
 .dash-leaderboard-item:first-child { background: var(--soft); border-color: var(--surface-highest); }
 .dash-leaderboard-item.current-user { border: 0; border-left: 4px solid var(--orange); background: var(--soft); }
 .level-grid { gap: 24px; }
+.active-level-summary h2 { font-weight: 800; }
+.active-level-actions { display: flex; justify-content: center; }
+.learning-checkpoint-navy:not(:has(.button)):not(:has(.checkpoint-lock-pill)) { text-align: center; }
+.learning-checkpoint-navy:not(:has(.button)):not(:has(.checkpoint-lock-pill)) > div { margin-inline: auto; }
 .level-card { padding: 24px; border-radius: 24px; border-color: var(--line); box-shadow: none; }
 .level-card:hover { transform: none; border-color: var(--line); box-shadow: var(--ambient-shadow); }
 .level-card h2 { font-size: 24px; line-height: 1.4; }
@@ -2125,6 +2140,11 @@ rt { color: var(--secondary); }
   border: 1px solid #dee1ea !important;
   font-size: 20px;
 }
+.learning-activity-card h3 { font-weight: 800; }
+.learning-activity-top { display: flex; align-items: flex-start; justify-content: flex-start; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #dee1ea; }
+.learning-activity-top > div { min-width: 0; }
+.learning-activity-top h3 { margin: 0; text-align: left; }
+.learning-activity-card > p { margin-top: 16px; text-align: left; }
 .learning-activity-status.status-gray {
   background: #f1f5f9 !important;
   color: #64748b !important;

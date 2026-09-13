@@ -1,3 +1,4 @@
+import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 import { StudentNavigation } from "@/components/student-navigation";
 import { supportingData, type SupportingKind } from "@/lib/supporting-mock";
 import Link from "next/link";
@@ -31,7 +32,7 @@ import {
   LuUser,
 } from "react-icons/lu";
 
-export function SupportingScreen({ kind, membership }: { kind: SupportingKind; membership: "free" | "lms" | "sensei" }) {
+export function SupportingScreen({ kind, membership, breadcrumbCurrent }: { kind: SupportingKind; membership: "free" | "lms" | "sensei"; breadcrumbCurrent?: string }) {
   const data = supportingData[kind];
   if (kind === "practice" && membership !== "free") return <PaidPractice membership={membership} />;
   if (kind === "library") return <LibraryScreen membership={membership} />;
@@ -41,12 +42,12 @@ export function SupportingScreen({ kind, membership }: { kind: SupportingKind; m
   if (kind === "community") return <CommunityScreen membership={membership} />;
   if (kind === "notifications") return <NotificationScreen membership={membership} />;
   if (kind === "profile") return <ProfileScreen membership={membership} />;
-  if (kind === "renewal") return <RenewalScreen membership={membership} />;
+  if (kind === "renewal") return <RenewalScreen membership={membership} breadcrumbCurrent={breadcrumbCurrent} />;
   if (kind === "createPost") return <CreatePostScreen membership={membership} />;
   if (kind === "affiliate") return <AffiliateScreen membership={membership} />;
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="supporting" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
         <header className="supporting-header">
           <p className="dash-kicker">{data.eyebrow}</p>
@@ -107,7 +108,7 @@ function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="profile" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main profile-page">
         <header className="supporting-header">
           <p className="dash-kicker">AKUN &amp; MEMBERSHIP</p>
@@ -267,7 +268,7 @@ function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei"
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="affiliate" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main affiliate-page">
         <header className="supporting-header">
           <p className="dash-kicker">PROGRAM AFILIASI &amp; REFERRAL</p>
@@ -384,14 +385,15 @@ function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei"
   );
 }
 
-function RenewalScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
+function RenewalScreen({ membership, breadcrumbCurrent }: { membership: "free" | "lms" | "sensei"; breadcrumbCurrent?: string }) {
   const [plan, setPlan] = useState<"lms" | "sensei">("lms");
   const [rewardApplied, setRewardApplied] = useState(false);
   const query = `?membership=${membership}`;
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="profile" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main renewal-page">
+        {breadcrumbCurrent && <StudentBreadcrumb items={[{ label: "Membership", href: `/renewal${query}` }, { label: breadcrumbCurrent }]} />}
         <Link className="sensei-back renewal-top-back" href={`/profile${query}`}>← Kembali ke Profil</Link>
         <header className="supporting-header">
           <p className="dash-kicker">MEMBERSHIP RENEWAL</p>
@@ -501,7 +503,7 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
   };
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="notifications" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main notification-page">
         <div className="progress-title-row">
           <header className="supporting-header">
@@ -577,7 +579,7 @@ function CertificateScreen({ membership }: { membership: "free" | "lms" | "sense
   const query = `?membership=${membership}`;
   if (membership === "free") return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="certificate" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
         <section className="sensei-status-panel">
           <p className="dash-kicker">AKSES PREMIUM</p>
@@ -600,7 +602,7 @@ function CertificateScreen({ membership }: { membership: "free" | "lms" | "sense
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="certificate" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main certificate-page">
         <div className="progress-title-row">
           <header className="supporting-header">
@@ -656,7 +658,7 @@ function CommunityScreen({ membership }: { membership: "free" | "lms" | "sensei"
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="community" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main community-page">
         <div className="progress-title-row">
           <header className="supporting-header">
@@ -711,7 +713,7 @@ function CreatePostScreen({ membership }: { membership: "free" | "lms" | "sensei
   const query = `?membership=${membership}`;
   if (membership === "free") return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="community" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
         <section className="sensei-status-panel">
           <p className="dash-kicker">COMMUNITY • READ ONLY</p>
@@ -725,7 +727,7 @@ function CreatePostScreen({ membership }: { membership: "free" | "lms" | "sensei
 
   if (submitted) return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="community" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
         <section className="sensei-status-panel">
           <p className="dash-kicker">COMMUNITY</p>
@@ -739,8 +741,9 @@ function CreatePostScreen({ membership }: { membership: "free" | "lms" | "sensei
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="community" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main">
+        <StudentBreadcrumb items={[{ label: "Diskusi Member", href: `/community${query}` }, { label: "Buat Diskusi" }]} />
         <header className="supporting-header">
           <p className="dash-kicker">BUAT POSTINGAN</p>
           <h1>Bagikan pertanyaan atau pengalaman belajar</h1>
@@ -771,7 +774,7 @@ function ProgressScreen({ membership }: { membership: "free" | "lms" | "sensei" 
   ];
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="progress" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main progress-page">
         <div className="progress-title-row">
           <header className="supporting-header">
@@ -853,7 +856,7 @@ function LeaderboardScreen({ membership }: { membership: "free" | "lms" | "sense
   ];
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="leaderboard" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main leaderboard-page">
         <div className="progress-title-row">
           <header className="supporting-header">
@@ -906,7 +909,7 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
   const visible = materials.filter((item) => (type === "Semua" || item.type === type) && item.title.toLowerCase().includes(search.toLowerCase()) && (level === "Semua" || level === "N4"));
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="library" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main library-page">
         <header className="supporting-header">
           <p className="dash-kicker">PERPUSTAKAAN MATERI</p>
@@ -995,14 +998,9 @@ function PaidPractice({ membership }: { membership: "lms" | "sensei" }) {
   ];
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="supporting" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main practice-page">
-        <header className="supporting-header">
-          <p className="dash-kicker">LATIHAN HARIAN • {membership === "sensei" ? "BELAJAR DENGAN SENSEI" : "BELAJAR MANDIRI"}</p>
-          <h1>Latihan singkat berdasarkan progresmu</h1>
-          <p>Aktivitas harian terpisah dari Try Out untuk memperkuat pemahaman materi setiap hari.</p>
-          <span className="supporting-badge practice-active">AKTIF</span>
-        </header>
+
         <section className="practice-recommendation">
           <div>
             <p className="dash-kicker">REKOMENDASI HARI INI</p>

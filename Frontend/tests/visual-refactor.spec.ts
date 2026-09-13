@@ -22,21 +22,100 @@ for (const width of [390, 768, 1440]) {
   });
 }
 
-test("membership lock keeps upgrade action and keyboard dismissal", async ({ page }) => {
+test("dashboard membership lock keeps upgrade action and close control", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/dashboard?membership=free");
-  await page.locator('nav[aria-label="Navigasi siswa"]:visible').getByRole("button", { name: "Try Out", exact: true }).click();
+  await page.getByRole("button", { name: "Try Out, akses terkunci" }).click({ force: true });
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Akses Terkunci" })).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Upgrade", exact: true })).toHaveAttribute("href", "/#program");
-  await page.keyboard.press("Escape");
+  await dialog.locator(".locked-modal-close").click();
   await expect(dialog).toHaveCount(0);
+});
+
+test("student navigation resolves active routes and preserves membership access", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const scenarios = [
+    ["/journey?membership=sensei", "Perjalanan Level", "Kelas Saya"],
+    ["/journey/n4?membership=sensei", "Perjalanan Level", "Kelas Saya"],
+    ["/learn/n4/chapter-4?membership=sensei", "Perjalanan Level", "Kelas Saya"],
+    ["/learn/n4/chapter-4/video?membership=sensei", "Perjalanan Level", "Kelas Saya"],
+    ["/learn/n4/chapter-4/flashcards?membership=sensei", "Kumpulan Flashcard", "Kelas Saya"],
+    ["/learn/n4/chapter-4/checkpoint?membership=sensei", "Perjalanan Level", "Kelas Saya"],
+    ["/practice?membership=lms", "Latihan Harian", "Kelas Saya"],
+    ["/library?membership=lms", "Perpustakaan", "Kelas Saya"],
+    ["/tryout?membership=lms", "Try Out", "Kelas Saya"],
+    ["/schedule/chapter-4?membership=lms", "Jadwal", "Kelas Saya"],
+    ["/replay/chapter-4?membership=sensei", "Replay", "Kelas Saya"],
+    ["/mini-checkpoint?membership=sensei", "Mini Checkpoint", "Kelas Saya"],
+    ["/community/post-1?membership=sensei", "Diskusi Member", "Komunitas"],
+    ["/community/create?membership=sensei", "Diskusi Member", "Komunitas"],
+    ["/community/ask?membership=lms", "Tanya Sensei", "Komunitas"],
+    ["/ask-sensei?membership=sensei", "Tanya Sensei", "Komunitas"],
+    ["/certificate/n5?membership=lms", "Sertifikat", "Progres"],
+    ["/renewal/membership?membership=free", "Membership", "Profil"],
+  ] as const;
+
+  for (const [route, activeLabel, groupLabel] of scenarios) {
+    await page.goto(route);
+    const nav = page.locator(".student-nav-desktop nav[aria-label='Navigasi siswa']");
+    await expect(nav.locator(".student-nav-parent").filter({ hasText: groupLabel })).toHaveAttribute("aria-expanded", "true");
+    await expect(nav.locator("a, button").filter({ hasText: new RegExp(`^${activeLabel}`) })).toHaveAttribute("aria-current", "page");
+  }
+
+  const classLabels = ["Perjalanan Level", "Latihan Harian", "Kumpulan Flashcard", "Perpustakaan", "Try Out", "Jadwal", "Replay", "Mini Checkpoint"];
+  for (const membership of ["free", "lms", "sensei"] as const) {
+    await page.goto(`/journey?membership=${membership}`);
+    const nav = page.locator(".student-nav-desktop nav[aria-label='Navigasi siswa']");
+    await expect(nav.getByRole("button", { name: "Kelas Saya", exact: true })).toHaveAttribute("aria-expanded", "true");
+    const visibleLabels = await nav.locator(".student-submenu:visible").first().locator("a, button").allTextContents();
+    expect(visibleLabels.map((label) => label.trim())).toEqual(classLabels);
+    const schedule = nav.locator("a, button").filter({ hasText: /^Jadwal$/ });
+    if (membership === "sensei") await expect(schedule).toHaveAttribute("href", `/schedule?membership=${membership}`);
+    else await expect(schedule).not.toHaveAttribute("href", /./);
+  }
+});
+
+test("locked pages preserve membership identity", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [route, label] of [["/schedule?membership=free", "Free Member"], ["/schedule?membership=lms", "Belajar Mandiri"], ["/replay?membership=lms", "Belajar Mandiri"], ["/mini-checkpoint?membership=lms", "Belajar Mandiri"], ["/ask-sensei?membership=lms", "Belajar Mandiri"]] as const) {
+    await page.goto(route);
+    await expect(page.locator(".sensei-topbar")).toContainText(label);
+    await expect(page.getByRole("heading", { name: "Fitur ini belum aktif pada membershipmu" })).toBeVisible();
+  }
+});
+
+test("student breadcrumbs preserve hierarchy and membership", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const scenarios = [
+    ["/journey/n5?membership=lms", ["Perjalanan Level", "N5"], "/journey?membership=lms"],
+    ["/learn/n5/chapter-1/video?membership=lms", ["Perjalanan Level", "N5", "Chapter 1", "Video"], "/journey?membership=lms"],
+    ["/schedule/chapter-4?membership=sensei", ["Jadwal", "Chapter 4"], "/schedule?membership=sensei"],
+    ["/replay/chapter-4?membership=sensei", ["Replay", "Chapter 4"], "/replay?membership=sensei"],
+    ["/community/post-1?membership=lms", ["Diskusi Member", "Detail Diskusi"], "/community?membership=lms"],
+    ["/community/create?membership=lms", ["Diskusi Member", "Buat Diskusi"], "/community?membership=lms"],
+    ["/certificate/n5?membership=lms", ["Sertifikat", "N5"], "/certificate?membership=lms"],
+    ["/renewal/membership?membership=free", ["Membership", "Detail Membership"], "/renewal?membership=free"],
+  ] as const;
+  for (const [route, labels, parentHref] of scenarios) {
+    await page.goto(route);
+    const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+    await expect(breadcrumb.locator("li")).toHaveCount(labels.length);
+    await expect(breadcrumb.getByRole("link")).toHaveText(labels.slice(0, -1));
+    await expect(breadcrumb.getByRole("link").first()).toHaveAttribute("href", parentHref);
+    await expect(breadcrumb.locator("[aria-current='page']")).toHaveText(labels.at(-1)!);
+  }
+  await page.goto("/learn/n4/chapter-4/flashcards?membership=sensei");
+  await expect(page.locator(".student-submenu a[aria-current='page']")).toHaveText("Kumpulan Flashcard");
 });
 
 test("mobile navigation preserves route action", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
   await page.goto("/dashboard?membership=lms");
-  await page.getByRole("button", { name: "Buka navigasi" }).click();
-  await page.locator('nav[aria-label="Navigasi siswa"]:visible').getByRole("link", { name: "Kelas Saya", exact: true }).click();
+  await page.getByRole("button", { name: "Buka navigasi", exact: true }).click();
+  const mobileNav = page.locator("#student-mobile-panel").getByRole("navigation", { name: "Navigasi siswa", exact: true });
+  const mobileGroup = mobileNav.locator(".student-nav-group").first();
+  await mobileGroup.locator(".student-nav-parent").click({ force: true });
+  await mobileGroup.locator(".student-submenu").getByRole("link", { name: "Perjalanan Level", exact: true }).click({ force: true });
   await expect(page).toHaveURL(/\/journey\?membership=lms/);
 });

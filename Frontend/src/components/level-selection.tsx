@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { LuArrowRight, LuFlame, LuInfo, LuKey, LuLock, LuSparkles, LuStar, LuFlag, LuUsers } from "react-icons/lu";
+import { LuArrowRight, LuLock, LuFlag, LuUsers } from "react-icons/lu";
 import type { JourneyLevel } from "@/lib/journey-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 
@@ -32,11 +32,10 @@ export function LevelSelection({ membership, levels }: { membership: Membership;
             <p className="dash-kicker">2 LEVEL AKTIF</p>
             <h2>JLPT N4 dan N3 aktif bersama Sensei</h2>
             <p>Lanjutkan N4 atau buka N3. Progress, jadwal kelas, dan replay disimpan per level serta cohort akun.</p>
-            <div>
+            <div className="active-level-actions">
               <Link className="continue-button" href="/journey/n4?membership=sensei">
                 Lanjutkan N4 <LuArrowRight aria-hidden="true" style={{ display: "inline-block", marginLeft: "4px", verticalAlign: "middle" }} />
               </Link>
-              <Link className="lms-secondary" href="/dashboard?membership=sensei">Kembali Dashboard</Link>
             </div>
           </div>
 
@@ -88,32 +87,7 @@ export function LevelSelection({ membership, levels }: { membership: Membership;
         })}
       </section>
 
-      {membership === "sensei" && (
-        <>
-          <section className="journey-activity">
-            <h2>Aktivitas minggu ini</h2>
-            <div>
-              {[
-                { id: "star", icon: <LuStar aria-hidden="true" /> },
-                { id: "flame", icon: <LuFlame aria-hidden="true" /> },
-                { id: "sparkles", icon: <LuSparkles aria-hidden="true" /> },
-              ].map((item) => (
-                <article key={item.id}>
-                  <span>{item.icon}</span>
-                  <div><small>Aktivitas Belajar</small><strong>Aktif</strong></div>
-                </article>
-              ))}
-            </div>
-          </section>
-          <section className="journey-announcement">
-            <span aria-hidden="true"><LuInfo /></span>
-            <div>
-              <h2>Pengumuman</h2>
-              <p>Satu akun dapat memiliki beberapa level dan cohort aktif. Progress, jadwal, serta replay disimpan per level; pembelian level lain tidak harus berurutan.</p>
-            </div>
-          </section>
-        </>
-      )}
+
     </>
   );
 }

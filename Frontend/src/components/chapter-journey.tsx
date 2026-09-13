@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LuArrowRight, LuBookOpen, LuCheck, LuKey, LuLock, LuStar } from "react-icons/lu";
+import { LuArrowRight, LuKey, LuLock, LuStar } from "react-icons/lu";
 import type { JourneyChapter, JourneyLevel } from "@/lib/journey-mock";
 import type { Membership } from "@/lib/dashboard-mock";
 

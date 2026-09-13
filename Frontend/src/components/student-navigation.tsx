@@ -8,49 +8,80 @@ import type { IconType } from "react-icons";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Membership } from "@/lib/dashboard-mock";
 
-type CurrentArea = "dashboard" | "journey" | "learning" | "flashcards" | "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout" | "library" | "progress" | "leaderboard" | "certificate" | "community" | "supporting" | "notifications" | "profile" | "affiliate";
+export type StudentNavKey = "dashboard" | "journey" | "practice" | "flashcards" | "library" | "tryout" | "schedule" | "replay" | "mini-checkpoint" | "community" | "ask-sensei" | "progress" | "leaderboard" | "certificate" | "notifications" | "profile" | "membership" | "affiliate";
 type Entitlement = "available" | "limited" | "readOnly" | "locked";
 type Implementation = "implemented" | "notImplemented";
-type NavChild = { label: string; href: string; entitlement: Entitlement };
-type NavItem = { label: string; icon: IconType; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean; children?: NavChild[] };
+type NavChild = { key: StudentNavKey; label: string; href: string; entitlement: Entitlement };
+type NavItem = { key?: StudentNavKey; label: string; icon: IconType; href?: string; entitlement: Entitlement; implementation: Implementation; active?: boolean; children?: NavChild[] };
 type ModalState = { feature: string; variant: "membershipLock" | "notImplemented" };
 
-function itemsFor(membership: Membership, current: CurrentArea): NavItem[] {
+function matchesFamily(pathname: string, base: string) {
+  return pathname === base || pathname.startsWith(`${base}/`);
+}
+
+export function resolveStudentNavKey(pathname: string): StudentNavKey | null {
+  if (pathname === "/dashboard") return "dashboard";
+  if (matchesFamily(pathname, "/journey")) return "journey";
+  if (/^\/learn\/[^/]+\/[^/]+\/flashcards$/.test(pathname)) return "flashcards";
+  if (matchesFamily(pathname, "/learn")) return "journey";
+  if (pathname === "/practice") return "practice";
+  if (pathname === "/flashcards") return "flashcards";
+  if (pathname === "/library") return "library";
+  if (matchesFamily(pathname, "/tryout")) return "tryout";
+  if (matchesFamily(pathname, "/schedule")) return "schedule";
+  if (matchesFamily(pathname, "/replay")) return "replay";
+  if (matchesFamily(pathname, "/mini-checkpoint")) return "mini-checkpoint";
+  if (pathname === "/community/ask") return "ask-sensei";
+  if (matchesFamily(pathname, "/community")) return "community";
+  if (pathname === "/ask-sensei") return "ask-sensei";
+  if (pathname === "/progress") return "progress";
+  if (pathname === "/leaderboard") return "leaderboard";
+  if (matchesFamily(pathname, "/certificate")) return "certificate";
+  if (pathname === "/notifications") return "notifications";
+  if (pathname === "/profile") return "profile";
+  if (matchesFamily(pathname, "/renewal") || pathname === "/membership") return "membership";
+  if (pathname === "/affiliate") return "affiliate";
+  return null;
+}
+
+function itemsFor(membership: Membership, current: StudentNavKey | null): NavItem[] {
   const free = membership === "free";
   const sensei = membership === "sensei";
   const query = `?membership=${membership}`;
-  return [
-    { label: "Dashboard", icon: LuHouse, href: `/dashboard${query}`, entitlement: "available", implementation: "implemented", active: current === "dashboard" },
-    { label: "Kelas Saya", icon: LuRoute, entitlement: "available", implementation: "implemented", active: ["journey", "learning", "flashcards", "supporting", "tryout", "library", "schedule", "replay", "mini-checkpoint"].includes(current), children: [
-      { label: "Perjalanan Level", href: `/journey${query}`, entitlement: "available" },
-      { label: "Kumpulan Flashcard", href: `/flashcards${query}`, entitlement: free ? "limited" : "available" },
-      { label: "Latihan Harian", href: `/practice${query}`, entitlement: free ? "limited" : "available" },
-      { label: "Try Out", href: `/tryout${query}`, entitlement: free ? "locked" : "available" },
-      { label: "Perpustakaan", href: `/library${query}`, entitlement: free ? "limited" : "available" },
-      { label: "Jadwal", href: `/schedule${query}`, entitlement: sensei ? "available" : "locked" },
-      { label: "Replay", href: `/replay${query}`, entitlement: sensei ? "available" : "locked" },
-      { label: "Mini Checkpoint", href: `/mini-checkpoint${query}`, entitlement: sensei ? "available" : "locked" },
+  const items: NavItem[] = [
+    { key: "dashboard", label: "Dashboard", icon: LuHouse, href: `/dashboard${query}`, entitlement: "available", implementation: "implemented" },
+    { label: "Kelas Saya", icon: LuRoute, entitlement: "available", implementation: "implemented", children: [
+      { key: "journey", label: "Perjalanan Level", href: `/journey${query}`, entitlement: "available" },
+      { key: "practice", label: "Latihan Harian", href: `/practice${query}`, entitlement: free ? "limited" : "available" },
+      { key: "flashcards", label: "Kumpulan Flashcard", href: `/flashcards${query}`, entitlement: free ? "limited" : "available" },
+      { key: "library", label: "Perpustakaan", href: `/library${query}`, entitlement: free ? "limited" : "available" },
+      { key: "tryout", label: "Try Out", href: `/tryout${query}`, entitlement: free ? "locked" : "available" },
+      { key: "schedule", label: "Jadwal", href: `/schedule${query}`, entitlement: sensei ? "available" : "locked" },
+      { key: "replay", label: "Replay", href: `/replay${query}`, entitlement: sensei ? "available" : "locked" },
+      { key: "mini-checkpoint", label: "Mini Checkpoint", href: `/mini-checkpoint${query}`, entitlement: sensei ? "available" : "locked" },
     ] },
-    { label: "Komunitas", icon: LuMessagesSquare, entitlement: free ? "readOnly" : "available", implementation: "implemented", active: current === "community" || current === "ask-sensei", children: [
-      { label: "Diskusi Member", href: `/community${query}`, entitlement: free ? "readOnly" : "available" },
-      { label: "Tanya Sensei", href: `/ask-sensei${query}`, entitlement: sensei ? "available" : "locked" },
+    { label: "Komunitas", icon: LuMessagesSquare, entitlement: free ? "readOnly" : "available", implementation: "implemented", children: [
+      { key: "community", label: "Diskusi Member", href: `/community${query}`, entitlement: free ? "readOnly" : "available" },
+      { key: "ask-sensei", label: "Tanya Sensei", href: `/ask-sensei${query}`, entitlement: sensei ? "available" : "locked" },
     ] },
-    { label: "Progres", icon: LuTrendingUp, entitlement: "available", implementation: "implemented", active: current === "progress" || current === "leaderboard" || current === "certificate", children: [
-      { label: "Ringkasan Progres", href: `/progress${query}`, entitlement: "available" },
-      { label: "Leaderboard", href: `/leaderboard${query}`, entitlement: "available" },
-      { label: "Sertifikat", href: `/certificate${query}`, entitlement: free ? "locked" : "available" },
+    { label: "Progres", icon: LuTrendingUp, entitlement: "available", implementation: "implemented", children: [
+      { key: "progress", label: "Ringkasan Progres", href: `/progress${query}`, entitlement: "available" },
+      { key: "leaderboard", label: "Leaderboard", href: `/leaderboard${query}`, entitlement: "available" },
+      { key: "certificate", label: "Sertifikat", href: `/certificate${query}`, entitlement: free ? "locked" : "available" },
     ] },
-    { label: "Notifikasi", icon: LuBell, href: `/notifications${query}`, entitlement: "available", implementation: "implemented", active: current === "notifications" },
-    { label: "Profil", icon: LuUser, entitlement: "available", implementation: "implemented", active: current === "profile" || current === "affiliate", children: [
-      { label: "Profil Saya", href: `/profile${query}`, entitlement: "available" },
-      { label: "Membership", href: `/renewal${query}`, entitlement: "available" },
-      { label: "Affiliate", href: `/affiliate${query}`, entitlement: "available" },
+    { key: "notifications", label: "Notifikasi", icon: LuBell, href: `/notifications${query}`, entitlement: "available", implementation: "implemented" },
+    { label: "Profil", icon: LuUser, entitlement: "available", implementation: "implemented", children: [
+      { key: "profile", label: "Profil Saya", href: `/profile${query}`, entitlement: "available" },
+      { key: "membership", label: "Membership", href: `/renewal${query}`, entitlement: "available" },
+      { key: "affiliate", label: "Affiliate", href: `/affiliate${query}`, entitlement: "available" },
     ] },
   ];
+  return items.map((item) => ({ ...item, active: item.key === current || item.children?.some((child) => child.key === current) }));
 }
 
-export function StudentNavigation({ membership, current }: { membership: Membership; current: CurrentArea }) {
+export function StudentNavigation({ membership }: { membership: Membership }) {
   const pathname = usePathname();
+  const current = resolveStudentNavKey(pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [modal, setModal] = useState<ModalState | null>(null);
@@ -121,8 +152,8 @@ export function StudentNavigation({ membership, current }: { membership: Members
         const stateClass = item.active ? "active" : item.entitlement;
         const Icon = item.icon;
         if (item.children && item.entitlement !== "locked") {
-          const open = expanded[item.label] ?? item.active ?? false;
-          return <div className="student-nav-group" key={item.label}><button className={`student-nav-item student-nav-parent state-${stateClass}`} type="button" aria-expanded={open} onClick={() => setExpanded((state) => ({ ...state, [item.label]: !open }))}><span aria-hidden="true"><Icon /></span>{item.label}<i className={open ? "open" : ""} aria-hidden="true">⌄</i></button>{open && <div className="student-submenu">{item.children.map((child) => { const active = pathname === child.href.split("?")[0]; return child.entitlement === "locked" ? <button className="locked" type="button" onClick={(event) => openModal(child.label, "membershipLock", event.currentTarget)} key={child.href}><span>{child.label}</span><LuLockKeyhole aria-hidden="true" /></button> : <Link className={active ? "active" : ""} href={child.href} aria-current={active ? "page" : undefined} onClick={() => setMobileOpen(false)} key={child.href}>{child.label}</Link>; })}</div>}</div>;
+          const open = item.active || expanded[item.label] === true;
+          return <div className="student-nav-group" key={item.label}><button className={`student-nav-item student-nav-parent state-${stateClass}`} type="button" aria-expanded={open} onClick={() => setExpanded((state) => ({ ...state, [item.label]: !open }))}><span aria-hidden="true"><Icon /></span>{item.label}<i className={open ? "open" : ""} aria-hidden="true">⌄</i></button>{open && <div className="student-submenu">{item.children.map((child) => { const active = child.key === current; return child.entitlement === "locked" ? <button className={`${active ? "active " : ""}locked`} type="button" aria-current={active ? "page" : undefined} onClick={(event) => openModal(child.label, "membershipLock", event.currentTarget)} key={child.key}><span>{child.label}</span><LuLockKeyhole aria-hidden="true" /></button> : <Link className={active ? "active" : ""} href={child.href} aria-current={active ? "page" : undefined} onClick={() => setMobileOpen(false)} key={child.key}>{child.label}</Link>; })}</div>}</div>;
         }
         if (item.entitlement !== "locked" && item.implementation === "implemented" && item.href) return <Link className={`student-nav-item state-${stateClass}`} href={item.href} aria-current={item.active ? "page" : undefined} onClick={() => setMobileOpen(false)} key={item.label}><span aria-hidden="true"><Icon /></span>{item.label}</Link>;
         const variant = item.entitlement === "locked" ? "membershipLock" : "notImplemented";

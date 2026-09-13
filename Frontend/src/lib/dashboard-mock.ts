@@ -12,11 +12,16 @@ export type DashboardIcon =
   | "tryout"
   | "affiliate";
 
+export type StudentFeature = "journey" | "practice" | "flashcards" | "library" | "tryout" | "schedule" | "replay" | "mini-checkpoint" | "community" | "ask-sensei" | "progress" | "leaderboard" | "certificate" | "notifications" | "profile" | "membership" | "affiliate";
+export type FeatureAccess = "available" | "limited" | "locked";
+
 export type DashboardAction = {
   title: string;
   detail: string;
   icon: DashboardIcon;
   href: string;
+  feature: StudentFeature;
+  access: FeatureAccess;
 };
 
 export type LeaderboardEntry = {
@@ -69,27 +74,36 @@ const defaultLeaderboard: LeaderboardEntry[] = [
   { rank: 5, name: "Dian Indra", xp: "Konsisten" },
 ];
 
-const quickActionsFor = (membership: Membership): DashboardAction[] => {
-  if (membership === "sensei") {
-    return [
-      { title: "Journey", detail: "Perjalanan Level", icon: "journey", href: `/journey?membership=${membership}` },
-      { title: "Jadwal", detail: "Sesi Kelas Zoom", icon: "checkpoint", href: `/schedule?membership=${membership}` },
-      { title: "Replay", detail: "Rekaman Kelas", icon: "replay", href: `/replay?membership=${membership}` },
-      { title: "Tanya Sensei", detail: "Konsultasi Materi", icon: "sensei", href: `/ask-sensei?membership=${membership}` },
-      { title: "Komunitas", detail: "Diskusi Pembelajar", icon: "community", href: `/community?membership=${membership}` },
-      { title: "Affiliate", detail: "Ajak Teman & Diskon", icon: "affiliate", href: `/affiliate?membership=${membership}` },
-    ];
+export function getStudentFeatureAccess(membership: Membership, feature: StudentFeature): FeatureAccess {
+  if (feature === "tryout" || feature === "schedule" || feature === "replay" || feature === "mini-checkpoint" || feature === "ask-sensei" || feature === "certificate") {
+    if (feature === "tryout" || feature === "certificate") return membership === "free" ? "locked" : "available";
+    return membership === "sensei" ? "available" : "locked";
   }
+  if (feature === "journey" || feature === "practice" || feature === "flashcards" || feature === "library" || feature === "community") {
+    return membership === "free" ? "limited" : "available";
+  }
+  return "available";
+}
 
-  return [
-    { title: "Journey", detail: "Perjalanan Level", icon: "journey", href: `/journey?membership=${membership}` },
-    { title: "Perpustakaan", detail: "Materi & Modul", icon: "library", href: `/library?membership=${membership}` },
-    { title: "Latihan", detail: "Latihan Harian", icon: "practice", href: `/practice?membership=${membership}` },
-    { title: "Try Out", detail: "Simulasi Ujian", icon: "tryout", href: `/tryout?membership=${membership}` },
-    { title: "Komunitas", detail: "Diskusi Pembelajar", icon: "community", href: `/community?membership=${membership}` },
-    { title: "Affiliate", detail: "Ajak Teman & Diskon", icon: "affiliate", href: `/affiliate?membership=${membership}` },
-  ];
-};
+const action = (membership: Membership, feature: StudentFeature, title: string, detail: string, icon: DashboardIcon, path: string): DashboardAction => ({ title, detail, icon, feature, access: getStudentFeatureAccess(membership, feature), href: `${path}?membership=${membership}` });
+
+const quickActionsFor = (membership: Membership): DashboardAction[] => membership === "sensei"
+  ? [
+      action(membership, "journey", "Journey", "Perjalanan Level", "journey", "/journey"),
+      action(membership, "schedule", "Jadwal", "Sesi Kelas Zoom", "checkpoint", "/schedule"),
+      action(membership, "replay", "Replay", "Rekaman Kelas", "replay", "/replay"),
+      action(membership, "ask-sensei", "Tanya Sensei", "Konsultasi Materi", "sensei", "/ask-sensei"),
+      action(membership, "community", "Komunitas", "Diskusi Pembelajar", "community", "/community"),
+      action(membership, "affiliate", "Affiliate", "Ajak Teman & Diskon", "affiliate", "/affiliate"),
+    ]
+  : [
+      action(membership, "journey", "Journey", "Perjalanan Level", "journey", "/journey"),
+      action(membership, "library", "Perpustakaan", "Materi & Modul", "library", "/library"),
+      action(membership, "practice", "Latihan", "Latihan Harian", "practice", "/practice"),
+      action(membership, "tryout", "Try Out", "Simulasi Ujian", "tryout", "/tryout"),
+      action(membership, "community", "Komunitas", "Diskusi Pembelajar", "community", "/community"),
+      action(membership, "affiliate", "Affiliate", "Ajak Teman & Diskon", "affiliate", "/affiliate"),
+    ];
 
 const configs: Record<Membership, DashboardConfig> = {
   free: {

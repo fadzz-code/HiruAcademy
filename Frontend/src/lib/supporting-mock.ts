@@ -1,6 +1,4 @@
-﻿import type { Membership } from "@/lib/dashboard-mock";
-
-export type SupportingKind =
+﻿export type SupportingKind =
   | "library"
   | "practice"
   | "progress"
@@ -160,7 +158,3 @@ export const supportingData: Record<SupportingKind, SupportingData> = {
     cards: [],
   },
 };
-
-export function getSupportingData(kind: SupportingKind, membership: Membership) {
-  return { ...supportingData[kind], membership };
-}

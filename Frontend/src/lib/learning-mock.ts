@@ -20,7 +20,7 @@ export function getLearningData(membership: Membership, levelSlug: string, chapt
   const level = levelSlug.toUpperCase();
   const chapterNumber = chapterSlug.replace("chapter-", "");
   const fixture = levelSlug === "n4" && chapterSlug === "chapter-4";
-  const chapterTitle = fixture ? "Pola Kalimat dan Kehidupan Sehari-hari" : `${level} • Chapter ${chapterNumber}`;
+  const chapterTitle = fixture ? "Pola Kalimat dan Kehidupan Sehari-hari" : `${level} | Chapter ${chapterNumber}`;
   const basePath = `/learn/${levelSlug}/${chapterSlug}`;
   const query = `?membership=${membership}`;
   const activities: LessonActivity[] = [

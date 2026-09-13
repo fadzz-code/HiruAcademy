@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 import { StudentNavigation } from "@/components/student-navigation";
 import { parseMembership } from "@/lib/dashboard-mock";
 
@@ -9,16 +10,16 @@ export function CertificateDetailScreen() {
   const searchParams = useSearchParams();
   const membership = parseMembership(searchParams.get("membership") ?? undefined);
   const query = `?membership=${membership}`;
-  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="certificate" /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">AKSES PREMIUM</p><h1>Akses ini belum aktif pada Free Member</h1><p>Sertifikat tersedia sesuai membership dan eligibility yang telah diverifikasi.</p><div className="status-actions"><Link className="button button-primary" href={`/renewal${query}`}>Lihat Membership</Link><Link className="button button-secondary" href={`/dashboard${query}`}>Kembali Dashboard</Link></div></section></main></div>;
+  if (membership === "free") return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} /><main className="supporting-main"><section className="sensei-status-panel"><p className="dash-kicker">AKSES PREMIUM</p><h1>Akses ini belum aktif pada Free Member</h1><p>Sertifikat tersedia sesuai membership dan eligibility yang telah diverifikasi.</p><div className="status-actions"><Link className="button button-primary" href={`/renewal${query}`}>Lihat Membership</Link><Link className="button button-secondary" href={`/dashboard${query}`}>Kembali Dashboard</Link></div></section></main></div>;
 
   return (
     <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} current="certificate" />
+      <StudentNavigation membership={membership} />
       <main className="supporting-main certificate-detail-page">
+        <StudentBreadcrumb items={[{ label: "Sertifikat", href: `/certificate${query}` }, { label: "N5" }]} />
         <div className="progress-title-row">
           <header className="supporting-header">
             <p className="dash-kicker">DIGITAL CERTIFICATE</p>
-            <h1>Sertifikat JLPT N5</h1>
             <p>Sertifikat resmi digital kelulusan program HIRU Academy.</p>
           </header>
           <Link href={`/certificate${query}`}>Certificate Center</Link>
