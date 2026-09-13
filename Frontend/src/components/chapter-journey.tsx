@@ -130,11 +130,6 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
 
   return (
     <>
-      <header className="chapter-journey-head">
-        <p className="dash-kicker">LEVEL AKTIF TERPILIH • CHAPTER JOURNEY</p>
-        <h1>Lanjutkan Chapter pada level dan cohort yang dipilih</h1>
-        <p>Nama level, Chapter, jadwal, dan progress dimuat berdasarkan level aktif yang dipilih.</p>
-      </header>
       <section className="chapter-progress-card">
         <div>
           <p className="dash-kicker">PROGRES LEVEL TERPILIH</p>
