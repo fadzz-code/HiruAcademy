@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useSearchParams } from "next/navigation";
 import { AskSenseiScreen } from "@/components/ask-sensei-screen";
@@ -32,15 +32,40 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
   if (kind === "dashboard") return <StudentDashboard data={getDashboardData(membership)} previewEnabled={process.env.NODE_ENV !== "production"} />;
   if (kind === "levels") return <JourneyShell membership={membership} current="levels"><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
-  if (kind === "tryout") return membership === "sensei" ? <SenseiShell current="tryout"><SenseiTryoutScreen /></SenseiShell> : hasTryoutAccess(membership) ? <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="tryout" /><main className="supporting-main"><SenseiTryoutScreen membership={membership} /></main></div> : <LockedTryout />;
+  if (kind === "tryout") {
+    return (
+      <div className="supporting-shell student-shell">
+        <StudentNavigation membership={membership} current="tryout" />
+        <main className="supporting-main">
+          {hasTryoutAccess(membership) ? <SenseiTryoutScreen membership={membership} /> : <LockedTryout />}
+        </main>
+      </div>
+    );
+  }
   if (kind === "schedule" || kind === "class-detail" || kind === "replay" || kind === "replay-player" || kind === "ask" || kind === "mini") {
-    if (!hasSenseiAccess(membership)) return <div className="supporting-shell student-shell"><StudentNavigation membership={membership} current="supporting" /><main className="supporting-main"><AssessmentUnavailable eyebrow="AKSES BELAJAR DENGAN SENSEI" title="Fitur ini belum aktif pada membershipmu" description="Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tersedia pada Belajar dengan Sensei." facts={["Paket Belajar", "Bimbingan Sensei"]} primary={{ label: "Lihat Membership", href: `/renewal?membership=${membership}` }} secondary={{ label: "Kembali Dashboard", href: `/dashboard?membership=${membership}` }} /></main></div>;
-    if (kind === "schedule") return <SenseiShell current="schedule"><ScheduleScreen /></SenseiShell>;
-    if (kind === "class-detail") return <SenseiShell current="schedule"><ClassDetailScreen /></SenseiShell>;
-    if (kind === "replay") return <SenseiShell current="replay"><ReplayScreen /></SenseiShell>;
-    if (kind === "replay-player") return <SenseiShell current="replay"><ReplayPlayerScreen /></SenseiShell>;
-    if (kind === "ask") return <SenseiShell current="ask-sensei"><AskSenseiScreen /></SenseiShell>;
-    return <SenseiShell current="mini-checkpoint"><MiniCheckpointScreen /></SenseiShell>;
+    const currentMap: Record<string, "schedule" | "replay" | "ask-sensei" | "mini-checkpoint" | "tryout"> = {
+      "schedule": "schedule",
+      "class-detail": "schedule",
+      "replay": "replay",
+      "replay-player": "replay",
+      "ask": "ask-sensei",
+      "mini": "mini-checkpoint"
+    };
+    
+    if (!hasSenseiAccess(membership)) {
+      return (
+        <SenseiShell membership={membership} current={currentMap[kind]}>
+          <AssessmentUnavailable eyebrow="AKSES BELAJAR DENGAN SENSEI" title="Fitur ini belum aktif pada membershipmu" description="Jadwal, replay, Tanya Sensei, dan Mini Checkpoint tersedia pada Belajar dengan Sensei." facts={["Paket Belajar", "Bimbingan Sensei"]} primary={{ label: "Lihat Membership", href: `/renewal?membership=${membership}` }} secondary={{ label: "Kembali Dashboard", href: `/dashboard?membership=${membership}` }} />
+        </SenseiShell>
+      );
+    }
+
+    if (kind === "schedule") return <SenseiShell membership={membership} current="schedule"><ScheduleScreen /></SenseiShell>;
+    if (kind === "class-detail") return <SenseiShell membership={membership} current="schedule"><ClassDetailScreen /></SenseiShell>;
+    if (kind === "replay") return <SenseiShell membership={membership} current="replay"><ReplayScreen /></SenseiShell>;
+    if (kind === "replay-player") return <SenseiShell membership={membership} current="replay"><ReplayPlayerScreen /></SenseiShell>;
+    if (kind === "ask") return <SenseiShell membership={membership} current="ask-sensei"><AskSenseiScreen /></SenseiShell>;
+    return <SenseiShell membership={membership} current="mini-checkpoint"><MiniCheckpointScreen /></SenseiShell>;
   }
   if (!level) return null;
   const selectedLevel = findJourneyLevel(membership, level);
@@ -57,3 +82,4 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
   }
   return <LearningShell membership={membership} level={level} chapter={chapter} current="flashcards"><FlashcardSession cards={data.cards} membership={membership} level={level} chapter={chapter} /></LearningShell>;
 }
+

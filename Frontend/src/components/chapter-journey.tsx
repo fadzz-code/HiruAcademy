@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -11,52 +11,6 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
   const [rating, setRating] = useState(4);
   const [feedback, setFeedback] = useState("");
   const [consent, setConsent] = useState(false);
-
-  if (membership !== "sensei") {
-    return (
-      <section className="chapter-list" aria-label={`Chapter ${level.title}`}>
-        {chapters.map((chapter) => (
-          <article className={`chapter-card chapter-${chapter.state}`} key={chapter.key}>
-            <div className="chapter-marker">
-              <span>
-                {chapter.state === "completed" ? (
-                  <LuCheck aria-hidden="true" />
-                ) : chapter.state === "current" ? (
-                  <LuBookOpen aria-hidden="true" />
-                ) : (
-                  <LuLock aria-hidden="true" />
-                )}
-              </span>
-              <i />
-            </div>
-            <div className="chapter-copy">
-              <div className="chapter-meta">
-                <span>{chapter.statusLabel}</span>
-                <small>{chapter.orderLabel}</small>
-              </div>
-              <h2>{chapter.title}</h2>
-              <p>{chapter.description}</p>
-            </div>
-            <div className="chapter-action">
-              {chapter.href ? (
-                <Link className="chapter-action-button" href={chapter.href}>
-                  {chapter.statusLabel}
-                  <b aria-hidden="true"><LuArrowRight /></b>
-                </Link>
-              ) : chapter.state === "entitlementLocked" ? (
-                <Link className="chapter-action-button" href={`/renewal?membership=${membership}`}>
-                  Upgrade Akses
-                  <b aria-hidden="true"><LuArrowRight /></b>
-                </Link>
-              ) : (
-                <span>{chapter.statusLabel}</span>
-              )}
-            </div>
-          </article>
-        ))}
-      </section>
-    );
-  }
 
   if (completionView === "complete") {
     return (
@@ -73,7 +27,7 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
         </div>
         <div className="level-complete-actions">
           <button type="button" onClick={() => setCompletionView("feedback")}>Kembali ke Hasil</button>
-          <Link href="/progress?membership=sensei">Kembali ke Daftar</Link>
+          <Link href={"/progress?membership=" + membership}>Kembali ke Daftar</Link>
         </div>
       </section>
     );
@@ -84,15 +38,15 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
       <section className="level-feedback">
         <header>
           <div>
-            <p className="dash-kicker">FEEDBACK AKHIR LEVEL • BELAJAR DENGAN SENSEI</p>
+            <p className="dash-kicker">FEEDBACK AKHIR LEVEL • {membership === "sensei" ? "BELAJAR DENGAN SENSEI" : "HIRU ACADEMY"}</p>
             <h1>Bagikan pengalaman setelah seluruh Chapter selesai</h1>
             <p>Form ini hanya muncul setelah Chapter terakhir pada level aktif selesai.</p>
           </div>
           <span>LEVEL SELESAI</span>
         </header>
         <section className="level-feedback-summary">
-          <strong>N4 • BELAJAR DENGAN SENSEI</strong>
-          <span>12 dari 12 Chapter selesai</span>
+          <strong>{level.title} • {membership === "sensei" ? "BELAJAR DENGAN SENSEI" : "BELAJAR MANDIRI"}</strong>
+          <span>{chapters.length} dari {chapters.length} Chapter selesai</span>
           <small>Progress dan status selesai tersimpan di akun.</small>
         </section>
         <form onSubmit={(event) => { event.preventDefault(); setCompletionView("submitted"); }}>
@@ -103,7 +57,7 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
                   type="button"
-                  aria-label={`${value} bintang`}
+                  aria-label={value + " bintang"}
                   aria-pressed={rating === value}
                   onClick={() => setRating(value)}
                   key={value}
@@ -135,7 +89,7 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
           <label className="feedback-text">
             Ceritakan pengalamanmu
             <small>Apa yang paling membantu dan apa yang perlu diperbaiki?</small>
-            <textarea value={feedback} onChange={(event) => setFeedback(event.target.value)} placeholder="Tulis masukan untuk tim akademik dan pengembangan produk…" rows={6} required />
+            <textarea value={feedback} onChange={(event) => setFeedback(event.target.value)} placeholder="Tulis masukan untuk tim akademik dan pengembangan produk..." rows={6} required />
           </label>
           <label className="feedback-consent">
             <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
@@ -167,8 +121,8 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
           <span>Status resmi tersimpan</span>
         </div>
         <div className="level-complete-actions">
-          <Link href="/progress?membership=sensei">Kembali ke Hasil</Link>
-          <Link href="/dashboard?membership=sensei">Kembali ke Daftar</Link>
+          <Link href={"/progress?membership=" + membership}>Kembali ke Hasil</Link>
+          <Link href={"/dashboard?membership=" + membership}>Kembali ke Daftar</Link>
         </div>
       </section>
     );
@@ -184,8 +138,8 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
       <section className="chapter-progress-card">
         <div>
           <p className="dash-kicker">PROGRES LEVEL TERPILIH</p>
-          <h2>Chapter 4 dari 12</h2>
-          <p>Progress, kelas Sensei, dan replay level lain tetap disimpan secara terpisah.</p>
+          <h2>Chapter 4 dari {chapters.length}</h2>
+          <p>Progress{membership === "sensei" ? ", kelas Sensei, dan replay" : " materi dan quiz"} level lain tetap disimpan secara terpisah.</p>
         </div>
         <div className="journey-progress">
           <span>Progress tersimpan</span>
@@ -193,9 +147,9 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
         </div>
       </section>
       <div className="chapter-journey-layout">
-        <section className="chapter-list sensei-chapter-list" aria-label={`Chapter ${level.title}`}>
+        <section className="chapter-list sensei-chapter-list" aria-label={"Chapter " + level.title}>
           {chapters.map((chapter) => (
-            <article className={`chapter-card chapter-${chapter.state}`} key={chapter.key}>
+            <article className={"chapter-card chapter-" + chapter.state} key={chapter.key}>
               <span className="chapter-number">{chapter.orderLabel}</span>
               <div className="chapter-copy">
                 <h2>{chapter.title}</h2>
@@ -213,12 +167,12 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
                     <b aria-hidden="true"><LuArrowRight /></b>
                   </button>
                 ) : chapter.state === "entitlementLocked" ? (
-                  <Link className="chapter-action-button" href={`/renewal?membership=${membership}`}>
+                  <Link className="chapter-action-button" href={"/renewal?membership=" + membership}>
                     Upgrade Akses
                     <b aria-hidden="true"><LuArrowRight /></b>
                   </Link>
                 ) : (
-                  <span className={`chapter-status chapter-status-${chapter.state}`}>
+                  <span className={"chapter-status chapter-status-" + chapter.state}>
                     {chapter.state === "progressionLocked" && <LuLock aria-hidden="true" style={{ display: "inline-block", marginRight: "4px", verticalAlign: "middle" }} />}
                     {chapter.statusLabel}
                   </span>
@@ -231,7 +185,7 @@ export function ChapterJourney({ membership, level, chapters }: { membership: Me
           <h2>Milestone berikutnya</h2>
           <p>Selesaikan Chapter 4 untuk membuka materi berikutnya dan menjaga konsistensi belajar.</p>
 
-          <Link href="/journey?membership=sensei">Kembali ke Level</Link>
+          <Link href={"/journey?membership=" + membership}>Kembali ke Level</Link>
         </aside>
       </div>
     </>

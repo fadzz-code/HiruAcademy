@@ -1,0 +1,867 @@
+{
+  "communities": {
+    "0": [
+      "frontend_src_app_blog_page",
+      "frontend_src_app_blog_page_articlemeta",
+      "frontend_src_app_blog_page_blogpage",
+      "frontend_src_app_blog_page_categories",
+      "frontend_src_app_blog_slug_page",
+      "frontend_src_app_blog_slug_page_blogdetailpage",
+      "frontend_src_app_blog_slug_page_generatestaticparams",
+      "frontend_src_app_checkout_page",
+      "frontend_src_app_checkout_page_benefits",
+      "frontend_src_app_checkout_page_checkoutcontent",
+      "frontend_src_app_checkout_page_checkoutpage",
+      "frontend_src_app_invoice_page",
+      "frontend_src_app_invoice_page_invoicecontent",
+      "frontend_src_app_invoice_page_invoicepage",
+      "frontend_src_app_kebijakan_privasi_page",
+      "frontend_src_app_kebijakan_privasi_page_privacypage",
+      "frontend_src_app_placement_page",
+      "frontend_src_app_placement_page_outcomes",
+      "frontend_src_app_placement_page_placementpage",
+      "frontend_src_app_placement_page_reminders",
+      "frontend_src_app_placement_page_steps",
+      "frontend_src_app_placement_question_page",
+      "frontend_src_app_placement_question_page_placementquestionpage",
+      "frontend_src_app_placement_result_page",
+      "frontend_src_app_placement_result_page_getplacementanswers",
+      "frontend_src_app_placement_result_page_placementresultpage",
+      "frontend_src_app_placement_result_page_subscribe",
+      "frontend_src_app_placement_result_page_tiericons",
+      "frontend_src_app_program_level_page",
+      "frontend_src_app_program_level_page_generatestaticparams",
+      "frontend_src_app_program_level_page_programdetailpage",
+      "frontend_src_app_program_page",
+      "frontend_src_app_program_page_programpage",
+      "frontend_src_app_register_page",
+      "frontend_src_app_register_page_registerform",
+      "frontend_src_app_register_page_registerpage",
+      "frontend_src_app_testimoni_page",
+      "frontend_src_app_testimoni_page_testimonialspage",
+      "frontend_src_components_public_shell",
+      "frontend_src_components_public_shell_publicfooter",
+      "frontend_src_components_public_shell_publicheader",
+      "frontend_src_components_public_shell_publicpage",
+      "frontend_src_lib_public_mock",
+      "frontend_src_lib_public_mock_blogarticles",
+      "frontend_src_lib_public_mock_blogdetail",
+      "frontend_src_lib_public_mock_blogdetailslug",
+      "frontend_src_lib_public_mock_blogfeatured",
+      "frontend_src_lib_public_mock_calculateplacementresult",
+      "frontend_src_lib_public_mock_levelcatalog",
+      "frontend_src_lib_public_mock_placementquestion",
+      "frontend_src_lib_public_mock_placementquestions",
+      "frontend_src_lib_public_mock_placementrecommendations",
+      "frontend_src_lib_public_mock_placementresult",
+      "frontend_src_lib_public_mock_placementresultarea",
+      "frontend_src_lib_public_mock_placementresultdata",
+      "frontend_src_lib_public_mock_plans",
+      "frontend_src_lib_public_mock_programcomparison",
+      "frontend_src_lib_public_mock_programfacilities",
+      "frontend_src_lib_public_mock_supportingvalues",
+      "frontend_src_lib_public_mock_testimonials",
+      "frontend_src_lib_public_mock_testimonialvideos"
+    ],
+    "1": [
+      "frontend_src_app_certificate_n3_page",
+      "frontend_src_app_certificate_n3_page_certificaten3page",
+      "frontend_src_app_certificate_n4_page",
+      "frontend_src_app_certificate_n4_page_certificaten4page",
+      "frontend_src_app_certificate_n5_page",
+      "frontend_src_app_certificate_n5_page_certificaten5detailpage",
+      "frontend_src_app_certificate_n5_page_metadata",
+      "frontend_src_app_community_ask_page",
+      "frontend_src_app_community_ask_page_asksenseipage",
+      "frontend_src_app_community_post_1_page",
+      "frontend_src_app_community_post_1_page_communitypostpage",
+      "frontend_src_app_flashcards_page",
+      "frontend_src_app_flashcards_page_flashcardspage",
+      "frontend_src_components_brand_logo",
+      "frontend_src_components_brand_logo_brandlogo",
+      "frontend_src_components_certificate_detail_screen",
+      "frontend_src_components_certificate_detail_screen_certificatedetailscreen",
+      "frontend_src_components_certificate_unavailable_screen",
+      "frontend_src_components_certificate_unavailable_screen_certificateunavailablescreen",
+      "frontend_src_components_community_post_screen",
+      "frontend_src_components_community_post_screen_communitypostscreen",
+      "frontend_src_components_flashcard_collection",
+      "frontend_src_components_flashcard_collection_decks",
+      "frontend_src_components_flashcard_collection_flashcardcollection",
+      "frontend_src_components_journey_shell",
+      "frontend_src_components_journey_shell_journeyshell",
+      "frontend_src_components_learning_shell",
+      "frontend_src_components_learning_shell_learningshell",
+      "frontend_src_components_sensei_shell",
+      "frontend_src_components_sensei_shell_senseishell",
+      "frontend_src_components_student_dashboard",
+      "frontend_src_components_student_dashboard_entitlementcard",
+      "frontend_src_components_student_dashboard_glyph",
+      "frontend_src_components_student_dashboard_glyphs",
+      "frontend_src_components_student_dashboard_studentdashboard",
+      "frontend_src_components_student_navigation",
+      "frontend_src_components_student_navigation_currentarea",
+      "frontend_src_components_student_navigation_entitlement",
+      "frontend_src_components_student_navigation_implementation",
+      "frontend_src_components_student_navigation_itemsfor",
+      "frontend_src_components_student_navigation_modalstate",
+      "frontend_src_components_student_navigation_navitem",
+      "frontend_src_components_student_navigation_studentnavigation",
+      "frontend_src_lib_dashboard_mock",
+      "frontend_src_lib_dashboard_mock_configs",
+      "frontend_src_lib_dashboard_mock_dashboardaction",
+      "frontend_src_lib_dashboard_mock_dashboardconfig",
+      "frontend_src_lib_dashboard_mock_dashboarddata",
+      "frontend_src_lib_dashboard_mock_dashboardentitlement",
+      "frontend_src_lib_dashboard_mock_dashboardicon",
+      "frontend_src_lib_dashboard_mock_entitlementstate",
+      "frontend_src_lib_dashboard_mock_getdashboarddata",
+      "frontend_src_lib_dashboard_mock_lmsentitlements",
+      "frontend_src_lib_dashboard_mock_membership",
+      "frontend_src_lib_dashboard_mock_parsemembership"
+    ],
+    "2": [
+      "frontend_src_app_certificate_page",
+      "frontend_src_app_certificate_page_certificatepage",
+      "frontend_src_app_certificate_page_metadata",
+      "frontend_src_app_community_create_page",
+      "frontend_src_app_community_create_page_createpostpage",
+      "frontend_src_app_community_page",
+      "frontend_src_app_community_page_communitypage",
+      "frontend_src_app_leaderboard_page",
+      "frontend_src_app_leaderboard_page_leaderboardpage",
+      "frontend_src_app_library_page",
+      "frontend_src_app_library_page_librarypage",
+      "frontend_src_app_notifications_page",
+      "frontend_src_app_notifications_page_notificationspage",
+      "frontend_src_app_practice_page",
+      "frontend_src_app_practice_page_practicepage",
+      "frontend_src_app_profile_page",
+      "frontend_src_app_profile_page_profilepage",
+      "frontend_src_app_progress_page",
+      "frontend_src_app_progress_page_progresspage",
+      "frontend_src_app_renewal_page",
+      "frontend_src_app_renewal_page_renewalpage",
+      "frontend_src_components_supporting_route",
+      "frontend_src_components_supporting_route_supportingroute",
+      "frontend_src_components_supporting_screen",
+      "frontend_src_components_supporting_screen_certificatescreen",
+      "frontend_src_components_supporting_screen_communityscreen",
+      "frontend_src_components_supporting_screen_createpostscreen",
+      "frontend_src_components_supporting_screen_leaderboardscreen",
+      "frontend_src_components_supporting_screen_libraryscreen",
+      "frontend_src_components_supporting_screen_notificationscreen",
+      "frontend_src_components_supporting_screen_paidpractice",
+      "frontend_src_components_supporting_screen_profilescreen",
+      "frontend_src_components_supporting_screen_progressscreen",
+      "frontend_src_components_supporting_screen_renewalscreen",
+      "frontend_src_components_supporting_screen_supportingscreen",
+      "frontend_src_lib_supporting_mock",
+      "frontend_src_lib_supporting_mock_card",
+      "frontend_src_lib_supporting_mock_getsupportingdata",
+      "frontend_src_lib_supporting_mock_supportingdata",
+      "frontend_src_lib_supporting_mock_supportingkind"
+    ],
+    "3": [
+      "frontend_src_components_assessment_runner",
+      "frontend_src_components_assessment_runner_answers",
+      "frontend_src_components_assessment_runner_assessmentresult",
+      "frontend_src_components_assessment_runner_assessmentreview",
+      "frontend_src_components_assessment_runner_assessmentrunner",
+      "frontend_src_components_assessment_runner_view",
+      "frontend_src_components_assessment_unavailable",
+      "frontend_src_components_assessment_unavailable_assessmentunavailable",
+      "frontend_src_components_assessment_unavailable_assessmentunavailableaction",
+      "frontend_src_components_mini_checkpoint_screen",
+      "frontend_src_components_mini_checkpoint_screen_minicheckpointscreen",
+      "frontend_src_components_mini_checkpoint_screen_view",
+      "frontend_src_components_sensei_screens",
+      "frontend_src_components_sensei_screens_classdetailscreen",
+      "frontend_src_components_sensei_screens_pagehead",
+      "frontend_src_components_sensei_screens_replayplayerscreen",
+      "frontend_src_components_sensei_screens_replayscreen",
+      "frontend_src_components_sensei_screens_schedulescreen",
+      "frontend_src_components_sensei_screens_senseistate",
+      "frontend_src_components_sensei_screens_sessionlist",
+      "frontend_src_components_sensei_screens_stateaction",
+      "frontend_src_components_sensei_tryout_screen",
+      "frontend_src_components_sensei_tryout_screen_senseitryoutscreen",
+      "frontend_src_components_sensei_tryout_screen_tryouts",
+      "frontend_src_components_sensei_tryout_screen_view",
+      "frontend_src_lib_assessment_mock",
+      "frontend_src_lib_assessment_mock_assessmentconfig",
+      "frontend_src_lib_assessment_mock_assessmentoption",
+      "frontend_src_lib_assessment_mock_assessmentquestion",
+      "frontend_src_lib_assessment_mock_assessmenttype",
+      "frontend_src_lib_assessment_mock_gettryoutconfig",
+      "frontend_src_lib_assessment_mock_hastryoutaccess",
+      "frontend_src_lib_assessment_mock_questions",
+      "frontend_src_lib_sensei_mock",
+      "frontend_src_lib_sensei_mock_hassenseiaccess",
+      "frontend_src_lib_sensei_mock_minicheckpointconfig",
+      "frontend_src_lib_sensei_mock_minicheckpoints",
+      "frontend_src_lib_sensei_mock_replaymarkers",
+      "frontend_src_lib_sensei_mock_replays",
+      "frontend_src_lib_sensei_mock_schedulesessions"
+    ],
+    "4": [
+      "eslint",
+      "eslint_config_next",
+      "frontend_package",
+      "frontend_package_dependencies",
+      "frontend_package_dependencies_next",
+      "frontend_package_dependencies_react",
+      "frontend_package_dependencies_react_dom",
+      "frontend_package_dependencies_react_icons",
+      "frontend_package_devdependencies",
+      "frontend_package_devdependencies_eslint",
+      "frontend_package_devdependencies_eslint_config_next",
+      "frontend_package_devdependencies_tailwindcss",
+      "frontend_package_devdependencies_tailwindcss_postcss",
+      "frontend_package_devdependencies_types_node",
+      "frontend_package_devdependencies_types_react",
+      "frontend_package_devdependencies_types_react_dom",
+      "frontend_package_devdependencies_typescript",
+      "frontend_package_name",
+      "frontend_package_private",
+      "frontend_package_scripts",
+      "frontend_package_scripts_build",
+      "frontend_package_scripts_dev",
+      "frontend_package_scripts_lint",
+      "frontend_package_scripts_start",
+      "frontend_package_scripts_typecheck",
+      "frontend_package_version",
+      "next",
+      "react",
+      "react_dom",
+      "react_icons",
+      "tailwindcss",
+      "tailwindcss_postcss",
+      "types_node",
+      "types_react",
+      "types_react_dom",
+      "typescript"
+    ],
+    "5": [
+      "frontend_tsconfig",
+      "frontend_tsconfig_compileroptions",
+      "frontend_tsconfig_compileroptions_allowjs",
+      "frontend_tsconfig_compileroptions_esmoduleinterop",
+      "frontend_tsconfig_compileroptions_incremental",
+      "frontend_tsconfig_compileroptions_isolatedmodules",
+      "frontend_tsconfig_compileroptions_jsx",
+      "frontend_tsconfig_compileroptions_lib",
+      "frontend_tsconfig_compileroptions_module",
+      "frontend_tsconfig_compileroptions_moduleresolution",
+      "frontend_tsconfig_compileroptions_noemit",
+      "frontend_tsconfig_compileroptions_paths",
+      "frontend_tsconfig_compileroptions_plugins",
+      "frontend_tsconfig_compileroptions_resolvejsonmodule",
+      "frontend_tsconfig_compileroptions_skiplibcheck",
+      "frontend_tsconfig_compileroptions_strict",
+      "frontend_tsconfig_compileroptions_target",
+      "frontend_tsconfig_exclude",
+      "frontend_tsconfig_include",
+      "ref_dom",
+      "ref_dom_iterable",
+      "ref_esnext",
+      "ref_mts",
+      "ref_next_dev_types_ts",
+      "ref_next_env_d_ts",
+      "ref_next_types_ts",
+      "ref_node_modules",
+      "ref_ts",
+      "ref_tsx"
+    ],
+    "6": [
+      "frontend_src_app_page",
+      "frontend_src_app_page_arrowlink",
+      "frontend_src_app_page_home",
+      "frontend_src_app_page_icon",
+      "frontend_src_app_page_iconname",
+      "frontend_src_app_page_icons",
+      "frontend_src_app_page_learningflow",
+      "frontend_src_app_page_lmspreview",
+      "frontend_src_app_page_lmspreviews",
+      "frontend_src_app_page_offers",
+      "frontend_src_app_page_proofitems",
+      "frontend_src_app_sensei_page",
+      "frontend_src_app_sensei_page_senseipage",
+      "frontend_src_components_landing_motion",
+      "frontend_src_components_landing_motion_landingmotion",
+      "frontend_src_components_sensei_grid",
+      "frontend_src_components_sensei_grid_senseigrid",
+      "frontend_src_lib_public_sensei",
+      "frontend_src_lib_public_sensei_publicsensei"
+    ],
+    "7": [
+      "frontend_src_components_ask_sensei_screen",
+      "frontend_src_components_ask_sensei_screen_asksenseiscreen",
+      "frontend_src_components_chapter_checkpoint",
+      "frontend_src_components_chapter_checkpoint_chaptercheckpoint",
+      "frontend_src_components_learning_question_activity",
+      "frontend_src_components_learning_question_activity_learningquestionactivity",
+      "frontend_src_components_lesson_overview",
+      "frontend_src_components_lesson_overview_lessonoverview",
+      "frontend_src_components_locked_tryout",
+      "frontend_src_components_locked_tryout_lockedtryout",
+      "frontend_src_components_static_student_route",
+      "frontend_src_components_static_student_route_routekind",
+      "frontend_src_components_video_lesson",
+      "frontend_src_components_video_lesson_videolesson",
+      "frontend_src_lib_learning_mock_learningdata",
+      "frontend_src_lib_learning_mock_learningquestion"
+    ],
+    "8": [
+      "frontend_src_components_document_lesson",
+      "frontend_src_components_document_lesson_documentlesson",
+      "frontend_src_components_flashcard_session",
+      "frontend_src_components_flashcard_session_flashcardsession",
+      "frontend_src_lib_learning_mock",
+      "frontend_src_lib_learning_mock_audioquestion",
+      "frontend_src_lib_learning_mock_documentlessonkind",
+      "frontend_src_lib_learning_mock_flashcarditem",
+      "frontend_src_lib_learning_mock_flashcards",
+      "frontend_src_lib_learning_mock_getdocumentlesson",
+      "frontend_src_lib_learning_mock_getlearningdata",
+      "frontend_src_lib_learning_mock_learningactivitykey",
+      "frontend_src_lib_learning_mock_learningactivitystate",
+      "frontend_src_lib_learning_mock_lessonactivity",
+      "frontend_src_lib_learning_mock_readingquestion"
+    ],
+    "9": [
+      "frontend_src_components_chapter_journey",
+      "frontend_src_components_chapter_journey_chapterjourney",
+      "frontend_src_components_level_selection",
+      "frontend_src_components_level_selection_levelselection",
+      "frontend_src_lib_journey_mock",
+      "frontend_src_lib_journey_mock_baselevels",
+      "frontend_src_lib_journey_mock_chapterstate",
+      "frontend_src_lib_journey_mock_cohortstate",
+      "frontend_src_lib_journey_mock_journeychapter",
+      "frontend_src_lib_journey_mock_journeylevel",
+      "frontend_src_lib_journey_mock_levelaccess",
+      "frontend_src_lib_journey_mock_levelprogression",
+      "frontend_src_lib_journey_mock_senseichapterseeds",
+      "frontend_src_lib_journey_mock_senseilevels"
+    ],
+    "10": [
+      "frontend_src_app_admin_mini_checkpoint_page",
+      "frontend_src_app_admin_mini_checkpoint_page_minicheckpointbuilderpage",
+      "frontend_src_app_admin_mini_checkpoint_page_questions",
+      "frontend_src_app_admin_page",
+      "frontend_src_app_admin_page_admindashboardpage",
+      "frontend_src_app_admin_program_page",
+      "frontend_src_app_admin_program_page_adminprogrampage",
+      "frontend_src_app_admin_sensei_page",
+      "frontend_src_app_admin_sensei_page_fixtures",
+      "frontend_src_app_admin_sensei_page_sensei",
+      "frontend_src_app_admin_sensei_page_senseipage",
+      "frontend_src_components_admin_shell_adminshell"
+    ],
+    "11": [
+      "frontend_src_app_ask_sensei_page",
+      "frontend_src_app_ask_sensei_page_asksenseipage",
+      "frontend_src_app_ask_sensei_page_metadata",
+      "frontend_src_app_journey_page",
+      "frontend_src_app_journey_page_levelselectionpage",
+      "frontend_src_app_journey_page_metadata",
+      "frontend_src_components_static_student_route_staticstudentroute",
+      "frontend_src_lib_journey_mock_canaccesslearning",
+      "frontend_src_lib_journey_mock_findjourneylevel",
+      "frontend_src_lib_journey_mock_getjourneychapters",
+      "frontend_src_lib_journey_mock_getjourneylevels"
+    ],
+    "12": [
+      "frontend_src_app_forgot_password_page",
+      "frontend_src_app_forgot_password_page_forgotpasswordpage",
+      "frontend_src_app_login_page",
+      "frontend_src_app_login_page_loginpage",
+      "frontend_src_app_reset_password_page",
+      "frontend_src_app_reset_password_page_resetpasswordcontent",
+      "frontend_src_app_reset_password_page_resetpasswordpage",
+      "frontend_src_components_auth_shell",
+      "frontend_src_components_auth_shell_authshell",
+      "frontend_src_components_auth_status",
+      "frontend_src_components_auth_status_authstatus"
+    ],
+    "13": [
+      "frontend_src_app_admin_access_settings_page",
+      "frontend_src_app_admin_access_settings_page_accesssettingspage",
+      "frontend_src_app_admin_access_settings_page_tab",
+      "frontend_src_components_admin_navigation",
+      "frontend_src_components_admin_navigation_adminnavigation",
+      "frontend_src_components_admin_navigation_chevron",
+      "frontend_src_components_admin_navigation_child",
+      "frontend_src_components_admin_navigation_item",
+      "frontend_src_components_admin_navigation_items",
+      "frontend_src_components_admin_shell"
+    ],
+    "14": [
+      "frontend_src_app_admin_landing_page_page",
+      "frontend_src_app_admin_landing_page_page_dialog",
+      "frontend_src_app_admin_landing_page_page_editor",
+      "frontend_src_app_admin_landing_page_page_initialsections",
+      "frontend_src_app_admin_landing_page_page_landingpagemanagement",
+      "frontend_src_app_admin_landing_page_page_result",
+      "frontend_src_app_admin_landing_page_page_section",
+      "frontend_src_app_admin_landing_page_page_versions"
+    ],
+    "15": [
+      "frontend_src_app_admin_settings_page",
+      "frontend_src_app_admin_settings_page_dialog",
+      "frontend_src_app_admin_settings_page_field",
+      "frontend_src_app_admin_settings_page_nav",
+      "frontend_src_app_admin_settings_page_section",
+      "frontend_src_app_admin_settings_page_select",
+      "frontend_src_app_admin_settings_page_settingspage",
+      "frontend_src_app_admin_settings_page_statusgrid"
+    ],
+    "16": [
+      "frontend_src_app_admin_notification_templates_page",
+      "frontend_src_app_admin_notification_templates_page_dialog",
+      "frontend_src_app_admin_notification_templates_page_fixtures",
+      "frontend_src_app_admin_notification_templates_page_notificationtemplatespage",
+      "frontend_src_app_admin_notification_templates_page_state",
+      "frontend_src_app_admin_notification_templates_page_template",
+      "frontend_src_app_admin_notification_templates_page_variables"
+    ],
+    "17": [
+      "frontend_src_app_admin_program_level_tryout_client_page",
+      "frontend_src_app_admin_program_level_tryout_client_page_clienttryoutbuilder",
+      "frontend_src_app_admin_program_level_tryout_client_page_poolfixtures",
+      "frontend_src_app_admin_program_level_tryout_client_page_sectionfixtures",
+      "frontend_src_app_admin_program_level_tryout_page",
+      "frontend_src_app_admin_program_level_tryout_page_generatestaticparams",
+      "frontend_src_app_admin_program_level_tryout_page_page"
+    ],
+    "18": [
+      "frontend_src_app_admin_cohorts_page",
+      "frontend_src_app_admin_cohorts_page_cohort",
+      "frontend_src_app_admin_cohorts_page_cohortspage",
+      "frontend_src_app_admin_cohorts_page_dialog",
+      "frontend_src_app_admin_cohorts_page_fixtures",
+      "frontend_src_app_admin_cohorts_page_result"
+    ],
+    "19": [
+      "frontend_src_app_admin_community_page",
+      "frontend_src_app_admin_community_page_communitypage",
+      "frontend_src_app_admin_community_page_dialog",
+      "frontend_src_app_admin_community_page_fixtures",
+      "frontend_src_app_admin_community_page_post",
+      "frontend_src_app_admin_community_page_state"
+    ],
+    "20": [
+      "frontend_src_app_admin_testimonials_page",
+      "frontend_src_app_admin_testimonials_page_dialog",
+      "frontend_src_app_admin_testimonials_page_fixtures",
+      "frontend_src_app_admin_testimonials_page_success",
+      "frontend_src_app_admin_testimonials_page_testimonial",
+      "frontend_src_app_admin_testimonials_page_testimonialspage"
+    ],
+    "21": [
+      "frontend_src_app_admin_announcements_page",
+      "frontend_src_app_admin_announcements_page_announcement",
+      "frontend_src_app_admin_announcements_page_announcementspage",
+      "frontend_src_app_admin_announcements_page_fixtures",
+      "frontend_src_app_admin_announcements_page_state"
+    ],
+    "22": [
+      "frontend_src_app_admin_audit_logs_page",
+      "frontend_src_app_admin_audit_logs_page_auditlogspage",
+      "frontend_src_app_admin_audit_logs_page_dialog",
+      "frontend_src_app_admin_audit_logs_page_event",
+      "frontend_src_app_admin_audit_logs_page_fixtures"
+    ],
+    "23": [
+      "frontend_src_app_admin_blog_page",
+      "frontend_src_app_admin_blog_page_article",
+      "frontend_src_app_admin_blog_page_blogmanagementpage",
+      "frontend_src_app_admin_blog_page_fixtures",
+      "frontend_src_app_admin_blog_page_state"
+    ],
+    "24": [
+      "frontend_src_app_admin_certificates_page",
+      "frontend_src_app_admin_certificates_page_certificate",
+      "frontend_src_app_admin_certificates_page_certificatespage",
+      "frontend_src_app_admin_certificates_page_fixtures",
+      "frontend_src_app_admin_certificates_page_state"
+    ],
+    "25": [
+      "frontend_src_app_admin_feedback_page",
+      "frontend_src_app_admin_feedback_page_dialog",
+      "frontend_src_app_admin_feedback_page_feedback",
+      "frontend_src_app_admin_feedback_page_feedbackpage",
+      "frontend_src_app_admin_feedback_page_fixtures"
+    ],
+    "26": [
+      "frontend_src_app_admin_invoices_page",
+      "frontend_src_app_admin_invoices_page_fixtures",
+      "frontend_src_app_admin_invoices_page_invoice",
+      "frontend_src_app_admin_invoices_page_invoicespage",
+      "frontend_src_app_admin_invoices_page_state"
+    ],
+    "27": [
+      "frontend_src_app_admin_program_level_chapters_chapter_quiz_client_page",
+      "frontend_src_app_admin_program_level_chapters_chapter_quiz_client_page_clientquizbuilder",
+      "frontend_src_app_admin_program_level_chapters_chapter_quiz_page",
+      "frontend_src_app_admin_program_level_chapters_chapter_quiz_page_generatestaticparams",
+      "frontend_src_app_admin_program_level_chapters_chapter_quiz_page_page"
+    ],
+    "28": [
+      "frontend_src_app_admin_program_level_chapters_client_page",
+      "frontend_src_app_admin_program_level_chapters_client_page_clientchapterbuilder",
+      "frontend_src_app_admin_program_level_chapters_page",
+      "frontend_src_app_admin_program_level_chapters_page_generatestaticparams",
+      "frontend_src_app_admin_program_level_chapters_page_page"
+    ],
+    "29": [
+      "frontend_src_app_admin_referrals_page",
+      "frontend_src_app_admin_referrals_page_fixtures",
+      "frontend_src_app_admin_referrals_page_referral",
+      "frontend_src_app_admin_referrals_page_referralspage",
+      "frontend_src_app_admin_referrals_page_state"
+    ],
+    "30": [
+      "frontend_src_app_admin_users_page",
+      "frontend_src_app_admin_users_page_dialog",
+      "frontend_src_app_admin_users_page_fixtureusers",
+      "frontend_src_app_admin_users_page_user",
+      "frontend_src_app_admin_users_page_userspage"
+    ],
+    "31": [
+      "frontend_src_app_admin_analytics_page",
+      "frontend_src_app_admin_analytics_page_analyticspage",
+      "frontend_src_app_admin_analytics_page_events",
+      "frontend_src_app_admin_analytics_page_panel"
+    ],
+    "32": [
+      "frontend_src_app_admin_assessment_results_page",
+      "frontend_src_app_admin_assessment_results_page_assessmentresultspage",
+      "frontend_src_app_admin_assessment_results_page_fixtures",
+      "frontend_src_app_admin_assessment_results_page_result"
+    ],
+    "33": [
+      "frontend_src_app_admin_content_library_page",
+      "frontend_src_app_admin_content_library_page_asset",
+      "frontend_src_app_admin_content_library_page_contentlibrarypage",
+      "frontend_src_app_admin_content_library_page_initialassets"
+    ],
+    "34": [
+      "frontend_src_app_admin_placement_page",
+      "frontend_src_app_admin_placement_page_fixtureleads",
+      "frontend_src_app_admin_placement_page_lead",
+      "frontend_src_app_admin_placement_page_placementpage"
+    ],
+    "35": [
+      "frontend_src_app_journey_level_page",
+      "frontend_src_app_journey_level_page_generatestaticparams",
+      "frontend_src_app_journey_level_page_journeypage",
+      "frontend_src_app_journey_level_page_metadata"
+    ],
+    "36": [
+      "frontend_src_app_layout",
+      "frontend_src_app_layout_metadata",
+      "frontend_src_app_layout_plusjakartasans",
+      "frontend_src_app_layout_rootlayout"
+    ],
+    "37": [
+      "frontend_src_app_learn_level_chapter_audio_page",
+      "frontend_src_app_learn_level_chapter_audio_page_audiopage",
+      "frontend_src_app_learn_level_chapter_audio_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_audio_page_metadata"
+    ],
+    "38": [
+      "frontend_src_app_learn_level_chapter_checkpoint_page",
+      "frontend_src_app_learn_level_chapter_checkpoint_page_checkpointpage",
+      "frontend_src_app_learn_level_chapter_checkpoint_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_checkpoint_page_metadata"
+    ],
+    "39": [
+      "frontend_src_app_learn_level_chapter_flashcards_page",
+      "frontend_src_app_learn_level_chapter_flashcards_page_flashcardpage",
+      "frontend_src_app_learn_level_chapter_flashcards_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_flashcards_page_metadata"
+    ],
+    "40": [
+      "frontend_src_app_learn_level_chapter_grammar_page",
+      "frontend_src_app_learn_level_chapter_grammar_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_grammar_page_grammarpage",
+      "frontend_src_app_learn_level_chapter_grammar_page_metadata"
+    ],
+    "41": [
+      "frontend_src_app_learn_level_chapter_kanji_page",
+      "frontend_src_app_learn_level_chapter_kanji_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_kanji_page_kanjipage",
+      "frontend_src_app_learn_level_chapter_kanji_page_metadata"
+    ],
+    "42": [
+      "frontend_src_app_learn_level_chapter_page",
+      "frontend_src_app_learn_level_chapter_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_page_learningpage",
+      "frontend_src_app_learn_level_chapter_page_metadata"
+    ],
+    "43": [
+      "frontend_src_app_learn_level_chapter_reading_page",
+      "frontend_src_app_learn_level_chapter_reading_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_reading_page_metadata",
+      "frontend_src_app_learn_level_chapter_reading_page_readingpage"
+    ],
+    "44": [
+      "frontend_src_app_learn_level_chapter_video_page",
+      "frontend_src_app_learn_level_chapter_video_page_generatestaticparams",
+      "frontend_src_app_learn_level_chapter_video_page_metadata",
+      "frontend_src_app_learn_level_chapter_video_page_videolessonpage"
+    ],
+    "45": [
+      "frontend_src_app_dashboard_page",
+      "frontend_src_app_dashboard_page_dashboardpage",
+      "frontend_src_app_dashboard_page_metadata"
+    ],
+    "46": [
+      "frontend_src_app_mini_checkpoint_page",
+      "frontend_src_app_mini_checkpoint_page_metadata",
+      "frontend_src_app_mini_checkpoint_page_minicheckpointpage"
+    ],
+    "47": [
+      "frontend_src_app_replay_chapter_4_page",
+      "frontend_src_app_replay_chapter_4_page_metadata",
+      "frontend_src_app_replay_chapter_4_page_replayplayerpage"
+    ],
+    "48": [
+      "frontend_src_app_replay_page",
+      "frontend_src_app_replay_page_metadata",
+      "frontend_src_app_replay_page_replaypage"
+    ],
+    "49": [
+      "frontend_src_app_schedule_chapter_4_page",
+      "frontend_src_app_schedule_chapter_4_page_classdetailpage",
+      "frontend_src_app_schedule_chapter_4_page_metadata"
+    ],
+    "50": [
+      "frontend_src_app_schedule_page",
+      "frontend_src_app_schedule_page_metadata",
+      "frontend_src_app_schedule_page_schedulepage"
+    ],
+    "51": [
+      "frontend_src_app_tryout_page",
+      "frontend_src_app_tryout_page_metadata",
+      "frontend_src_app_tryout_page_tryoutpage"
+    ],
+    "52": [
+      "frontend_eslint_config",
+      "frontend_eslint_config_eslintconfig"
+    ],
+    "53": [
+      "frontend_next_config",
+      "frontend_next_config_nextconfig"
+    ],
+    "54": [
+      "frontend_postcss_config",
+      "frontend_postcss_config_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.05191256830601093,
+    "1": 0.06397306397306397,
+    "2": 0.06923076923076923,
+    "3": 0.06025641025641026,
+    "4": 0.05555555555555555,
+    "5": 0.06896551724137931,
+    "6": 0.1286549707602339,
+    "7": 0.2,
+    "8": 0.17142857142857143,
+    "9": 0.17582417582417584,
+    "10": 0.16666666666666666,
+    "11": 0.23636363636363636,
+    "12": 0.2909090909090909,
+    "13": 0.2222222222222222,
+    "14": 0.25,
+    "15": 0.25,
+    "16": 0.2857142857142857,
+    "17": 0.3333333333333333,
+    "18": 0.3333333333333333,
+    "19": 0.3333333333333333,
+    "20": 0.3333333333333333,
+    "21": 0.4,
+    "22": 0.4,
+    "23": 0.4,
+    "24": 0.4,
+    "25": 0.4,
+    "26": 0.4,
+    "27": 0.5,
+    "28": 0.5,
+    "29": 0.4,
+    "30": 0.4,
+    "31": 0.5,
+    "32": 0.5,
+    "33": 0.5,
+    "34": 0.5,
+    "35": 0.5,
+    "36": 0.5,
+    "37": 0.5,
+    "38": 0.5,
+    "39": 0.5,
+    "40": 0.5,
+    "41": 0.5,
+    "42": 0.5,
+    "43": 0.5,
+    "44": 0.5,
+    "45": 0.6666666666666666,
+    "46": 0.6666666666666666,
+    "47": 0.6666666666666666,
+    "48": 0.6666666666666666,
+    "49": 0.6666666666666666,
+    "50": 0.6666666666666666,
+    "51": 0.6666666666666666,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0
+  },
+  "gods": [
+    {
+      "id": "frontend_src_components_static_student_route_staticstudentroute",
+      "label": "StaticStudentRoute()",
+      "degree": 28
+    },
+    {
+      "id": "frontend_src_components_admin_shell_adminshell",
+      "label": "AdminShell()",
+      "degree": 27
+    },
+    {
+      "id": "frontend_tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "frontend_src_components_public_shell_publicpage",
+      "label": "PublicPage()",
+      "degree": 14
+    },
+    {
+      "id": "frontend_src_components_student_navigation_studentnavigation",
+      "label": "StudentNavigation()",
+      "degree": 13
+    },
+    {
+      "id": "frontend_src_lib_dashboard_mock_membership",
+      "label": "Membership",
+      "degree": 13
+    },
+    {
+      "id": "frontend_src_components_supporting_route_supportingroute",
+      "label": "SupportingRoute()",
+      "degree": 11
+    },
+    {
+      "id": "frontend_src_lib_dashboard_mock_parsemembership",
+      "label": "parseMembership()",
+      "degree": 11
+    },
+    {
+      "id": "frontend_src_components_brand_logo_brandlogo",
+      "label": "BrandLogo()",
+      "degree": 7
+    },
+    {
+      "id": "frontend_tsconfig_include",
+      "label": "include",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "StaticStudentRoute()",
+      "target": "hasTryoutAccess()",
+      "source_files": [
+        "Frontend/src/components/static-student-route.tsx",
+        "Frontend/src/lib/assessment-mock.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "StaticStudentRoute()",
+      "target": "getDashboardData()",
+      "source_files": [
+        "Frontend/src/components/static-student-route.tsx",
+        "Frontend/src/lib/dashboard-mock.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "StaticStudentRoute()",
+      "target": "parseMembership()",
+      "source_files": [
+        "Frontend/src/components/static-student-route.tsx",
+        "Frontend/src/lib/dashboard-mock.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "StaticStudentRoute()",
+      "target": "getLearningData()",
+      "source_files": [
+        "Frontend/src/components/static-student-route.tsx",
+        "Frontend/src/lib/learning-mock.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "StaticStudentRoute()",
+      "target": "hasSenseiAccess()",
+      "source_files": [
+        "Frontend/src/components/static-student-route.tsx",
+        "Frontend/src/lib/sensei-mock.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `BrandLogo()` connect `dashboard-mock.ts` to `public-mock.ts`, `reset-password/page.tsx`, `admin-shell.tsx`?",
+      "why": "High betweenness centrality (0.230) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Membership` connect `dashboard-mock.ts` to `learning-mock.ts`, `journey-mock.ts`, `supporting-screen.tsx`, `sensei-screens.tsx`?",
+      "why": "High betweenness centrality (0.034) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `AdminShell()` connect `AdminShell` to `admin-shell.tsx`, `landing-page/page.tsx`, `settings/page.tsx`, `notification-templates/page.tsx`, `tryout/client-page.tsx`, `cohorts/page.tsx`, `admin/community/page.tsx`, `testimonials/page.tsx`, `announcements/page.tsx`, `audit-logs/page.tsx`, `admin/blog/page.tsx`, `certificates/page.tsx`, `feedback/page.tsx`, `invoices/page.tsx`, `quiz/client-page.tsx`, `chapters/client-page.tsx`, `referrals/page.tsx`, `users/page.tsx`, `analytics/page.tsx`, `assessment-results/page.tsx`, `content-library/page.tsx`, `admin/placement/page.tsx`?",
+      "why": "High betweenness centrality (0.026) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `eslintConfig`, `nextConfig`, `name` to the rest of the system?",
+      "why": "184 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `public-mock.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.05191256830601093 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `dashboard-mock.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06397306397306397 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `supporting-screen.tsx` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06923076923076923 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
