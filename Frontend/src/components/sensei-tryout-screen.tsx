@@ -37,6 +37,23 @@ type TryoutItem = {
   view: View;
 };
 
+type ResultSection = { key: string; label: string; score: number; maxScore: number };
+type Recommendation = { title: string; body: string; actions: string[]; href?: string };
+
+function getRecommendation(sections: ResultSection[], membership: string): Recommendation {
+  const weakest = sections.reduce((current, section) => section.score / section.maxScore < current.score / current.maxScore ? section : current);
+  const query = `?membership=${membership}`;
+  const recommendations: Record<string, Recommendation> = {
+    "Moji Goi": { title: "Fokus utama: Moji Goi (Kosakata)", body: "Skor Kosakata merupakan yang terendah pada attempt ini. Fokuskan belajar berikutnya pada penguatan kosakata dan evaluasi kembali soal yang belum tepat.", actions: ["Review Kosakata", "Kumpulan Flashcard", "Review jawaban yang salah"], href: `/flashcards${query}` },
+    Bunpou: { title: "Fokus utama: Bunpou (Tata Bahasa)", body: "Skor Tata Bahasa merupakan yang terendah pada attempt ini. Ulangi pola kalimat dan latihan terkait sebelum mencoba simulasi berikutnya.", actions: ["Review Modul Tata Bahasa", "Latihan Tata Bahasa", "Review jawaban yang salah"], href: `/learn/n4/chapter-4/grammar${query}` },
+    Dokkai: { title: "Fokus utama: Dokkai (Reading)", body: "Skor Reading merupakan yang terendah pada attempt ini. Fokuskan belajar berikutnya pada pemahaman bacaan dan evaluasi kembali soal yang belum tepat.", actions: ["Ulangi materi Reading", "Kerjakan Latihan Reading", "Review jawaban yang salah"], href: `/learn/n4/chapter-4/reading${query}` },
+    Choukai: { title: "Fokus utama: Choukai (Listening)", body: "Skor Listening masih lebih rendah dibanding bagian lainnya. Latihan mendengar secara berulang akan membantu meningkatkan pemahaman percakapan.", actions: ["Ulangi materi Audio", "Kerjakan Latihan Listening", "Review soal audio yang salah"], href: `/learn/n4/chapter-4/audio${query}` },
+  };
+  const allEqual = sections.every((section) => section.score / section.maxScore === sections[0].score / sections[0].maxScore);
+  if (allEqual || weakest.score / weakest.maxScore >= 0.9) return { title: "Fokus Selanjutnya: Pertahankan Konsistensi", body: "Performa antar bagian cukup seimbang. Lanjutkan latihan secara konsisten dan review soal yang masih salah.", actions: ["Review jawaban"] };
+  return recommendations[weakest.key];
+}
+
 const tryouts: TryoutItem[] = [
   { id: "to-n4-1", icon: LuGraduationCap, level: "N4", title: "Try Out N4 — Simulasi 1", status: "TERSEDIA", description: "Simulasi penuh dengan format standar JLPT dan review jawaban lengkap.", meta: "100 soal • 2 attempt", view: "info" },
   { id: "to-n3-1", icon: LuClock, level: "N3", title: "Try Out N3 — Simulasi Nasional", status: "MENUNGGU", description: "Dijadwalkan serentak dan terbuka otomatis sesuai tanggal mulai.", meta: "Mulai 12 Agustus • 1 attempt", view: "waiting" },
@@ -147,11 +164,18 @@ export function SenseiTryoutScreen({ membership = "sensei" }: { membership?: "lm
     const answered = answer ? 1 : 0;
     const unanswered = 100 - answered;
     const totalScore = correct * 2;
+    const sections: ResultSection[] = [
+      { key: "Moji Goi", label: "Moji Goi (Kosakata)", score: correct, maxScore: 25 },
+      { key: "Bunpou", label: "Bunpou (Tata Bahasa)", score: 18, maxScore: 25 },
+      { key: "Dokkai", label: "Dokkai (Reading)", score: 12, maxScore: 25 },
+      { key: "Choukai", label: "Choukai (Listening)", score: 20, maxScore: 25 },
+    ];
+    const recommendation = getRecommendation(sections, membership);
     return (
       <div className="sensei-tryout tryout-result-report">
         <header className="tryout-result-header"><h1>Hasil Try Out</h1></header>
         <section className="tryout-score-report"><div className="tryout-section-scores"><h2><span>得点区分別得点</span><small>Scores by Scoring Section</small></h2><article><div><strong>言語知識（文字・語彙・文法）・読解</strong><small>Language Knowledge (Vocabulary/Grammar) &amp; Reading</small></div><b>{correct * 2} / 120</b></article><article><div><strong>聴解</strong><small>Listening</small></div><b>0 / 60</b></article></div><div className="tryout-total-score"><span>総合得点</span><small>Total Score</small><strong>{totalScore}</strong><em>/ 180</em></div></section>
-        <section className="tryout-reference-info"><h2>Reference Information</h2><dl><div><dt>Jawaban Benar</dt><dd>{correct}</dd></div><div><dt>Jawaban Salah</dt><dd>{answered - correct}</dd></div><div><dt>Tidak Dijawab</dt><dd>{unanswered}</dd></div><div><dt>Waktu Pengerjaan</dt><dd>78 menit</dd></div><div><dt>Attempt</dt><dd>1 / 2</dd></div></dl></section>
+        <section className="tryout-lower-grid"><section className="tryout-reference-info"><h2>Reference Information</h2><dl><div><dt>Jawaban Benar</dt><dd>{correct}</dd></div><div><dt>Jawaban Salah</dt><dd>{answered - correct}</dd></div><div><dt>Tidak Dijawab</dt><dd>{unanswered}</dd></div><div><dt>Waktu Pengerjaan</dt><dd>01:32:18</dd></div><div><dt>Attempt</dt><dd>1 / 2</dd></div></dl></section><aside className="tryout-recommendation"><h2>Rekomendasi Belajar</h2><h3>{recommendation.title}</h3><p>{recommendation.body}</p><ul>{recommendation.actions.map((action) => <li key={action}>{action}</li>)}</ul>{recommendation.href ? <Link className="button button-primary" href={recommendation.href}>Buka Materi Terkait <LuArrowRight aria-hidden="true" /></Link> : null}</aside></section>
         <div className="tryout-result-actions"><button type="button" className="button button-secondary" onClick={list}><LuArrowLeft aria-hidden="true" /> Kembali ke Daftar Try Out</button><button type="button" className="button button-primary" onClick={() => setView("review")}>Review Jawaban <LuArrowRight aria-hidden="true" /></button></div>
       </div>
     );
