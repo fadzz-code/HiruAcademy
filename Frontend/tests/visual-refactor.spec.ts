@@ -37,10 +37,16 @@ const responsiveStudentRoutes = [
   "/leaderboard?membership=lms",
   "/profile?membership=lms",
   "/renewal?membership=lms",
+  "/certificate?membership=lms",
+  "/notifications?membership=lms",
+  "/renewal/membership?membership=lms",
+  "/community/post-1?membership=lms",
+  "/community/ask?membership=lms",
+  "/learn/n4/chapter-1/reading?membership=lms",
   "/affiliate?membership=lms",
 ];
 
-for (const viewport of [{ width: 360, height: 800 }, { width: 390, height: 844 }, { width: 393, height: 852 }, { width: 412, height: 915 }, { width: 768, height: 1024 }, { width: 820, height: 1180 }, { width: 1024, height: 768 }, { width: 1440, height: 900 }]) {
+for (const viewport of [{ width: 320, height: 568 }, { width: 360, height: 800 }, { width: 375, height: 667 }, { width: 390, height: 844 }, { width: 393, height: 852 }, { width: 412, height: 915 }, { width: 430, height: 932 }, { width: 768, height: 1024 }, { width: 820, height: 1180 }, { width: 1024, height: 768 }, { width: 1280, height: 800 }, { width: 1440, height: 900 }]) {
   test.describe(`student responsive ${viewport.width}`, () => {
     test.use({ viewport });
     for (const route of responsiveStudentRoutes) {
@@ -55,6 +61,18 @@ for (const viewport of [{ width: 360, height: 800 }, { width: 390, height: 844 }
     }
   });
 }
+
+test("free dashboard bento uses full-width mobile cards", async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 852 });
+  await page.goto("/dashboard?membership=free");
+  const content = page.locator(".dash-content");
+  const cards = [page.locator(".dashboard-bento-left"), page.locator(".dash-progress-card"), page.locator(".dashboard-bento-leaderboard")];
+  const contentWidth = await content.evaluate((element) => element.getBoundingClientRect().width - parseFloat(getComputedStyle(element).paddingLeft) - parseFloat(getComputedStyle(element).paddingRight));
+  for (const card of cards) expect(await card.evaluate((element) => element.getBoundingClientRect().width)).toBeGreaterThanOrEqual(contentWidth - 1);
+  await expect(page.getByRole("link", { name: /Lanjutkan Belajar/ })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(393);
+  await page.screenshot({ path: "C:/Users/Tulo/AppData/Local/Temp/opencode/dashboard-393.png", fullPage: true, animations: "disabled" });
+});
 
 test("dashboard membership lock keeps upgrade action and close control", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
