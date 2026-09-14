@@ -88,6 +88,17 @@ test("dashboard membership lock keeps upgrade action and close control", async (
   await expect(dialog).toHaveCount(0);
 });
 
+test("practice advances to next question", async ({ page }) => {
+  await page.goto("/practice?membership=lms");
+  await page.getByLabel("Pilih Level").selectOption("N5");
+  await page.getByRole("button", { name: "Kanji" }).click();
+  await page.getByRole("button", { name: "Mulai Latihan" }).first().click();
+  await expect(page.locator(".placement-option").first()).toBeVisible();
+  await page.locator(".placement-option").first().click();
+  await page.getByRole("button", { name: "Lanjut Soal" }).click();
+  await expect(page.getByText("Soal 2/3", { exact: true })).toBeVisible();
+});
+
 test("practice supports level, category, answer, score, and history flow", async ({ page }) => {
   await page.goto("/practice?membership=lms");
   await page.getByLabel("Pilih Level").selectOption("N5");

@@ -33,7 +33,7 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
   const questions = getPracticeQuestions();
   const activeCategory = levelHasCategories(level) ? category : undefined;
   const key = practiceKey(level, exercise, activeCategory);
-  const current = questions[questionIndex];
+  const current = questions[Math.min(questionIndex, Math.max(questions.length - 1, 0))];
   const latest = (item: number) => history.find((entry) => entry.level === level && entry.category === activeCategory && entry.exercise === item);
 
   const changeLevel = (value: PracticeLevel) => {
@@ -44,9 +44,10 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
   const start = (item: number) => {
     const nextKey = practiceKey(level, item, activeCategory);
     const draft = drafts[nextKey];
+    setStep("runner");
     setExercise(item);
     setAnswers(draft?.answers ?? {});
-    setQuestionIndex(draft?.questionIndex ?? 0);
+    setQuestionIndex(Math.min(draft?.questionIndex ?? 0, questions.length - 1));
     setResult(null);
     setSecondsLeft(300);
     setStep("runner");
@@ -149,7 +150,7 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
                 </button>
               ) : (
                 <button type="button" className="button button-primary runner-next-btn" disabled={Object.keys(answers).length !== questions.length} onClick={() => submit(Date.now())}>
-                  Selesaikan <LuCheck aria-hidden="true" />
+                  Kumpulkan <LuCheck aria-hidden="true" />
                 </button>
               )}
             </div>
