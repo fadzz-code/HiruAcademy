@@ -88,6 +88,23 @@ test("dashboard membership lock keeps upgrade action and close control", async (
   await expect(dialog).toHaveCount(0);
 });
 
+test("tryout runner uses clean focus workspace", async ({ page }) => {
+  await page.goto("/tryout?membership=lms");
+  await page.getByRole("button", { name: "Mulai Try Out" }).first().click();
+  await page.getByRole("button", { name: "Mulai Try Out" }).click();
+  await expect(page.getByRole("heading", { name: /Soal 4 dari 100/ })).toBeVisible();
+  await expect(page.getByText("NAVIGATOR SOAL", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "26–50" })).toBeVisible();
+});
+
+test("tryout uses breadcrumb and dropdown filter", async ({ page }) => {
+  await page.goto("/tryout?membership=lms");
+  await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toBeVisible();
+  const filter = page.getByLabel("Pilih Level Try Out");
+  await filter.selectOption("N3");
+  await expect(page.getByText("N3 | Simulasi Nasional", { exact: true })).toBeVisible();
+});
+
 test("practice advances to next question", async ({ page }) => {
   await page.goto("/practice?membership=lms");
   await page.getByLabel("Pilih Level").selectOption("N5");

@@ -25,6 +25,7 @@ import { getDashboardData, parseMembership } from "@/lib/dashboard-mock";
 import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearning } from "@/lib/journey-mock";
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
+import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 
 type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint" | "tryout" | "schedule" | "class-detail" | "replay" | "replay-player" | "ask" | "mini";
 
@@ -36,9 +37,10 @@ export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; 
     return (
       <div className="supporting-shell student-shell">
         <StudentNavigation membership={membership} />
-        <main className="supporting-main">
-          {hasTryoutAccess(membership) ? <SenseiTryoutScreen membership={membership} /> : <LockedTryout />}
-        </main>
+          <main className="supporting-main">
+           <StudentBreadcrumb items={[{ label: "Try Out" }]} />
+           {hasTryoutAccess(membership) ? <SenseiTryoutScreen membership={membership} /> : <LockedTryout />}
+         </main>
       </div>
     );
   }
