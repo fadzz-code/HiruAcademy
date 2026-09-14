@@ -17,6 +17,8 @@ export type JourneyLevel = {
   actionLabel: string;
 };
 
+export type ProgressComponent = { label: string; weight: number; complete: boolean };
+
 export type JourneyChapter = {
   key: string;
   orderLabel: string;
@@ -24,6 +26,9 @@ export type JourneyChapter = {
   description: string;
   state: ChapterState;
   statusLabel: string;
+  progress: number;
+  components: ProgressComponent[];
+  checkpointUnlocked: boolean;
   href?: string;
 };
 
@@ -51,7 +56,7 @@ export function getJourneyLevels(membership: Membership): JourneyLevel[] {
   if (membership === "sensei") return senseiLevels;
   return baseLevels.map(([slug, code, title, desc]) => {
     const free = membership === "free";
-    const freeEligible = slug === "dasar" || slug === "n5";
+    const freeEligible = slug !== "ssw-pengolahan-makanan" && slug !== "interview";
     const lmsOwned = slug === "dasar" || slug === "n5" || slug === "n4";
     const access: LevelAccess = free ? (freeEligible ? "freePreview" : "notPurchased") : lmsOwned ? "owned" : "notPurchased";
     const progression: LevelProgression = slug === "n4" ? "current" : "available";
@@ -77,6 +82,18 @@ export function getJourneyLevels(membership: Membership): JourneyLevel[] {
   });
 }
 
+const dasarComponents = [["Video", 25], ["Modul PDF", 25], ["Flashcard", 25], ["Checkpoint", 25]] as const;
+const standardComponents = [["Video", 20], ["Modul PDF", 5], ["Flashcard", 20], ["Audio", 20], ["Reading", 20], ["Checkpoint", 15]] as const;
+
+function chapterComponents(levelSlug: string, number: number, state: ChapterState): ProgressComponent[] {
+  const seeds = levelSlug === "dasar" || levelSlug === "ssw-pengolahan-makanan" ? dasarComponents : standardComponents;
+  return seeds.map(([label, weight]) => ({ label, weight, complete: state === "completed" || (state === "current" && label !== "Checkpoint" && number === 1) }));
+}
+
+function chapterProgress(components: ProgressComponent[]) {
+  return components.reduce((total, component) => total + (component.complete ? component.weight : 0), 0);
+}
+
 const senseiChapterSeeds = [
   ["chapter-1", "01", "Tata Bahasa Dasar N4", "completed", "Selesai"],
   ["chapter-2", "02", "Transportasi dan Arah", "completed", "Selesai"],
@@ -91,9 +108,12 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
       key: `chapter-${number}`,
       orderLabel: String(number).padStart(2, "0"),
       title: `${level.code} • Chapter ${number}`,
-      description: "Video • 2 modul • flashcard • audio • reading • checkpoint",
+      description: "Video | modul | flashcard | audio | reading | checkpoint",
       state: "entitlementLocked" as ChapterState,
       statusLabel: "Terkunci • Upgrade",
+      progress: 0,
+      components: chapterComponents(level.slug, number, "entitlementLocked"),
+      checkpointUnlocked: false,
     }));
   }
 
@@ -103,12 +123,15 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
         key,
         orderLabel,
         title: level.slug === "n4" ? title : `${level.code} • ${title}`,
-        description: "Video • 2 modul • flashcard • audio • reading • checkpoint",
+        description: "Video | modul | flashcard | audio | reading | checkpoint",
         state,
         statusLabel,
+        progress: state === "completed" ? 100 : state === "current" ? 60 : 0,
+        components: chapterComponents(level.slug, Number(orderLabel), state),
+        checkpointUnlocked: state === "completed" || state === "current",
         href: state === "completed" ? `/learn/${level.slug}/${key}?membership=sensei` : state === "current" ? `/learn/${level.slug}/chapter-4?membership=sensei` : undefined,
       })),
-      { key: "chapter-12", orderLabel: "12", title: "Chapter Terakhir — Penyelesaian Level", description: "Selesaikan seluruh aktivitas untuk membuka Feedback Akhir Level.", state: "finalPreview", statusLabel: "Simulasi Akhir" },
+      { key: "chapter-12", orderLabel: "12", title: "Chapter Terakhir — Penyelesaian Level", description: "Selesaikan seluruh aktivitas untuk membuka Feedback Akhir Level.", state: "finalPreview", statusLabel: "Simulasi Akhir", progress: 0, components: [], checkpointUnlocked: false },
     ];
   }
 
@@ -120,10 +143,13 @@ export function getJourneyChapters(membership: Membership, level: JourneyLevel):
     return {
       key: `chapter-${number}`,
       orderLabel: String(number).padStart(2, "0"),
-      title: `${level.code} • Chapter ${number}`,
-      description: "Video • modul • flashcard • audio • reading • checkpoint",
+      title: `${level.code} | Chapter ${number}`,
+      description: "Video | modul | flashcard | audio | reading | checkpoint",
       state,
       statusLabel: state === "completed" ? "Selesai" : state === "current" ? "Lanjutkan" : state === "entitlementLocked" ? "Terkunci • Upgrade" : "Terkunci",
+      progress: chapterProgress(chapterComponents(level.slug, number, state)),
+      components: chapterComponents(level.slug, number, state),
+      checkpointUnlocked: state === "completed" || state === "current",
       href: state === "completed" || state === "current" ? `/learn/${level.slug}/chapter-${number}?membership=${membership}` : undefined,
     };
   });
@@ -134,8 +160,9 @@ export function findJourneyLevel(membership: Membership, slug: string): JourneyL
 }
 
 export function canAccessLearning(membership: Membership, levelSlug: string, chapterKey: string): boolean {
-  if (chapterKey === "chapter-1") return true;
   const level = findJourneyLevel(membership, levelSlug);
+  if (!level) return false;
+  if (chapterKey === "chapter-1" && level.access !== "notPurchased") return true;
   if (!level || level.access === "notPurchased") return false;
   if (level.access === "freePreview") return chapterKey === "chapter-1";
   return getJourneyChapters(membership, level).some((chapter) => chapter.key === chapterKey && (chapter.state === "completed" || chapter.state === "current" || chapter.state === "available"));

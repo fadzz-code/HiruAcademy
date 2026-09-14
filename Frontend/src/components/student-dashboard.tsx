@@ -172,7 +172,7 @@ export function StudentDashboard({
 
           {/* 3. Akses Cepat */}
           <section className="lms-section-head dashboard-quick-heading">
-            <p className="dash-kicker">AKSES CEPAT</p>
+            <h2>Menu cepat</h2>
           </section>
           <section className="lms-quick-grid" aria-label="Akses cepat">
             {config.quickActions.map((action) => {

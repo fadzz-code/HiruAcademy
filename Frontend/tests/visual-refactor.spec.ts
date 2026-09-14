@@ -22,15 +22,78 @@ for (const width of [390, 768, 1440]) {
   });
 }
 
+const responsiveStudentRoutes = [
+  "/dashboard?membership=lms",
+  "/journey?membership=lms",
+  "/learn/n4/chapter-4?membership=lms",
+  "/practice?membership=lms",
+  "/library?membership=lms",
+  "/tryout?membership=lms",
+  "/schedule?membership=sensei",
+  "/replay?membership=sensei",
+  "/mini-checkpoint?membership=sensei",
+  "/community?membership=lms",
+  "/progress?membership=lms",
+  "/leaderboard?membership=lms",
+  "/profile?membership=lms",
+  "/renewal?membership=lms",
+  "/affiliate?membership=lms",
+];
+
+for (const viewport of [{ width: 360, height: 800 }, { width: 390, height: 844 }, { width: 393, height: 852 }, { width: 412, height: 915 }, { width: 768, height: 1024 }, { width: 820, height: 1180 }, { width: 1024, height: 768 }, { width: 1440, height: 900 }]) {
+  test.describe(`student responsive ${viewport.width}`, () => {
+    test.use({ viewport });
+    for (const route of responsiveStudentRoutes) {
+      test(route, async ({ page }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (error) => errors.push(error.message));
+        await page.goto(route);
+        await expect(page.getByRole("heading").first()).toBeVisible();
+        expect(errors).toEqual([]);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), `Horizontal overflow: ${route}`).toBeLessThanOrEqual(1);
+      });
+    }
+  });
+}
+
 test("dashboard membership lock keeps upgrade action and close control", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/dashboard?membership=free");
-  await page.getByRole("button", { name: "Try Out, akses terkunci" }).click({ force: true });
+  const tryout = page.getByRole("button", { name: "Try Out, akses terkunci" });
+  await expect(tryout).toHaveCSS("display", "flex");
+  await expect(tryout.locator("svg")).toBeVisible();
+  await tryout.click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Akses Terkunci" })).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Upgrade", exact: true })).toHaveAttribute("href", "/#program");
   await dialog.locator(".locked-modal-close").click();
   await expect(dialog).toHaveCount(0);
+});
+
+test("practice supports level, category, answer, score, and history flow", async ({ page }) => {
+  await page.goto("/practice?membership=lms");
+  await page.getByLabel("Pilih Level").selectOption("N5");
+  await page.getByRole("button", { name: "Kanji" }).click();
+  await page.getByRole("button", { name: "Mulai Latihan" }).first().click();
+  await page.getByLabel("日本語").check();
+  await page.getByRole("button", { name: "Berikutnya" }).click();
+  await page.getByLabel("Selamat pagi").check();
+  await page.getByRole("button", { name: "Berikutnya" }).click();
+  await page.getByLabel("か").check();
+  await page.getByRole("button", { name: "Submit" }).click();
+  await expect(page.getByText("LATIHAN SELESAI", { exact: true })).toBeVisible();
+  await expect(page.getByText("100%", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Lihat Jawaban" }).click();
+  await expect(page.getByRole("heading", { name: "Lihat Jawaban" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Ulangi Latihan" }).first()).toBeVisible();
+});
+
+test("practice skips categories for Dasar", async ({ page }) => {
+  await page.goto("/practice?membership=lms");
+  await page.getByLabel("Pilih Level").selectOption("Dasar Bahasa Jepang");
+  await expect(page.getByRole("navigation", { name: "Pilih Kategori" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Mulai Latihan" }).first()).toBeVisible();
 });
 
 test("student navigation resolves active routes and preserves membership access", async ({ page }) => {

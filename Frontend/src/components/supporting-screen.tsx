@@ -1,4 +1,5 @@
 import { StudentBreadcrumb } from "@/components/student-breadcrumb";
+import { PracticeScreen as PracticeFlowScreen } from "@/components/practice-screen";
 import { StudentNavigation } from "@/components/student-navigation";
 import { supportingData, type SupportingKind } from "@/lib/supporting-mock";
 import Link from "next/link";
@@ -33,8 +34,8 @@ import {
 } from "react-icons/lu";
 
 export function SupportingScreen({ kind, membership, breadcrumbCurrent }: { kind: SupportingKind; membership: "free" | "lms" | "sensei"; breadcrumbCurrent?: string }) {
+  if (kind === "practice") return <PracticeFlowScreen membership={membership} />;
   const data = supportingData[kind];
-  if (kind === "practice" && membership !== "free") return <PaidPractice membership={membership} />;
   if (kind === "library") return <LibraryScreen membership={membership} />;
   if (kind === "progress") return <ProgressScreen membership={membership} />;
   if (kind === "leaderboard") return <LeaderboardScreen membership={membership} />;
@@ -901,12 +902,41 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
   const [level, setLevel] = useState("Semua");
   const [type, setType] = useState("Semua");
   const [locked, setLocked] = useState(false);
-  const materials = [
-    { icon: LuBookOpen, type: "Tata Bahasa", title: "Pola Kalimat Sehari-hari", description: "Modul Chapter 4 yang terakhir dibuka.", status: "Tersimpan", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/grammar?membership=${membership}` },
-    { icon: LuLayers3, type: "Kanji", title: "Keadaan, Waktu & Aktivitas", description: "Kanji chapter dengan bookmark dan catatan.", status: "Tersedia", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}/kanji?membership=${membership}` },
-    { icon: LuBookOpen, type: "Audio", title: "Simulasi Choukai N4", description: "Akses audio lengkap mengikuti membership.", status: "Terkunci" },
-  ];
-  const visible = materials.filter((item) => (type === "Semua" || item.type === type) && item.title.toLowerCase().includes(search.toLowerCase()) && (level === "Semua" || level === "N4"));
+  const materialSeeds = [
+    ["Dasar", "Tata Bahasa", "Pola Kalimat Dasar", "Modul pengenalan pola kalimat Jepang.", false],
+    ["N5", "Tata Bahasa", "Tata Bahasa N5", "Pola kalimat dasar level N5.", false],
+    ["N5", "Kanji", "Kanji Pemula", "Kanji dasar untuk percakapan harian.", false],
+    ["N5", "Kosakata", "Kosakata Sehari-hari", "Kosakata inti level N5.", false],
+    ["N4", "Tata Bahasa", "Pola Kalimat Sehari-hari", "Modul Chapter 4 yang terakhir dibuka.", false],
+    ["N4", "Kanji", "Keadaan, Waktu & Aktivitas", "Kanji chapter dengan bookmark dan catatan.", false],
+    ["N4", "Kosakata", "Kosakata Aktivitas", "Kosakata kontekstual level N4.", false],
+    ["N3", "Tata Bahasa", "Tata Bahasa Menengah", "Pola kalimat untuk teks umum.", true],
+    ["N3", "Kanji", "Kanji Menengah", "Kanji untuk bacaan umum level N3.", true],
+    ["N3", "Kosakata", "Kosakata Menengah", "Kosakata komunikasi level N3.", true],
+    ["N2", "Tata Bahasa", "Tata Bahasa Lanjutan", "Struktur kalimat kompleks level N2.", true],
+    ["N2", "Kanji", "Kanji Lanjutan", "Kanji untuk bacaan profesional level N2.", true],
+    ["N2", "Kosakata", "Kosakata Lanjutan", "Kosakata akademik dan profesional level N2.", true],
+    ["SSW", "Kosakata", "Kosakata SSW Pengolahan Makanan", "Istilah kerja dan instruksi lapangan.", true],
+    ["Interview", "Reading", "Persiapan Interview", "Materi persiapan wawancara kerja.", true],
+  ] as const;
+  const materials = materialSeeds.map(([itemLevel, itemType, title, description]) => {
+    const isLocked = membership === "free"
+      ? itemLevel === "SSW" || itemLevel === "Interview"
+      : membership === "lms"
+        ? !["Dasar", "N5", "N4"].includes(itemLevel)
+        : !["N4", "N3"].includes(itemLevel);
+    return {
+      icon: itemType === "Kanji" ? LuLayers3 : LuBookOpen,
+      level: itemLevel,
+      type: itemType,
+      title,
+      description,
+      status: isLocked ? "Terkunci" : "Tersedia",
+      href: isLocked ? undefined : `/learn/${itemLevel === "Dasar" ? "dasar" : itemLevel.toLowerCase()}/chapter-${membership === "free" ? "1" : "4"}/${itemType === "Tata Bahasa" ? "grammar" : itemType.toLowerCase()}?membership=${membership}`,
+    };
+  });
+  const query = search.trim().toLowerCase();
+  const visible = materials.filter((item) => (type === "Semua" || item.type === type) && [item.title, item.level, item.type, item.description].some((value) => value.toLowerCase().includes(query)) && (level === "Semua" || level === item.level));
   return (
     <div className="supporting-shell student-shell">
       <StudentNavigation membership={membership} />
@@ -914,7 +944,7 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
         <header className="supporting-header">
           <p className="dash-kicker">PERPUSTAKAAN MATERI</p>
           <h1>Temukan kembali materi dari seluruh journey</h1>
-          <p>Akses arsip materi, tata bahasa, kanji, dan audio pembelajaran yang telah dipelajari.</p>
+          <p>Akses material mengikuti level dan entitlement membership.</p>
         </header>
         <div className="library-filter-bar">
           <label className="library-search">
@@ -925,7 +955,7 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
             <div className="library-select-item">
               <label htmlFor="library-level-select">Level</label>
               <select id="library-level-select" value={level} onChange={(event) => setLevel(event.target.value)}>
-                {["Semua", "N5", "N4", "N3", "SSW", "Interview"].map((item) => (
+                {["Semua", "Dasar", "N5", "N4", "N3", "N2", "SSW", "Interview"].map((item) => (
                   <option key={item} value={item}>{item === "Interview" ? "Persiapan Interview" : item}</option>
                 ))}
               </select>
@@ -942,29 +972,34 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
         </div>
         {visible.length ? (
           <>
-            <section className="library-section-head"><h2>Rekomendasi N4</h2></section>
+            <section className="library-section-head"><h2>{level === "Semua" ? "Semua Materi" : level === "Interview" ? "Persiapan Interview" : level}</h2></section>
             <section className="library-material-grid">{visible.map((item) => {
               const Icon = item.icon;
               return (
                 <article key={item.title}>
-                  <span aria-hidden="true"><Icon /></span>
-                  <small>{item.type}</small>
-                  <h2>{item.title}</h2>
-                  <p>{item.description}</p>
-                  <b>{item.status}</b>
-                  {item.href ? (
-                    <Link aria-label={`${item.type}: ${item.title}`} href={item.href}>Buka materi</Link>
-                  ) : (
-                    <button type="button" onClick={() => setLocked(true)} aria-label={`${item.type}: ${item.title}`}>Lihat status</button>
-                  )}
+                  <div className="library-material-visual">
+                    <small className="library-material-label"><Icon aria-hidden="true" />{item.type}</small>
+                    <span aria-hidden="true"><Icon /></span>
+                  </div>
+                  <div className="library-material-content">
+                    <h2>{item.title}</h2>
+                    <p>{item.description}</p>
+                    <footer>
+                      <small>{item.level}</small>
+                      {item.href ? (
+                        <Link aria-label={`${item.type}: ${item.title}`} href={item.href}>Buka materi</Link>
+                      ) : (
+                        <button type="button" onClick={() => setLocked(true)} aria-label={`${item.type}: ${item.title}`}>Terkunci</button>
+                      )}
+                    </footer>
+                  </div>
                 </article>
               );
             })}</section>
           </>
         ) : (
-          <section className="library-empty">
-            <p className="dash-kicker">LIBRARY EMPTY</p>
-            <h2>Belum ada materi pada filter ini</h2>
+          <section className="library-empty" style={{ background: "#fff", border: 0, boxShadow: "none" }}>
+            <h2>Materi yang kamu cari tidak ada</h2>
             <p>Ubah level, kategori, atau kata kunci untuk menemukan materi yang tersedia.</p>
             <button type="button" onClick={() => { setSearch(""); setLevel("Semua"); setType("Semua"); }}>Reset Filter</button>
           </section>
@@ -987,57 +1022,4 @@ function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }
   );
 }
 
-function PaidPractice({ membership }: { membership: "lms" | "sensei" }) {
-  const base = "/learn/n4/chapter-4";
-  const query = `?membership=${membership}`;
-  const modes = [
-    { icon: LuLayers3, status: "REKOMENDASI", title: "Flashcard Review", description: "Ulangi kosakata dan pola dengan tingkat keyakinan.", meta: "5-10 menit • deck level aktif", href: `${base}/flashcards${query}` },
-    { icon: LuBookOpen, status: "TERSEDIA", title: "Audio Drill", description: "Latihan listening dari Chapter aktif.", meta: "10 soal • hasil langsung", href: `${base}/audio${query}` },
-    { icon: LuBookOpen, status: "TERSEDIA", title: "Reading Drill", description: "Bacaan pendek dengan penjelasan jawaban.", meta: "8 soal • fokus Dokkai", href: `${base}/reading${query}` },
-    { icon: LuClipboardCheck, status: "TERSEDIA", title: "Checkpoint Retry", description: "Ulangi checkpoint sesuai target Chapter.", meta: "Nilai terbaru tersimpan", href: `${base}/checkpoint${query}` },
-  ];
-  return (
-    <div className="supporting-shell student-shell">
-      <StudentNavigation membership={membership} />
-      <main className="supporting-main practice-page">
 
-        <section className="practice-recommendation">
-          <div>
-            <p className="dash-kicker">REKOMENDASI HARI INI</p>
-            <h2>Perkuat Chapter 4 dalam 15-20 menit</h2>
-            <p>Urutan latihan disusun dari kartu flashcard yang perlu diulang dan soal latihan terakhir.</p>
-            <div>
-              <Link className="button button-primary" href={`${base}/flashcards${query}`}>Mulai Rekomendasi</Link>
-              <Link className="button button-dark" href={`/tryout${query}`}>Buka Daftar Try Out</Link>
-            </div>
-          </div>
-          <div className="practice-metrics">
-            {[["4 aktivitas", "Target harian"], ["12 hari", "Hari beruntun"], ["18", "Selesai minggu ini"], ["82%", "Akurasi"]].map(([value, label]) => (
-              <div key={label}><strong>{value}</strong><span>{label}</span></div>
-            ))}
-          </div>
-        </section>
-        <section className="practice-section-head">
-          <p className="dash-kicker">PILIH MODE</p>
-          <h2>Latihan Harian</h2>
-          <p>Pilih aktivitas latihan singkat tanpa memulai simulasi Try Out resmi.</p>
-        </section>
-        <section className="practice-mode-grid">
-          {modes.map((mode) => {
-            const Icon = mode.icon;
-            return (
-              <article key={mode.title}>
-                <span className="supporting-icon" aria-hidden="true"><Icon /></span>
-                <small>{mode.status}</small>
-                <h2>{mode.title}</h2>
-                <p>{mode.description}</p>
-                <b>{mode.meta}</b>
-                <Link href={mode.href}>Buka +</Link>
-              </article>
-            );
-          })}
-        </section>
-      </main>
-    </div>
-  );
-}

@@ -38,7 +38,7 @@ const card = (
   href?: string
 ): Card => ({ icon, status, title, description, action, href });
 
-export const supportingData: Record<SupportingKind, SupportingData> = {
+export const supportingData: Record<Exclude<SupportingKind, "practice">, SupportingData> = {
   library: {
     eyebrow: "PERPUSTAKAAN MATERI",
     title: "Temukan kembali materi dari seluruh journey",
@@ -53,18 +53,6 @@ export const supportingData: Record<SupportingKind, SupportingData> = {
       title: "Pencarian Materi",
       description: "Ubah level, kategori, atau kata kunci untuk menemukan materi yang tersedia.",
     },
-  },
-  practice: {
-    eyebrow: "LATIHAN HARIAN",
-    title: "Latihan singkat berdasarkan progresmu",
-    description: "Aktivitas harian terpisah dari simulasi Try Out dan dapat diulang sewaktu-waktu.",
-    locked: true,
-    cards: [
-      card("review", "REKOMENDASI", "Flashcard Review", "Ulangi kosakata dan pola dengan tingkat keyakinan.", "Mulai Rekomendasi", "/journey"),
-      card("audio", "TERSEDIA", "Audio Drill", "Latihan listening dari Chapter aktif."),
-      card("read", "TERSEDIA", "Reading Drill", "Bacaan pendek dengan penjelasan jawaban."),
-      card("checkpoint", "TERSEDIA", "Checkpoint Retry", "Ulangi checkpoint sesuai target Chapter."),
-    ],
   },
   progress: {
     eyebrow: "PROGRES & ACHIEVEMENT",
