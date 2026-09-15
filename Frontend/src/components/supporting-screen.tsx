@@ -175,7 +175,7 @@ function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }
         <section className="profile-referral">
           <div className="profile-section-header">
             <div>
-              <p className="dash-kicker">PROGRAM AFILIASI &amp; REFERRAL</p>
+<p className="dash-kicker">PROGRAM AFFILIATE</p>
               <h2>Kode referral saya</h2>
             </div>
             <Link className="button button-secondary" href={`/affiliate${query}`}>Buka Halaman Affiliate →</Link>
@@ -222,14 +222,13 @@ function ProfileScreen({ membership }: { membership: "free" | "lms" | "sensei" }
 }
 
 function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
-  const query = `?membership=${membership}`;
   const [codeCopied, setCodeCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
-  const referralCode = "HIRU-HILMI";
-  const referralLink = "https://hiruacademy.id/ref/HIRU-HILMI";
+  const referralCode = "HIRU-HILMI25";
+  const referralLink = "hiruacademy.com/daftar?ref=HIRU-HILMI25";
   const shareMessage = encodeURIComponent(
-    "Ayo belajar bahasa Jepang di HIRU Academy! Gunakan kode referral HIRU-HILMI untuk mendapatkan diskon pendaftaran: https://hiruacademy.id/ref/HIRU-HILMI"
+    "Ayo belajar bahasa Jepang di HIRU Academy! Gunakan kode affiliate HIRU-HILMI25 untuk mendapatkan diskon pendaftaran: hiruacademy.com/daftar?ref=HIRU-HILMI25"
   );
   const waUrl = `https://api.whatsapp.com/send?text=${shareMessage}`;
 
@@ -247,24 +246,29 @@ function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei"
   };
 
   const stats = [
-    { label: "Total Referral", value: "4 Teman", desc: "Teman yang mendaftar dengan kodemu" },
-    { label: "Referral Berhasil", value: "2 Terverifikasi", desc: "Invoice lunas & membership aktif" },
-    { label: "Menunggu Verifikasi", value: "1 Menunggu", desc: "Invoice dalam antrean review" },
-    { label: "Total Reward", value: "Rp 350.000", desc: "Reward diskon siap digunakan" },
+    { label: "Total Klik", value: "120", desc: "Jumlah klik pada link affiliate" },
+    { label: "Total Daftar", value: "18", desc: "Pendaftar dari link affiliate" },
+    { label: "Total Pembelian", value: "5", desc: "Pembelian dari referral" },
+    { label: "Total Komisi", value: "Rp750.000", desc: "Total komisi affiliate" },
+    { label: "Komisi Belum Dicairkan", value: "Rp300.000", desc: "Komisi menunggu pencairan" },
+    { label: "Komisi Sudah Dicairkan", value: "Rp450.000", desc: "Komisi yang telah dicairkan" },
   ];
 
   const steps = [
-    { number: "01", title: "Bagikan Kode / Link", desc: "Bagikan link atau kode referral HIRU-HILMI ke teman atau media sosial." },
-    { number: "02", title: "Teman Mendaftar", desc: "Teman memasukkan kode referral dan mendapatkan diskon langsung saat checkout." },
-    { number: "03", title: "Verifikasi Pembayaran", desc: "Tim HIRU memverifikasi invoice pembayaran pendaftaran temanmu." },
-    { number: "04", title: "Reward Aktif", desc: "Reward diskon dan komisi otomatis aktif untuk renewal atau pemakaian berikutnya." },
+    { number: "01", title: "Klik", desc: "Orang membuka link affiliate yang kamu bagikan." },
+    { number: "02", title: "Daftar", desc: "Pendaftar membuat akun melalui link affiliate." },
+    { number: "03", title: "Menunggu pembayaran", desc: "Referral menunggu pembayaran program." },
+    { number: "04", title: "Sudah bayar", desc: "Pembayaran referral berhasil diterima." },
+    { number: "05", title: "Komisi valid", desc: "Komisi memenuhi ketentuan program affiliate." },
+    { number: "06", title: "Komisi dicairkan", desc: "Komisi telah dibayarkan kepada affiliate." },
+    { number: "07", title: "Dibatalkan", desc: "Referral dibatalkan sesuai status transaksi." },
   ];
 
   const history = [
-    { id: "INV-1024", name: "Rina S.", program: "Program JLPT N4", date: "4 Mar 2026", status: "Menunggu", statusClass: "pending", reward: "Menunggu verifikasi" },
-    { id: "INV-1017", name: "Dimas P.", program: "Program JLPT N3", date: "28 Feb 2026", status: "Tersedia", statusClass: "active", reward: "Rp 150.000 (Tersedia)" },
-    { id: "INV-1008", name: "Ayu W.", program: "Belajar Mandiri N4", date: "14 Feb 2026", status: "Digunakan", statusClass: "used", reward: "Dipakai pada renewal" },
-    { id: "INV-0998", name: "Budi S.", program: "Program JLPT N5", date: "2 Feb 2026", status: "Dibatalkan", statusClass: "cancelled", reward: "Invoice dibatalkan" },
+    { id: "REF-1024", name: "Ahmad", program: "N4 Belajar Mandiri", date: "4 Mar 2026", status: "Sudah bayar", statusClass: "active", reward: "Rp. 20.000" },
+    { id: "REF-1017", name: "Shinta", program: "N3 Belajar bersama sensei", date: "28 Feb 2026", status: "Menunggu pembayaran", statusClass: "pending", reward: "Rp. 0" },
+    { id: "REF-1008", name: "Ayu", program: "N4 Belajar Mandiri", date: "14 Feb 2026", status: "Komisi valid", statusClass: "active", reward: "Rp. 150.000" },
+    { id: "REF-0998", name: "Budi", program: "N5 Belajar Mandiri", date: "2 Feb 2026", status: "Dibatalkan", statusClass: "cancelled", reward: "Rp. 0" },
   ];
 
   return (
@@ -273,8 +277,8 @@ function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei"
       <main className="supporting-main affiliate-page">
         <header className="supporting-header">
           <p className="dash-kicker">PROGRAM AFILIASI &amp; REFERRAL</p>
-          <h1>Ajak teman belajar bersama di HIRU Academy</h1>
-          <p>Bagikan kode atau link referralmu. Teman mendapat diskon pendaftaran, dan kamu memperoleh reward belajar.</p>
+          <h1>Program Affiliate Hiru Academy</h1>
+          <p>Bagikan kode atau link affiliate. Teman mendapat diskon pendaftaran, dan kamu memperoleh komisi.</p>
         </header>
 
         <section className="affiliate-share-card">
@@ -345,21 +349,21 @@ function AffiliateScreen({ membership }: { membership: "free" | "lms" | "sensei"
         <section className="affiliate-history-section">
           <div className="affiliate-history-head">
             <div>
-              <h2>Riwayat Penggunaan Referral</h2>
-              <p>Daftar teman yang menggunakan kodemu beserta status invoice dan reward.</p>
+<h2>Riwayat Referral</h2>
+               <p>Nama program, status referral, dan komisi dari setiap referral.</p>
             </div>
-            <Link className="button button-secondary" href={`/renewal${query}`}>Gunakan Reward</Link>
+            
           </div>
 
           <div className="affiliate-table-container">
             <table className="affiliate-table">
               <thead>
                 <tr>
-                  <th>Pengguna</th>
-                  <th>Program</th>
+<th>Nama</th>
+                   <th>Program</th>
                   <th>Tanggal</th>
                   <th>Status</th>
-                  <th>Reward</th>
+                  <th>Komisi</th>
                 </tr>
               </thead>
               <tbody>
