@@ -4,114 +4,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
+import { adminGroups } from "@/lib/admin-console";
 
-type Child = { label: string; href: string };
-type Item = { label: string; href?: string; current: string; children?: Child[] };
-
-const items: Item[] = [
-  { label: "Dashboard", href: "/admin", current: "dashboard" },
-  { label: "Content Studio", current: "content-studio", children: [
-    { label: "Studio Overview", href: "/admin/content-studio" },
-    { label: "Student Dashboards", href: "/admin/content-studio/dashboards" },
-    { label: "Levels", href: "/admin/content-studio/levels" },
-    { label: "Lessons", href: "/admin/content-studio/lessons" },
-  ] },
-  { label: "Program", href: "/admin/program", current: "program" },
-  { label: "Content Builder", current: "content", children: [
-    { label: "Flashcards", href: "/admin/content-studio/flashcards" },
-    { label: "Chapter Builder", href: "/admin/program/n4/chapters" },
-    { label: "Quiz Builder", href: "/admin/program/n4/chapters/chapter-4/quiz" },
-    { label: "Try Out Builder", href: "/admin/program/n4/tryout" },
-    { label: "Mini Checkpoint", href: "/admin/mini-checkpoint" },
-    { label: "Content Library", href: "/admin/content-library" },
-  ] },
-  { label: "Placement & Hasil", current: "placement", children: [
-    { label: "Placement Test", href: "/admin/placement" },
-    { label: "Assessment Results", href: "/admin/assessment-results" },
-  ] },
-  { label: "Pengguna & Akses", current: "users", children: [
-    { label: "User Management", href: "/admin/users" },
-    { label: "Access Settings", href: "/admin/access-settings" },
-    { label: "Certificate Management", href: "/admin/certificates" },
-  ] },
-  { label: "Transaksi", current: "transaction", children: [
-    { label: "Invoice Management", href: "/admin/invoices" },
-    { label: "Referral & Diskon", href: "/admin/referrals" },
-  ] },
-  { label: "Konten & Komunikasi", current: "communication", children: [
-    { label: "Announcement", href: "/admin/announcements" },
-    { label: "Blog", href: "/admin/blog" },
-    { label: "Testimoni", href: "/admin/testimonials" },
-    { label: "Feedback Akhir Level", href: "/admin/feedback" },
-    { label: "Community", href: "/admin/community" },
-    { label: "Notification Templates", href: "/admin/notification-templates" },
-    { label: "Landing Page", href: "/admin/landing-page" },
-  ] },
-  { label: "Sensei & Cohort", current: "sensei", children: [
-    { label: "Sensei Management", href: "/admin/sensei" },
-    { label: "Cohort & Kelas", href: "/admin/cohorts" },
-  ] },
-  { label: "Analitik", href: "/admin/analytics", current: "analytics" },
-  { label: "Pengaturan", current: "settings", children: [
-    { label: "Audit Logs", href: "/admin/audit-logs" },
-    { label: "General Settings", href: "/admin/settings" },
-  ] },
-];
-
-function Chevron({ open }: { open: boolean }) {
-  return <svg className={open ? "open" : ""} viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4" /></svg>;
-}
+function isActive(pathname: string, href: string) { return href === "/admin" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`); }
 
 export function AdminNavigation({ current }: { current: string }) {
-  const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [expanded, setExpanded] = useState<Record<string,string | undefined>>({});
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const sidebarRef = useRef<HTMLElement | null>(null);
-
+  const pathname = usePathname() || current;
+  const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLElement>(null);
   useEffect(() => {
-    if (!mobileOpen) return;
-    sidebarRef.current?.querySelector<HTMLElement>("a,button")?.focus();
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setMobileOpen(false);
-        window.setTimeout(() => triggerRef.current?.focus(), 0);
-      }
-      if (event.key !== "Tab" || !sidebarRef.current) return;
-      const focusable = [...sidebarRef.current.querySelectorAll<HTMLElement>("a,button")];
-      if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const focusable = () => [...(sidebar.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])") ?? [])];
+    focusable()[0]?.focus();
+    function keydown(event: KeyboardEvent) {
+      if (event.key === "Escape") { event.preventDefault(); setOpen(false); requestAnimationFrame(() => trigger.current?.focus()); return; }
+      if (event.key !== "Tab") return;
+      const elements = focusable();
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      if (!first || !last) { event.preventDefault(); return; }
+      if (event.shiftKey && (document.activeElement === first || !sidebar.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !sidebar.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
     }
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [mobileOpen]);
-
-  function closeMobile() {
-    setMobileOpen(false);
-    window.setTimeout(() => triggerRef.current?.focus(), 0);
-  }
-
-  function groupOpen(item: Item) {
-    const manual = expanded[item.current];
-    return manual === undefined ? item.children?.some((child) => child.href === pathname) ?? false : manual === "open";
-  }
-
-  return <>
-    <button ref={triggerRef} className="admin-mobile-toggle" type="button" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-controls="admin-sidebar" aria-label={mobileOpen ? "Tutup navigasi admin" : "Buka navigasi admin"}><span aria-hidden="true">≡</span></button>
-    <aside ref={sidebarRef} id="admin-sidebar" className={`admin-sidebar ${mobileOpen ? "open" : ""}`}>
-      <div className="admin-brand"><BrandLogo /><p>ADMIN CONSOLE</p></div>
-      <nav aria-label="Navigasi admin">{items.map((item) => {
-        if (item.children) {
-          const open = groupOpen(item);
-          return <div className="admin-nav-group" key={item.current}><button className={current === item.current ? "admin-nav-parent current" : "admin-nav-parent"} type="button" aria-expanded={open} onClick={() => setExpanded((state) => ({ ...state, [item.current]: open ? "closed" : "open" }))}><span>{item.label}</span><Chevron open={open}/></button>{open && <div className="admin-submenu">{item.children.map((child) => <Link className={pathname === child.href ? "active" : ""} href={child.href} aria-current={pathname === child.href ? "page" : undefined} onClick={() => setMobileOpen(false)} key={child.href}>{child.label}</Link>)}</div>}</div>;
-        }
-        return item.href ? <Link key={item.current} href={item.href} className={`admin-nav-item ${current === item.current ? "active" : ""}`} aria-current={current === item.current ? "page" : undefined} onClick={() => setMobileOpen(false)}>{item.label}</Link> : <span key={item.current} className="admin-nav-item disabled" aria-disabled="true">{item.label}</span>;
-      })}</nav>
-      <div className="admin-nav-footer"><Link href="/" className="admin-nav-item logout">Keluar Admin</Link></div>
-    </aside>
-    {mobileOpen && <button className="admin-mobile-backdrop" type="button" onClick={closeMobile} aria-label="Tutup navigasi admin"/>}
-  </>;
+    document.addEventListener("keydown", keydown);
+    return () => { document.removeEventListener("keydown", keydown); document.body.style.overflow = previousOverflow; };
+  }, [open]);
+  return <><button ref={trigger} className="admin-mobile-toggle" type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="admin-sidebar" aria-label={open ? "Tutup navigasi admin" : "Buka navigasi admin"}><span aria-hidden="true">≡</span></button><aside ref={sidebar} id="admin-sidebar" className={`admin-sidebar ${open ? "open" : ""}`} aria-hidden={!open ? undefined : false}><div className="admin-brand"><BrandLogo/><p>PANEL ADMIN</p></div><nav aria-label="Navigasi admin">{adminGroups.map((group) => <section className="console-nav-group" key={group.label}><p>{group.label}</p>{group.items.map((item) => <Link key={item.href} href={item.href} className={`admin-nav-item ${isActive(pathname, item.href) ? "active" : ""}`} aria-current={pathname === item.href ? "page" : undefined} onClick={() => setOpen(false)}>{item.label}</Link>)}</section>)}</nav><div className="admin-nav-footer"><Link href="/" className="admin-nav-item">Kembali ke Situs</Link></div></aside>{open && <div className="admin-mobile-backdrop" role="presentation" onMouseDown={() => { setOpen(false); requestAnimationFrame(() => trigger.current?.focus()); }} />}</>;
 }
