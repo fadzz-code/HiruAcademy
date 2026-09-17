@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { KeyboardEvent, ReactNode, RefObject, useEffect, useId, useRef } from "react";
+export { AdminShell } from "@/components/admin-shell";
 
 export function AdminPageHeader({ title, description, eyebrow, actions }: { title: string; description?: string; eyebrow?: string; actions?: ReactNode }) {
   return <header className="admin-page-header"><div>{eyebrow && <p className="admin-kicker">{eyebrow}</p>}<h1>{title}</h1>{description && <p>{description}</p>}</div>{actions && <div className="admin-page-actions">{actions}</div>}</header>;
@@ -20,6 +21,9 @@ const statusClasses: Record<string, string> = {
   draft: "draft", draf: "draft", published: "published", terbit: "published", dipublikasikan: "published",
   pending: "pending", menunggu: "pending", verified: "verified", terverifikasi: "verified", diperiksa: "verified",
   active: "active", aktif: "active", rejected: "rejected", ditolak: "rejected", paid: "paid", dibayar: "paid", diproses: "pending",
+  baru: "pending", "sudah dihubungi": "verified",
+  "menunggu pembayaran": "pending", "sudah bayar": "pending", diverifikasi: "verified",
+  "sudah dicairkan": "paid", "menunggu validasi": "pending", tersedia: "active", dibatalkan: "rejected", nonaktif: "draft",
 };
 export function AdminStatusBadge({ status }: { status: string }) { return <span className={`admin-status-badge status-${statusClasses[status.toLowerCase()] ?? "neutral"}`}>{status}</span>; }
 

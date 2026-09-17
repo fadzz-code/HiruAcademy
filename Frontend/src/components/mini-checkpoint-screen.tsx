@@ -15,6 +15,7 @@ import {
 } from "react-icons/lu";
 import { AssessmentUnavailable } from "@/components/assessment-unavailable";
 import { miniCheckpoints } from "@/lib/sensei-mock";
+import { usePublishedAssessments, type PublishedAssessment } from "@/lib/assessment-store";
 
 const defaultItem = miniCheckpoints.find((group) => group.level === "N4")!.items.find((item) => item.session === "sesi 2" && item.part === "part 1")!;
 type View = "list" | "info" | "runner" | "result" | "review" | "unavailable" | "review-unavailable";
@@ -28,6 +29,15 @@ export function MiniCheckpointScreen() {
   const [question, setQuestion] = useState(4);
   const [reviewFilter, setReviewFilter] = useState("SEMUA 10");
   const [reviewQuestion, setReviewQuestion] = useState(4);
+  const [selectedAssessment, setSelectedAssessment] = useState<PublishedAssessment>();
+  const published = usePublishedAssessments().filter((item) => item.type === "mini-checkpoint");
+  const activeQuestions = selectedAssessment?.questions ?? [];
+  const activeQuestion = activeQuestions[Math.min(question - 1, Math.max(activeQuestions.length - 1, 0))];
+  const totalQuestions = selectedAssessment ? activeQuestions.length : 10;
+  const hierarchyItems = Array.from(new Map([
+    ...(miniCheckpoints.find((group) => group.level === selectedLevel)?.items ?? []).map((item) => [`${item.level}|${item.session}|${item.part}`, { item, assessment: undefined as PublishedAssessment | undefined } ] as const),
+    ...published.filter((item) => item.level === selectedLevel && item.session && item.part).map((assessment) => [`${assessment.level}|sesi ${assessment.session}|part ${assessment.part}`, { item: { id: assessment.id, level: assessment.level, session: `sesi ${assessment.session}`, part: `part ${assessment.part}` }, assessment }] as const),
+  ]).values());
 
   if (view === "unavailable") {
     return (
@@ -63,7 +73,7 @@ export function MiniCheckpointScreen() {
             <p className="dash-kicker">
               MINI CHECKPOINT • {selected.level} {selected.session.toUpperCase()} {selected.part.toUpperCase()}
             </p>
-            <h1>Soal {question} dari 10</h1>
+            <h1>Soal {question} dari {totalQuestions}</h1>
             <p>Jawaban tersimpan otomatis sesuai alur evaluasi resmi kelas Sensei.</p>
           </div>
           <span>TIMER AKTIF</span>
@@ -85,17 +95,17 @@ export function MiniCheckpointScreen() {
         <div className="mini-runner-layout">
           <main>
             <section className="learning-question-card">
-              <p className="dash-kicker">BAGIAN BUNPOU • SOAL {question}</p>
-              <h2>Pilih jawaban yang paling tepat.</h2>
-              <p className="mini-question-japanese">日本へ行く前に、パスポートを＿＿＿＿。</p>
+<p className="dash-kicker">BAGIAN {activeQuestion?.section.toUpperCase() ?? "BUNPOU"} • SOAL {question}</p>
+               <h2>{activeQuestion?.prompt ?? "Pilih jawaban yang paling tepat."}</h2>
+               <p className="mini-question-japanese">{activeQuestion?.japanese?.text ?? "日本へ行く前に、パスポートを＿＿＿＿。"}</p>
               <fieldset>
                 <legend className="sr-only">Pilihan jawaban</legend>
-                {[
-                  ["a", "確認しておきます"],
-                  ["b", "確認しています"],
-                  ["c", "確認したことがあります"],
-                  ["d", "確認するでしょう"],
-                ].map(([id, label], index) => (
+{(activeQuestion?.options.map((option) => [option.id, option.label]) ?? [
+                   ["a", "確認しておきます"],
+                   ["b", "確認しています"],
+                   ["c", "確認したことがあります"],
+                   ["d", "確認するでしょう"],
+                 ]).map(([id, label], index) => (
                   <label className={answer === id ? "selected" : ""} key={id}>
                     <input
                       type="radio"
@@ -128,8 +138,8 @@ export function MiniCheckpointScreen() {
               </button>
               <button
                 type="button"
-                onClick={() => setQuestion((value) => Math.min(10, value + 1))}
-                disabled={question === 10}
+onClick={() => setQuestion((value) => Math.min(totalQuestions, value + 1))}
+                 disabled={question === totalQuestions}
               >
                 Selanjutnya
               </button>
@@ -407,26 +417,8 @@ export function MiniCheckpointScreen() {
       </div>
 
       <section className="mini-vertical-cards-section" aria-label={`Daftar Mini Checkpoint ${selectedLevel}`}>
-        {[
-          { session: 1, part: 1 },
-          { session: 1, part: 2 },
-          { session: 2, part: 1 },
-          { session: 2, part: 2 },
-          { session: 3, part: 1 },
-          { session: 3, part: 2 },
-        ].map(({ session, part }) => {
-          const title = `${selectedLevel} sesi ${session} part ${part}`;
-          const existing = miniCheckpoints
-            .find((g) => g.level === selectedLevel)
-            ?.items.find((it) => it.session === `sesi ${session}` && it.part === `part ${part}`);
-
-          const currentItem = existing || {
-            id: `mc-${selectedLevel.toLowerCase()}-s${session}p${part}`,
-            level: selectedLevel,
-            session: `sesi ${session}`,
-            part: `part ${part}`,
-            status: "Tersedia",
-          };
+        {hierarchyItems.map(({ item: currentItem, assessment }) => {
+           const title = assessment?.title ?? `${selectedLevel} ${currentItem.session} ${currentItem.part}`;
 
           return (
             <article className="mini-checkpoint-card" key={title}>
@@ -434,7 +426,7 @@ export function MiniCheckpointScreen() {
                 <span className="mini-card-icon" aria-hidden="true"><LuFileCheck /></span>
                 <div>
                   <h3>{title}</h3>
-                  <p>10 soal singkat • passing score 75% • timer ±10 menit</p>
+                  <p>{assessment?.questions.length ?? 10} soal singkat • timer ±{assessment?.durationMinutes ?? 10} menit</p>
                 </div>
               </div>
               <div className="mini-checkpoint-card-right">
@@ -443,8 +435,11 @@ export function MiniCheckpointScreen() {
                   type="button"
                   className="button button-primary"
                   onClick={() => {
-                    setSelected(currentItem);
-                    setView("info");
+                     setSelected(currentItem);
+                     setSelectedAssessment(assessment);
+                     setQuestion(1);
+                     setAnswer("");
+                     setView("info");
                   }}
                 >
                   Mulai Checkpoint

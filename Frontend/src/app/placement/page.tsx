@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { PublicPage } from "@/components/public-shell";
+import { usePublishedPlacement } from "@/lib/placement-store";
 
 const outcomes = [
   ["Analisis 4 kemampuan", "Lihat hasil Bunpou, Moji・Goi, Dokkai, dan Choukai."],
@@ -41,6 +42,7 @@ const reminders = [
 ];
 
 export default function PlacementPage() {
+  const { config: publishedConfig } = usePublishedPlacement();
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [target, setTarget] = useState("");
@@ -48,17 +50,24 @@ export default function PlacementPage() {
   const [whatsappConsent, setWhatsappConsent] = useState(false);
   const valid = Boolean(name.trim() && whatsapp.trim() && target && privacy && whatsappConsent);
 
+  const introHeading = publishedConfig?.introHeading || "Kenali levelmu sebelum memulai journey";
+  const description =
+    publishedConfig?.description ||
+    "Isi Nama, WhatsApp, dan Target Ujian, lalu jawab 20 soal sekitar 5 menit. Tidak perlu login untuk memulai.";
+  const questionCount = publishedConfig?.questions?.length || 20;
+  const durationMinutes = publishedConfig?.durationMinutes || 5;
+
   return (
     <PublicPage active="Placement Test">
       <main className="public-main placement-page">
         <section className="placement-hero-card">
           <div className="placement-hero-copy">
             <p className="kicker">PLACEMENT TEST</p>
-            <h1>Kenali levelmu sebelum memulai journey</h1>
-            <p>Isi Nama, WhatsApp, dan Target Ujian, lalu jawab 20 soal sekitar 5 menit. Tidak perlu login untuk memulai.</p>
+            <h1>{introHeading}</h1>
+            <p>{description}</p>
             <div className="public-pills">
               <span>Gratis</span>
-              <span>20 soal | ±5 menit</span>
+              <span>{questionCount} soal | ±{durationMinutes} menit</span>
               <span>Hasil langsung</span>
             </div>
             <div className="result-actions">

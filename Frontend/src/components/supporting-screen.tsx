@@ -2,8 +2,10 @@ import { StudentBreadcrumb } from "@/components/student-breadcrumb";
 import { PracticeScreen as PracticeFlowScreen } from "@/components/practice-screen";
 import { StudentNavigation } from "@/components/student-navigation";
 import { supportingData, type SupportingKind } from "@/lib/supporting-mock";
+import { usePublishedCurriculum } from "@/lib/curriculum-store";
+import { usePublishedAnnouncements } from "@/lib/website-store";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   LuAward,
   LuBell,
@@ -468,21 +470,42 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
   const [allRead, setAllRead] = useState(false);
   const [page, setPage] = useState(1);
   const query = `?membership=${membership}`;
+  const publishedAnnouncements = usePublishedAnnouncements(membership);
+
+  const activeAnnouncements = useMemo(() => {
+    return publishedAnnouncements
+      .filter((an) => !an.audience || an.audience === "all" || an.audience === membership)
+      .map((an) => ({
+        icon: LuBell,
+        category: "Pengumuman",
+        title: an.title,
+        description: an.content,
+        action: an.ctaLabel || "Lihat Detail",
+        href: an.ctaPath ? (an.ctaPath.startsWith("/") ? `${an.ctaPath}${an.ctaPath.includes("?") ? "&" : "?"}membership=${membership}` : an.ctaPath) : undefined,
+        isRead: false,
+        priority: an.priority,
+        date: an.startAt
+          ? new Date(an.startAt).toLocaleDateString("id-ID", { day: "numeric", month: "short" })
+          : "Hari ini",
+      }));
+  }, [publishedAnnouncements, membership]);
+
   const third =
     membership === "sensei"
-      ? { icon: LuRotateCcw, category: "Kelas", title: "Replay kelas sudah dipublikasikan", description: "Replay dapat ditonton selama masa aktif cohort.", action: "Buka Replay", href: `/replay${query}`, isRead: false }
+      ? { icon: LuRotateCcw, category: "Kelas", title: "Replay kelas sudah dipublikasikan", description: "Replay dapat ditonton selama masa aktif cohort.", action: "Buka Replay", href: `/replay${query}`, isRead: false, priority: undefined, date: "Hari ini" }
       : membership === "lms"
-      ? { icon: LuBookOpen, category: "Kelas", title: "Feedback materi sudah diperbarui", description: "Penjelasan tata bahasa Bab 12 telah dilengkapi contoh kalimat baru.", action: "Buka Feedback", href: undefined, isRead: false }
-      : { icon: LuRoute, category: "Kelas", title: "Progress chapter diperbarui", description: "Catatan progres chapter aktifmu berhasil diperbarui.", action: "Buka Progress", href: `/progress${query}`, isRead: false };
+      ? { icon: LuBookOpen, category: "Kelas", title: "Feedback materi sudah diperbarui", description: "Penjelasan tata bahasa Bab 12 telah dilengkapi contoh kalimat baru.", action: "Buka Feedback", href: undefined, isRead: false, priority: undefined, date: "Hari ini" }
+      : { icon: LuRoute, category: "Kelas", title: "Progress chapter diperbarui", description: "Catatan progres chapter aktifmu berhasil diperbarui.", action: "Buka Progress", href: `/progress${query}`, isRead: false, priority: undefined, date: "Hari ini" };
   const today = [
-    { icon: LuBookOpen, category: "Belajar", title: "Materi Chapter 4 tersedia", description: "Lanjutkan video, modul, dan latihan pada journey aktif.", action: "Buka Chapter", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}${query}`, isRead: false },
-    { icon: LuCalendar, category: "Kelas", title: "Pengingat sesi Zoom", description: "Sesi bimbingan mingguan bersama Sensei akan dimulai besok malam.", action: "Lihat Jadwal", href: membership === "sensei" ? `/schedule${query}` : undefined, isRead: false },
+    ...activeAnnouncements,
+    { icon: LuBookOpen, category: "Belajar", title: "Materi Chapter 4 tersedia", description: "Lanjutkan video, modul, dan latihan pada journey aktif.", action: "Buka Chapter", href: `/learn/n4/${membership === "free" ? "chapter-1" : "chapter-4"}${query}`, isRead: false, priority: undefined, date: "Hari ini" },
+    { icon: LuCalendar, category: "Kelas", title: "Pengingat sesi Zoom", description: "Sesi bimbingan mingguan bersama Sensei akan dimulai besok malam.", action: "Lihat Jadwal", href: membership === "sensei" ? `/schedule${query}` : undefined, isRead: false, priority: undefined, date: "Hari ini" },
     third,
   ];
   const previous = [
-    { icon: LuFlame, category: "Achievement", title: "Achievement baru terbuka", description: "Streak belajar berhasil mencapai milestone baru.", action: "Lihat Achievement", href: `/progress${query}`, isRead: true },
-    { icon: LuClock, category: "Akun", title: "Periode membership akan berakhir", description: "Masa aktif belajarmu tersisa 30 hari. Perpanjang untuk mempertahankan streak.", action: "Lihat Membership", href: `/profile${query}`, isRead: true },
-    { icon: LuAward, category: "Achievement", title: "Sertifikat digital tersedia", description: "Sertifikat dapat dilihat dan diunduh dari Certificate Center.", action: "Buka Sertifikat", href: membership === "free" ? undefined : `/certificate${query}`, isRead: true },
+    { icon: LuFlame, category: "Achievement", title: "Achievement baru terbuka", description: "Streak belajar berhasil mencapai milestone baru.", action: "Lihat Achievement", href: `/progress${query}`, isRead: true, priority: undefined, date: "Sebelumnya" },
+    { icon: LuClock, category: "Akun", title: "Periode membership akan berakhir", description: "Masa aktif belajarmu tersisa 30 hari. Perpanjang untuk mempertahankan streak.", action: "Lihat Membership", href: `/profile${query}`, isRead: true, priority: undefined, date: "Sebelumnya" },
+    { icon: LuAward, category: "Achievement", title: "Sertifikat digital tersedia", description: "Sertifikat dapat dilihat dan diunduh dari Certificate Center.", action: "Buka Sertifikat", href: membership === "free" ? undefined : `/certificate${query}`, isRead: true, priority: undefined, date: "Sebelumnya" },
   ];
   const matches = (item: { category: string; isRead?: boolean }) => {
     if (filter === "Semua") return true;
@@ -498,7 +521,26 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
       <article className={allRead || item.isRead ? "read" : "unread"} key={item.title}>
         <span className="notification-icon" aria-hidden="true"><Icon /></span>
         <div>
-          <small>{item.category} • Hari ini</small>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
+            <small>{item.category} • {item.date}</small>
+            {item.priority && (
+              <span
+                style={{
+                  display: "inline-block",
+                  padding: "1px 7px",
+                  borderRadius: "999px",
+                  fontSize: "9px",
+                  fontWeight: 800,
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                  background: item.priority === "Important" ? "#fee2e2" : "#e0f2fe",
+                  color: item.priority === "Important" ? "#991b1b" : "#0369a1",
+                }}
+              >
+                {item.priority === "Important" ? "Penting" : "Pengumuman"}
+              </span>
+            )}
+          </div>
           <h2>{item.title}</h2>
           <p>{item.description}</p>
         </div>
@@ -520,7 +562,7 @@ function NotificationScreen({ membership }: { membership: "free" | "lms" | "sens
         </div>
         <div className="notification-toolbar">
           <div>
-            {["Semua", "Belum Dibaca", "Belajar", "Kelas", "Akun"].map((item) => (
+            {["Semua", "Belum Dibaca", "Pengumuman", "Belajar", "Kelas", "Akun"].map((item) => (
               <button className={filter === item ? "active" : ""} type="button" onClick={() => setFilter(item)} key={item}>{item}</button>
             ))}
           </div>
@@ -901,42 +943,79 @@ function LeaderboardScreen({ membership }: { membership: "free" | "lms" | "sense
   );
 }
 
+type LibraryMaterialSeed = {
+  id: string;
+  level: string;
+  type: string;
+  title: string;
+  description: string;
+  href?: string;
+};
+
+const baseSeeds: LibraryMaterialSeed[] = [
+  { id: "dasar-tb", level: "Dasar", type: "Tata Bahasa", title: "Pola Kalimat Dasar", description: "Modul pengenalan pola kalimat Jepang." },
+  { id: "n5-tb", level: "N5", type: "Tata Bahasa", title: "Tata Bahasa N5", description: "Pola kalimat dasar level N5." },
+  { id: "n5-kj", level: "N5", type: "Kanji", title: "Kanji Pemula", description: "Kanji dasar untuk percakapan harian." },
+  { id: "n5-kk", level: "N5", type: "Kosakata", title: "Kosakata Sehari-hari", description: "Kosakata inti level N5." },
+  { id: "n4-tb", level: "N4", type: "Tata Bahasa", title: "Pola Kalimat Sehari-hari", description: "Modul Chapter 4 yang terakhir dibuka." },
+  { id: "n4-kj", level: "N4", type: "Kanji", title: "Keadaan, Waktu & Aktivitas", description: "Kanji chapter dengan bookmark dan catatan." },
+  { id: "n4-kk", level: "N4", type: "Kosakata", title: "Kosakata Aktivitas", description: "Kosakata kontekstual level N4." },
+  { id: "n3-tb", level: "N3", type: "Tata Bahasa", title: "Tata Bahasa Menengah", description: "Pola kalimat untuk teks umum." },
+  { id: "n3-kj", level: "N3", type: "Kanji", title: "Kanji Menengah", description: "Kanji untuk bacaan umum level N3." },
+  { id: "n3-kk", level: "N3", type: "Kosakata", title: "Kosakata Menengah", description: "Kosakata komunikasi level N3." },
+  { id: "n2-tb", level: "N2", type: "Tata Bahasa", title: "Tata Bahasa Lanjutan", description: "Struktur kalimat kompleks level N2." },
+  { id: "n2-kj", level: "N2", type: "Kanji", title: "Kanji Lanjutan", description: "Kanji untuk bacaan profesional level N2." },
+  { id: "n2-kk", level: "N2", type: "Kosakata", title: "Kosakata Lanjutan", description: "Kosakata akademik dan profesional level N2." },
+  { id: "ssw-kk", level: "SSW", type: "Kosakata", title: "Kosakata SSW Pengolahan Makanan", description: "Istilah kerja dan instruksi lapangan." },
+  { id: "interview-rd", level: "Interview", type: "Reading", title: "Persiapan Interview", description: "Materi persiapan wawancara kerja." },
+];
+
 function LibraryScreen({ membership }: { membership: "free" | "lms" | "sensei" }) {
   const [search, setSearch] = useState("");
   const [level, setLevel] = useState("Semua");
   const [type, setType] = useState("Semua");
   const [locked, setLocked] = useState(false);
-  const materialSeeds = [
-    ["Dasar", "Tata Bahasa", "Pola Kalimat Dasar", "Modul pengenalan pola kalimat Jepang.", false],
-    ["N5", "Tata Bahasa", "Tata Bahasa N5", "Pola kalimat dasar level N5.", false],
-    ["N5", "Kanji", "Kanji Pemula", "Kanji dasar untuk percakapan harian.", false],
-    ["N5", "Kosakata", "Kosakata Sehari-hari", "Kosakata inti level N5.", false],
-    ["N4", "Tata Bahasa", "Pola Kalimat Sehari-hari", "Modul Chapter 4 yang terakhir dibuka.", false],
-    ["N4", "Kanji", "Keadaan, Waktu & Aktivitas", "Kanji chapter dengan bookmark dan catatan.", false],
-    ["N4", "Kosakata", "Kosakata Aktivitas", "Kosakata kontekstual level N4.", false],
-    ["N3", "Tata Bahasa", "Tata Bahasa Menengah", "Pola kalimat untuk teks umum.", true],
-    ["N3", "Kanji", "Kanji Menengah", "Kanji untuk bacaan umum level N3.", true],
-    ["N3", "Kosakata", "Kosakata Menengah", "Kosakata komunikasi level N3.", true],
-    ["N2", "Tata Bahasa", "Tata Bahasa Lanjutan", "Struktur kalimat kompleks level N2.", true],
-    ["N2", "Kanji", "Kanji Lanjutan", "Kanji untuk bacaan profesional level N2.", true],
-    ["N2", "Kosakata", "Kosakata Lanjutan", "Kosakata akademik dan profesional level N2.", true],
-    ["SSW", "Kosakata", "Kosakata SSW Pengolahan Makanan", "Istilah kerja dan instruksi lapangan.", true],
-    ["Interview", "Reading", "Persiapan Interview", "Materi persiapan wawancara kerja.", true],
-  ] as const;
-  const materials = materialSeeds.map(([itemLevel, itemType, title, description]) => {
+  const curriculum = usePublishedCurriculum();
+
+  const publishedMaterials: LibraryMaterialSeed[] = useMemo(() => {
+    return (curriculum.libraryMaterials || [])
+      .filter((item) => item.status === "Published")
+      .map((item) => {
+        const itemLevel = item.programCode === "DASAR" ? "Dasar" : item.programCode === "INTERVIEW" ? "Interview" : item.programCode.toUpperCase();
+        return {
+          id: item.id,
+          level: itemLevel,
+          type: item.type,
+          title: item.title,
+          description: item.description,
+          href: item.url || undefined,
+        };
+      });
+  }, [curriculum.libraryMaterials]);
+
+  const materialSeeds = useMemo(() => {
+    if (!publishedMaterials.length) return baseSeeds;
+    return [
+      ...baseSeeds.filter((s) => !publishedMaterials.some((p) => p.title.toLowerCase() === s.title.toLowerCase())),
+      ...publishedMaterials,
+    ];
+  }, [publishedMaterials]);
+
+  const materials = materialSeeds.map((item) => {
     const isLocked = membership === "free"
-      ? itemLevel === "SSW" || itemLevel === "Interview"
+      ? item.level === "SSW" || item.level === "Interview"
       : membership === "lms"
-        ? !["Dasar", "N5", "N4"].includes(itemLevel)
-        : !["N4", "N3"].includes(itemLevel);
+        ? !["Dasar", "N5", "N4"].includes(item.level)
+        : !["N4", "N3"].includes(item.level);
+    const defaultHref = `/learn/${item.level === "Dasar" ? "dasar" : item.level.toLowerCase()}/chapter-${membership === "free" ? "1" : "4"}/${item.type === "Tata Bahasa" ? "grammar" : item.type.toLowerCase()}?membership=${membership}`;
     return {
-      icon: itemType === "Kanji" ? LuLayers3 : LuBookOpen,
-      level: itemLevel,
-      type: itemType,
-      title,
-      description,
+      icon: item.type === "Kanji" ? LuLayers3 : LuBookOpen,
+      level: item.level,
+      type: item.type,
+      title: item.title,
+      description: item.description,
       status: isLocked ? "Terkunci" : "Tersedia",
-      href: isLocked ? undefined : `/learn/${itemLevel === "Dasar" ? "dasar" : itemLevel.toLowerCase()}/chapter-${membership === "free" ? "1" : "4"}/${itemType === "Tata Bahasa" ? "grammar" : itemType.toLowerCase()}?membership=${membership}`,
+      href: isLocked ? undefined : (item.href || defaultHref),
     };
   });
   const query = search.trim().toLowerCase();

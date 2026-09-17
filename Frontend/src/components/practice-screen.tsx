@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LuArrowLeft, LuArrowRight, LuBookOpen, LuCheck, LuClock, LuFlame, LuLock, LuPlay, LuRotateCcw, LuTarget, LuVolume2 } from "react-icons/lu";
 import { StudentNavigation } from "@/components/student-navigation";
-import { canAccessPracticeLevel, defaultPracticeLevel, getPracticeQuestions, historyKey, levelHasCategories, practiceCategories, practiceKey, practiceLevels, progressKey, type PracticeCategory, type PracticeDraft, type PracticeHistory, type PracticeLevel } from "@/lib/practice-mock";
+import { canAccessPracticeLevel, defaultPracticeLevel, getPracticeAnswerKey, getPracticeQuestions, historyKey, levelHasCategories, practiceCategories, practiceKey, practiceLevels, progressKey, type PracticeCategory, type PracticeDraft, type PracticeHistory, type PracticeLevel } from "@/lib/practice-mock";
 import type { Membership } from "@/lib/dashboard-mock";
+import { usePublishedAssessments } from "@/lib/assessment-store";
 
 type Step = "list" | "runner" | "result" | "review";
 
@@ -28,10 +29,33 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(300);
-  const [history, setHistory] = useState<PracticeHistory[]>(() => readSession(historyKey(membership), []));
-  const [drafts, setDrafts] = useState<Record<string, PracticeDraft>>(() => readSession(progressKey(membership), {}));
-  const questions = getPracticeQuestions();
+  const [history, setHistory] = useState<PracticeHistory[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, PracticeDraft>>({});
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const savedHistory = readSession<PracticeHistory[]>(historyKey(membership), []);
+      if (savedHistory.length) {
+        setHistory(savedHistory);
+        setLevel(savedHistory[0].level);
+        if (savedHistory[0].category) setCategory(savedHistory[0].category);
+      }
+      const savedDrafts = readSession<Record<string, PracticeDraft>>(progressKey(membership), {});
+      setDrafts(savedDrafts);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [membership]);
+  const published = usePublishedAssessments();
   const activeCategory = levelHasCategories(level) ? category : undefined;
+  const publishedExercises = useMemo(() => published.filter((item) => item.type === "practice" && item.level === level && item.category === activeCategory && item.exercise), [activeCategory, level, published]);
+  const exerciseItems = useMemo(() => {
+    const items = new Map<number, { exercise: number; title?: string; count: number }>([1, 2, 3, 4, 5].map((item) => [item, { exercise: item, count: getPracticeQuestions().length }]));
+    publishedExercises.forEach((item) => items.set(item.exercise!, { exercise: item.exercise!, title: item.title, count: item.questions.length }));
+    return [...items.values()].sort((a, b) => a.exercise - b.exercise);
+  }, [publishedExercises]);
+  const selectedAssessment = publishedExercises.find((item) => item.exercise === exercise);
+  const questions = selectedAssessment?.questions.map((question) => ({ id: question.id, prompt: question.prompt, options: question.options.filter((option) => option.label.trim()).map((option) => ({ id: option.id, text: option.label })) })) ?? getPracticeQuestions();
+  const answerKey = selectedAssessment ? Object.fromEntries(questions.map((question) => [question.id, question.options.findIndex((option) => option.id === selectedAssessment.answerKey[question.id])])) : getPracticeAnswerKey();
   const key = practiceKey(level, exercise, activeCategory);
   const current = questions[Math.min(questionIndex, Math.max(questions.length - 1, 0))];
   const latest = (item: number) => history.find((entry) => entry.level === level && entry.category === activeCategory && entry.exercise === item);
@@ -66,7 +90,7 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
     sessionStorage.setItem(progressKey(membership), JSON.stringify(nextDrafts));
   };
   const submit = (submittedAt: number) => {
-    const correct = questions.filter((question) => answers[question.id] === question.answer).length;
+    const correct = questions.filter((question) => answers[question.id] === answerKey[question.id]).length;
     const next = { score: Math.round(correct / questions.length * 100), correct, total: questions.length };
     const item: PracticeHistory = { id: `${submittedAt}`, level, category: activeCategory, exercise, ...next, at: new Date(submittedAt).toISOString() };
     const nextHistory = [item, ...history];
@@ -93,7 +117,21 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
     {step === "list" && <>
       <section className="practice-summary" aria-label="Ringkasan Latihan"><article><LuBookOpen /><div><span>Total Latihan</span><strong>{history.length}</strong></div></article><article><LuTarget /><div><span>Rata-rata Skor</span><strong>{average}%</strong></div></article><article><LuFlame /><div><span>Streak Hari Ini</span><strong>{history.length ? 1 : 0} hari</strong></div></article></section>
       {levelHasCategories(level) && <nav className="practice-category-tabs" aria-label="Pilih Kategori">{practiceCategories.map((item) => <button type="button" aria-pressed={category === item} className={category === item ? "active" : ""} onClick={() => setCategory(item)} key={item}>{item}</button>)}</nav>}
-      {!canAccessPracticeLevel(membership, level) ? <section className="practice-locked"><LuLock /><h2>Akses latihan terkunci</h2><p>Level ini belum termasuk dalam membership aktif.</p><a href={`/renewal?membership=${membership}`}>Upgrade</a></section> : <section className="practice-journey-list" aria-label="Daftar latihan">{[1, 2, 3, 4, 5].map((item) => { const score = latest(item); const draft = drafts[practiceKey(level, item, activeCategory)]; const status = score ? "Selesai" : draft ? "Dalam Progres" : "Belum Selesai"; return <article className={`practice-journey-card status-${status.toLowerCase().replace(" ", "-")}`} key={item}><div className="practice-journey-number">{String(item).padStart(2, "0")}</div><div className="practice-journey-copy"><div className="practice-journey-title"><h2>{level === "N5" ? "N5" : level} {activeCategory ? `| ${activeCategory} ` : ""}| Latihan {String(item).padStart(2, "0")}</h2><span className={`practice-status status-${status.toLowerCase().replace(" ", "-")}`}>{status}</span></div><p>3 Soal</p><div className="practice-last-score"><span>Skor</span><strong>{score ? `${score.score}%` : item === 1 ? "80%" : "65%"}</strong></div></div><div className="practice-journey-action"><button type="button" onClick={() => start(item)}>{score ? <LuRotateCcw /> : <LuPlay />}{score ? "Ulangi Latihan" : draft ? "Lanjutkan" : "Mulai Latihan"}</button></div></article>; })}</section>}
+      {!canAccessPracticeLevel(membership, level) ? <section className="practice-locked"><LuLock /><h2>Akses latihan terkunci</h2><p>Level ini belum termasuk dalam membership aktif.</p><a href={`/renewal?membership=${membership}`}>Upgrade</a></section> : <section className="practice-journey-list" aria-label="Daftar latihan">{exerciseItems.map((item) => { const score = latest(item.exercise); const draft = drafts[practiceKey(level, item.exercise, activeCategory)]; const status = score ? "Selesai" : draft ? "Dalam Progres" : "Belum Selesai"; return <article className={`practice-journey-card status-${status.toLowerCase().replace(" ", "-")}`} key={item.exercise}><div className="practice-journey-number">{String(item.exercise).padStart(2, "0")}</div><div className="practice-journey-copy"><div className="practice-journey-title"><h2>{item.title ?? `${level === "N5" ? "N5" : level} ${activeCategory ? `| ${activeCategory} ` : ""}| Latihan ${String(item.exercise).padStart(2, "0")}`}</h2><span className={`practice-status status-${status.toLowerCase().replace(" ", "-")}`}>{status}</span></div><p>{item.count} Soal</p><div className="practice-last-score"><span>Skor</span><strong>{score ? `${score.score}%` : item.exercise === 1 ? "80%" : "65%"}</strong></div></div><div className="practice-journey-action"><button type="button" onClick={() => start(item.exercise)}>{score ? <LuRotateCcw /> : <LuPlay />}{score ? "Ulangi Latihan" : draft ? "Lanjutkan" : "Mulai Latihan"}</button></div></article>; })}</section>}
+      {history.length > 0 && (
+        <section className="practice-history" aria-label="Riwayat Latihan">
+          <h2>Riwayat Latihan</h2>
+          <div>
+            {history.map((item) => (
+              <article key={item.id}>
+                <span>{item.level} {item.category ? `| ${item.category} ` : ""}| Latihan {String(item.exercise).padStart(2, "0")}</span>
+                <b>{item.score}%</b>
+                <small>{item.correct}/{item.total} Benar</small>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
     </>}
     {step === "runner" && current && (
       <section className="practice-runner placement-assessment">
@@ -131,10 +169,10 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
                 const isSelected = answers[current.id] === index;
                 const optionKey = String.fromCharCode(65 + index);
                 return (
-                  <label className={`placement-option ${isSelected ? "selected" : ""}`} key={option}>
+                  <label className={`placement-option ${isSelected ? "selected" : ""}`} key={option.id}>
                     <input type="radio" name={current.id} checked={isSelected} onChange={() => saveAnswer(index)} />
                     <span className="option-badge">{optionKey}</span>
-                    <span className="option-text">{option}</span>
+                    <span className="option-text">{option.text}</span>
                     {isSelected && <span className="option-selected-check" aria-hidden="true"><LuCheck /></span>}
                   </label>
                 );
@@ -146,11 +184,11 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
               </button>}
               {questionIndex < questions.length - 1 ? (
                 <button type="button" className="button button-primary runner-next-btn" disabled={answers[current.id] === undefined} onClick={() => move(questionIndex + 1)}>
-                  Lanjut Soal <LuArrowRight aria-hidden="true" />
+                  Lanjut Soal <span className="sr-only">Berikutnya</span><LuArrowRight aria-hidden="true" />
                 </button>
               ) : (
                 <button type="button" className="button button-primary runner-next-btn" disabled={Object.keys(answers).length !== questions.length} onClick={() => submit(Date.now())}>
-                  Kumpulkan <LuCheck aria-hidden="true" />
+                  Kumpulkan <span className="sr-only">Submit Selesai</span><LuCheck aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -159,6 +197,6 @@ export function PracticeScreen({ membership }: { membership: Membership }) {
       </section>
     )}
     {step === "result" && result && <section className="practice-result-screen"><p className="dash-kicker">LATIHAN SELESAI</p><h2>Skor</h2><strong>{result.score}%</strong><p>{result.correct} dari {result.total} jawaban benar</p><div><button type="button" onClick={() => setStep("review")}>Lihat Jawaban</button><button type="button" onClick={() => start(exercise)}>Ulangi Latihan</button><button type="button" onClick={() => setStep("list")}>Kembali ke Daftar Latihan</button></div></section>}
-    {step === "review" && <section className="practice-review"><button className="practice-back" type="button" onClick={() => setStep("result")}><LuArrowLeft /> Kembali ke Hasil</button><h2>Lihat Jawaban</h2>{questions.map((question, index) => { const userAnswer = answers[question.id]; const correct = userAnswer === question.answer; return <article className={correct ? "correct" : "incorrect"} key={question.id}><span>Soal {index + 1} · {correct ? "Benar" : "Salah"}</span><h3>{question.prompt}</h3><p>Jawaban kamu: {question.options[userAnswer]}</p><strong>Jawaban benar: {question.options[question.answer]}</strong></article>; })}</section>}
+    {step === "review" && <section className="practice-review"><button className="practice-back" type="button" onClick={() => setStep("result")}><LuArrowLeft /> Kembali ke Hasil</button><h2>Lihat Jawaban</h2>{questions.map((question, index) => { const userAnswer = answers[question.id]; const correct = userAnswer === answerKey[question.id]; return <article className={correct ? "correct" : "incorrect"} key={question.id}><span>Soal {index + 1} · {correct ? "Benar" : "Salah"}</span><h3>{question.prompt}</h3><p>Jawaban kamu: {question.options[userAnswer]?.text}</p><strong>Jawaban benar: {question.options[answerKey[question.id]]?.text}</strong></article>; })}</section>}
   </main></div>;
 }

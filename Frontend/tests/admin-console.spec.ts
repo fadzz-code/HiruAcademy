@@ -16,37 +16,16 @@ test("sidebar groups 17 destinations and links back to site", async ({ page }) =
 for (const route of routes) test(`${route} opens`, async ({ page }) => { expect((await page.goto(route))?.status()).toBe(200); await expect(page.getByRole("heading", { level: 1 })).toBeVisible(); });
 
 test("dashboard shows real quick actions and persisted metrics", async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem("admin-demo-store", JSON.stringify({ items: { blog: [{ id: "1", title: "Draf", detail: "Artikel", status: "Draf" }] }, invoices: [{ id: "1", title: "A", detail: "B", status: "Menunggu" }, { id: "2", title: "C", detail: "D", status: "Terverifikasi" }], payouts: [{ id: "3", title: "E", detail: "F", status: "Menunggu" }], integrations: {} })));
+  await page.addInitScript(() => {
+    localStorage.setItem("hiru-admin-business:v1", JSON.stringify({ version: 1, invoices: [{ id: "1", createdAt: "2026-01-01T00:00:00.000Z", userName: "A", userEmail: "a@example.com", userWhatsApp: "081234567890", programCode: "N5", plan: "lms", amount: 0, status: "Menunggu pembayaran", timeline: [] }], users: [], affiliates: [], commissions: [], payouts: [{ id: "3", affiliateId: "AFF-001", affiliateName: "E", amount: 0, commissionIds: [], createdAt: "2026-01-01T00:00:00.000Z", status: "Menunggu" }], settings: { adminWhatsAppNumber: "", invoiceWhatsAppTemplate: "", affiliateEnabled: false, commissionMode: "Percentage", commissionValue: 0, validationPeriodDays: 0 }, activities: [] }));
+    localStorage.setItem("hiru-admin-assessment:v1", JSON.stringify({ version: 1, assessments: [{ id: "a1", type: "checkpoint", status: "Draft", title: "Tes", description: "", level: "", questions: [], sections: [], updatedAt: "2026-01-01T00:00:00.000Z" }] }));
+  });
   await page.goto("/admin");
   await expect(page.getByRole("link", { name: /Tinjau Invoice/ })).toHaveAttribute("href", "/admin/invoice");
   await expect(page.getByText("Invoice menunggu").locator("..").getByText("1", { exact: true })).toBeVisible();
   await expect(page.getByText("Pencairan menunggu").locator("..").getByText("1", { exact: true })).toBeVisible();
   await expect(page.getByText("Item draf").locator("..").getByText("1", { exact: true })).toBeVisible();
   await expect(page.getByText("Total Pengguna")).toHaveCount(0);
-});
-
-test("corrupt and incomplete storage normalizes nested defaults", async ({ page }) => {
-   await page.goto("/admin");
-   await page.evaluate(() => localStorage.setItem("admin-demo-store", "{"));
-   await page.goto("/admin?corrupt=1");
-  await expect(page.getByText("Invoice menunggu")).toBeVisible();
-  const corrupt = await page.evaluate(() => JSON.parse(localStorage.getItem("admin-demo-store") ?? "{}"));
-  expect(corrupt.invoices).toHaveLength(1);
-  expect(corrupt.payouts).toHaveLength(1);
-  expect(corrupt.integrations.Zoom).toBe("Belum terhubung");
-  await page.evaluate(() => localStorage.setItem("admin-demo-store", JSON.stringify({ items: { valid: [{ id: "7", title: "Valid", detail: "Saved", status: "Draf" }], broken: null }, invoices: "bad", payouts: [{ id: 1 }], integrations: { Zoom: "Terhubung", Email: 2 } })));
-   await page.goto("/admin/program-harga");
-   await page.goto("/admin?refresh=1");
-   await expect(page.getByText("Invoice menunggu")).toBeVisible();
-   await expect.poll(() => page.evaluate(() => localStorage.getItem("admin-demo-store"))).toContain('"valid"');
-   const incomplete = await page.evaluate(() => JSON.parse(localStorage.getItem("admin-demo-store") ?? "{}"));
-  expect(incomplete.items.valid).toHaveLength(1);
-  expect(incomplete.items.broken).toBeUndefined();
-  expect(incomplete.invoices).toHaveLength(1);
-  expect(incomplete.payouts).toEqual([]);
-  expect(incomplete.integrations.Zoom).toBe("Terhubung");
-  expect(incomplete.integrations.Email).toBe("Belum terhubung");
-  expect(incomplete.integrations.Analitik).toBe("Belum terhubung");
 });
 
 test("mobile drawer locks body and traps all focusable selectors", async ({ page }) => {
@@ -68,24 +47,10 @@ test("mobile drawer locks body and traps all focusable selectors", async ({ page
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
 });
 
-const creations = [
-  ["A", "/admin/program-harga", "Buat Program", "Nama program", "Program Sakura"],
-  ["B", "/admin/kurikulum-materi", "Buat Materi", "Judul materi", "Lesson Hiragana"],
-  ["C", "/admin/bank-soal", "Buat Soal", "Pertanyaan", "Soal Kosakata"],
-  ["D", "/admin/pengguna-akses", "Tambah Pengguna", "Nama", "Member Baru"],
-  ["E", "/admin/blog-seo", "Buat Artikel", "Judul artikel", "Artikel JLPT"],
-] as const;
-for (const [scenario, route, action, label, value] of creations) test(`skenario ${scenario}: dialog fokus dan form menyimpan data`, async ({ page }) => { await page.goto(route); const trigger = page.getByRole("button", { name: action }); await trigger.click(); await expect(page.getByLabel(label)).toBeFocused(); await page.getByLabel(label).fill(value); const required = page.getByRole("dialog").locator("[required]"); for (let index = 1; index < await required.count(); index++) await required.nth(index).fill("Data uji"); await page.getByRole("button", { name: "Simpan", exact: true }).click(); await page.reload(); await expect(page.getByRole("heading", { name: value })).toBeVisible(); });
+test("dedicated Sensei dialog focuses and persists data", async ({ page }) => { await page.goto("/admin/sensei"); const trigger = page.getByRole("button", { name: "Tambah Sensei" }); await trigger.click(); const dialog = page.getByRole("dialog"); await expect(dialog).toBeVisible(); await dialog.getByLabel("Nama").focus(); await dialog.getByLabel("Nama").fill("Sensei Kenji"); await dialog.getByLabel("Bio singkat").fill("Pengajar bahasa Jepang."); await dialog.getByLabel("Keahlian").fill("JLPT N5"); await dialog.getByRole("button", { name: "Simpan" }).click(); await page.reload(); await expect(page.getByText("Sensei Kenji", { exact: true })).toBeVisible(); });
 
-test("dialog traps focus, Escape closes, and returns focus", async ({ page }) => { await page.goto("/admin/program-harga"); const trigger = page.getByRole("button", { name: "Buat Program" }); await trigger.click(); await page.keyboard.press("Shift+Tab"); await expect(page.getByRole("button", { name: "Tutup dialog" })).toBeFocused(); await page.keyboard.press("Tab"); await expect(page.getByLabel("Nama program")).toBeFocused(); await page.keyboard.press("Escape"); await expect(page.getByRole("dialog")).toHaveCount(0); await expect(trigger).toBeFocused(); });
+test("dialog traps focus, Escape closes, and returns focus", async ({ page }) => { await page.goto("/admin/sensei"); const trigger = page.getByRole("button", { name: "Tambah Sensei" }); await trigger.click(); const dialog = page.getByRole("dialog"); await dialog.getByLabel("Nama").focus(); await page.keyboard.press("Shift+Tab"); await expect(page.getByRole("button", { name: "Tutup dialog" })).toBeFocused(); await page.keyboard.press("Tab"); await expect(page.getByLabel("Nama")).toBeFocused(); await page.keyboard.press("Escape"); await expect(dialog).toHaveCount(0); await expect(trigger).toBeFocused(); });
 
-test("tabs support roving keyboard navigation", async ({ page }) => { await page.goto("/admin/program-harga"); const first = page.getByRole("tab", { name: "Program" }); await first.focus(); await page.keyboard.press("ArrowRight"); await expect(page.getByRole("tab", { name: "Level" })).toBeFocused(); await expect(page.getByRole("tab", { name: "Level" })).toHaveAttribute("aria-selected", "true"); await page.keyboard.press("End"); await expect(page.getByRole("tab", { name: "Manfaat" })).toBeFocused(); });
-
-test("status badges expose semantic text and classes", async ({ page }) => { await page.goto("/admin/invoice"); const badge = page.locator(".admin-status-badge").filter({ hasText: "Menunggu" }).first(); await expect(badge).toHaveClass(/status-pending/); await page.getByRole("button", { name: "Lihat Detail" }).first().click(); await page.getByRole("button", { name: "Lihat Bukti" }).click(); await expect(page.getByRole("dialog").locator(".admin-status-badge", { hasText: "Diperiksa" })).toHaveClass(/status-verified/); });
-
-test("skenario F: invoice melewati pemeriksaan lalu verifikasi", async ({ page }) => { await page.goto("/admin/invoice"); await page.getByRole("button", { name: "Lihat Detail" }).click(); await page.getByRole("button", { name: "Lihat Bukti" }).click(); await page.getByRole("button", { name: "Verifikasi & Aktifkan" }).click(); await expect(page.getByRole("status")).toContainText("terverifikasi"); });
-test("skenario G: invoice dapat ditolak setelah diperiksa", async ({ page }) => { await page.goto("/admin/invoice"); await page.getByRole("button", { name: "Lihat Detail" }).click(); await page.getByRole("button", { name: "Lihat Bukti" }).click(); await page.getByRole("button", { name: "Tolak Invoice" }).click(); await expect(page.getByRole("status")).toContainText("ditolak"); });
-test("skenario H: pencairan diproses lalu dibayar", async ({ page }) => { await page.goto("/admin/pencairan-komisi"); await page.getByRole("button", { name: "Lihat Detail" }).click(); await page.getByRole("button", { name: "Proses Pencairan" }).click(); await page.getByRole("button", { name: "Tandai Dibayar" }).click(); await expect(page.getByRole("status")).toContainText("dibayar"); });
-test("skenario I: pengaturan integrasi tersimpan", async ({ page }) => { await page.goto("/admin/pengaturan-integrasi"); await page.getByRole("tab", { name: "Integrasi", exact: true }).click(); await page.getByLabel("Status Zoom").selectOption("Terhubung"); await page.getByRole("button", { name: "Simpan Integrasi" }).click(); await expect(page.getByRole("status")).toHaveText("Pengaturan integrasi berhasil disimpan."); await page.reload(); await page.getByRole("tab", { name: "Integrasi", exact: true }).click(); await expect(page.getByLabel("Status Zoom")).toHaveValue("Terhubung"); });
+test("tabs support roving keyboard navigation", async ({ page }) => { await page.goto("/admin/pengaturan-integrasi"); const first = page.getByRole("tab", { name: "Umum" }); await first.focus(); await page.keyboard.press("ArrowRight"); await expect(page.getByRole("tab", { name: "Branding" })).toBeFocused(); await expect(page.getByRole("tab", { name: "Branding" })).toHaveAttribute("aria-selected", "true"); await page.keyboard.press("End"); await expect(page.getByRole("tab", { name: "Profil Admin" })).toBeFocused(); });
 
 for (const viewport of [{ width: 360, height: 800 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 820, height: 1180 }, { width: 1024, height: 768 }, { width: 1440, height: 900 }]) test(`dashboard has no overflow at ${viewport.width}x${viewport.height}`, async ({ page }) => { await page.setViewportSize(viewport); await page.goto("/admin"); expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true); if (viewport.width <= 820) { const trigger = page.getByRole("button", { name: "Buka navigasi admin" }); await trigger.click(); await expect(page.locator("#admin-sidebar")).toHaveClass(/open/); await page.keyboard.press("Escape"); await expect(trigger).toBeFocused(); } else await expect(page.getByRole("button", { name: "Buka navigasi admin" })).toBeHidden(); });

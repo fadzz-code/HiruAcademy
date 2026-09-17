@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
-import { publicSensei } from "@/lib/public-sensei";
+import { publicSensei, type PublicSensei } from "@/lib/public-sensei";
+import { usePublishedClassOperations } from "@/lib/class-store";
 
 export function SenseiGrid({ limit, reveal = false }: { limit?: number; reveal?: boolean }) {
-  const profiles = limit ? publicSensei.slice(0, limit) : publicSensei;
+  const operations = usePublishedClassOperations();
+  const profiles = (() => { const seen = new Set<string>(); const merged: PublicSensei[] = []; for (const sensei of [...publicSensei, ...operations.sensei.map((item) => ({ id: item.id, name: item.name, initials: item.name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase(), avatarSrc: item.photoUrl || undefined, expertise: item.specialization }))]) { const key = sensei.id + sensei.name.toLowerCase(); if (!seen.has(key) && !merged.some((x) => x.name.toLowerCase() === sensei.name.toLowerCase())) { seen.add(key); merged.push(sensei); } } return limit ? merged.slice(0, limit) : merged; })();
 
   return (
     <div className="sensei-grid">

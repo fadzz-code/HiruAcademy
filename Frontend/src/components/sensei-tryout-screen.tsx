@@ -23,6 +23,7 @@ import {
   LuSparkles,
 } from "react-icons/lu";
 import { AssessmentUnavailable } from "@/components/assessment-unavailable";
+import { usePublishedAssessments, type PublishedAssessment } from "@/lib/assessment-store";
 
 type View = "list" | "info" | "runner" | "timeout" | "result" | "review" | "review-unavailable" | "locked" | "waiting" | "exhausted";
 
@@ -35,6 +36,7 @@ type TryoutItem = {
   meta: string;
   level: string;
   view: View;
+  assessment?: PublishedAssessment;
 };
 
 type ResultSection = { key: string; label: string; score: number; maxScore: number };
@@ -73,6 +75,12 @@ export function SenseiTryoutScreen({ membership = "sensei" }: { membership?: "lm
   const [submitConfirm, setSubmitConfirm] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(5922);
   const [questionRange, setQuestionRange] = useState(0);
+  const [selectedAssessment, setSelectedAssessment] = useState<PublishedAssessment>();
+  const published = usePublishedAssessments();
+  const publishedTryouts: TryoutItem[] = published.filter((item) => item.type === "tryout").map((item) => ({ id: item.id, icon: LuGraduationCap, level: item.level, title: item.title, status: "TERSEDIA", description: "Simulasi terbit dari pengaturan admin.", meta: `${item.questions.length} soal`, view: "info", assessment: item }));
+  const catalog = [...tryouts.filter((fixture) => !publishedTryouts.some((item) => item.id === fixture.id)), ...publishedTryouts];
+  const questions = selectedAssessment?.questions ?? [];
+  const activeQuestion = questions[Math.min(question - 1, Math.max(questions.length - 1, 0))];
   useEffect(() => {
     if (view !== "runner" || secondsLeft === 0) return;
     const timer = window.setInterval(() => setSecondsLeft((value) => Math.max(0, value - 1)), 1000);
@@ -148,12 +156,13 @@ export function SenseiTryoutScreen({ membership = "sensei" }: { membership?: "lm
   }
 
   if (view === "runner") {
+    const totalQuestions = selectedAssessment ? questions.length : 100;
     const rangeStart = questionRange * 25 + 1;
     return (
       <div className="sensei-tryout tryout-runner tryout-clean-focus">
-        <header className="tryout-focus-header"><div><h1>Soal {question} dari 100</h1><p>Try Out N4 • Bunpou • Attempt 1/2</p></div><div className="tryout-focus-timer"><span>Timer</span><strong>{timerLabel}</strong><small>Sisa waktu sesi</small></div></header>
+        <header className="tryout-focus-header"><div><h1>Soal {question} dari {totalQuestions}</h1><p>{selectedAssessment?.title ?? "Try Out N4"} • {activeQuestion?.section ?? "Bunpou"} • Attempt 1/2</p></div><div className="tryout-focus-timer"><span>Timer</span><strong>{timerLabel}</strong><small>Sisa waktu sesi</small></div></header>
         <div className="tryout-focus-status"><span><strong>14/100</strong> Dijawab</span><i aria-hidden="true" /> <span><strong>{marked ? "3" : "2"}</strong> Ditandai</span><i aria-hidden="true" /> <span>Auto-save Aktif</span></div>
-        <div className="tryout-focus-layout"><main><section className="tryout-focus-question"><p className="dash-kicker">BAGIAN BUNPOU • SOAL {question}</p><h2>Pilih jawaban yang paling tepat.</h2><p className="tryout-question-japanese">日本へ行く前に、パスポートを＿＿＿＿。</p><fieldset><legend className="sr-only">Pilih satu jawaban</legend>{[["a", "確認しておきます"], ["b", "確認しています"], ["c", "確認したことがあります"], ["d", "確認するでしょう"]].map(([id, label], index) => <label className={answer === id ? "selected" : ""} key={id}><input type="radio" name="tryout-answer" checked={answer === id} onChange={() => setAnswer(id)} /><span className="tryout-option-letter">{String.fromCharCode(65 + index)}</span><span>{label}</span></label>)}</fieldset></section><div className="tryout-focus-actions"><button type="button" onClick={() => setQuestion((value) => Math.max(1, value - 1))} disabled={question === 1}>Sebelumnya</button><button className={marked ? "marked" : ""} type="button" onClick={() => setMarked((value) => !value)}><LuFlag aria-hidden="true" />{marked ? "Hapus Tanda" : "Tandai Soal"}</button><button type="button" onClick={() => setQuestion((value) => Math.min(100, value + 1))} disabled={question === 100}>Selanjutnya</button></div></main><aside className="tryout-focus-navigator"><p className="dash-kicker">NAVIGATOR SOAL</p><strong>14 dijawab • {marked ? "3" : "2"} ditandai</strong><div className="tryout-number-grid">{Array.from({ length: 25 }, (_, index) => { const number = rangeStart + index; return <button aria-current={number === question ? "step" : undefined} aria-label={`Soal ${number}${number === question ? ", sedang dibuka" : index < 14 ? ", sudah dijawab" : ", belum dijawab"}`} className={`${number === question ? "active" : ""} ${number < 14 ? "answered" : ""}`} onClick={() => setQuestion(number)} type="button" key={number}>{number}</button>; })}</div><div className="tryout-range"><span>Range</span>{["1–25", "26–50", "51–75", "76–100"].map((range, index) => <button className={questionRange === index ? "active" : ""} type="button" onClick={() => setQuestionRange(index)} key={range}>{range}</button>)}</div><button className="tryout-submit" type="button" onClick={() => setSubmitConfirm(true)}>Selesaikan Try Out</button><button type="button" onClick={list}>Keluar Sesi</button></aside></div>{submitConfirm && <div className="tryout-submit-modal"><section role="dialog" aria-modal="true" aria-labelledby="tryout-submit-title"><h2 id="tryout-submit-title">Selesaikan Try Out?</h2><p>14 dari 100 soal belum dijawab.</p><small>Setelah dikirim, jawaban tidak dapat diubah pada attempt ini.</small><div><button type="button" onClick={() => setSubmitConfirm(false)}>Kembali Mengerjakan</button><button type="button" onClick={() => { setSubmitConfirm(false); setView("result"); }}>Kirim</button></div></section></div>}
+        <div className="tryout-focus-layout"><main><section className="tryout-focus-question"><p className="dash-kicker">BAGIAN {activeQuestion?.section.toUpperCase() ?? "BUNPOU"} • SOAL {question}</p><h2>{activeQuestion?.prompt ?? "Pilih jawaban yang paling tepat."}</h2><p className="tryout-question-japanese">{activeQuestion?.japanese?.text ?? "日本へ行く前に、パスポートを＿＿＿＿。"}</p><fieldset><legend className="sr-only">Pilih satu jawaban</legend>{(activeQuestion?.options.map((option) => [option.id, option.label]) ?? [["a", "確認しておきます"], ["b", "確認しています"], ["c", "確認したことがあります"], ["d", "確認するでしょう"]]).map(([id, label], index) => <label className={answer === id ? "selected" : ""} key={id}><input type="radio" name="tryout-answer" checked={answer === id} onChange={() => setAnswer(id)} /><span className="tryout-option-letter">{String.fromCharCode(65 + index)}</span><span>{label}</span></label>)}</fieldset></section><div className="tryout-focus-actions"><button type="button" onClick={() => setQuestion((value) => Math.max(1, value - 1))} disabled={question === 1}>Sebelumnya</button><button className={marked ? "marked" : ""} type="button" onClick={() => setMarked((value) => !value)}><LuFlag aria-hidden="true" />{marked ? "Hapus Tanda" : "Tandai Soal"}</button><button type="button" onClick={() => setQuestion((value) => Math.min(totalQuestions, value + 1))} disabled={question === totalQuestions}>Selanjutnya</button></div></main><aside className="tryout-focus-navigator"><p className="dash-kicker">NAVIGATOR SOAL</p><strong>14 dijawab • {marked ? "3" : "2"} ditandai</strong><div className="tryout-number-grid">{Array.from({ length: 25 }, (_, index) => { const number = rangeStart + index; return <button aria-current={number === question ? "step" : undefined} aria-label={`Soal ${number}${number === question ? ", sedang dibuka" : index < 14 ? ", sudah dijawab" : ", belum dijawab"}`} className={`${number === question ? "active" : ""} ${number < 14 ? "answered" : ""}`} onClick={() => setQuestion(number)} type="button" key={number}>{number}</button>; })}</div><div className="tryout-range"><span>Range</span>{["1–25", "26–50", "51–75", "76–100"].map((range, index) => <button className={questionRange === index ? "active" : ""} type="button" onClick={() => setQuestionRange(index)} key={range}>{range}</button>)}</div><button className="tryout-submit" type="button" onClick={() => setSubmitConfirm(true)}>Selesaikan Try Out</button><button type="button" onClick={list}>Keluar Sesi</button></aside></div>{submitConfirm && <div className="tryout-submit-modal"><section role="dialog" aria-modal="true" aria-labelledby="tryout-submit-title"><h2 id="tryout-submit-title">Selesaikan Try Out?</h2><p>14 dari 100 soal belum dijawab.</p><small>Setelah dikirim, jawaban tidak dapat diubah pada attempt ini.</small><div><button type="button" onClick={() => setSubmitConfirm(false)}>Kembali Mengerjakan</button><button type="button" onClick={() => { setSubmitConfirm(false); setView("result"); }}>Kirim</button></div></section></div>}
       </div>
     );
   }
@@ -564,16 +573,16 @@ export function SenseiTryoutScreen({ membership = "sensei" }: { membership?: "lm
         <button className="sensei-back" type="button" onClick={list}>&larr; Kembali ke Daftar</button>
         <div className="tryout-prestart-layout">
           <main>
-            <section className="tryout-prestart-info"><p className="dash-kicker">INFORMASI SIMULASI</p><p>Try Out ini menggunakan sistem waktu mundur (timer) dan penilaian standar JLPT. Anda dapat meninjau jawaban setelah menyelesaikan seluruh sesi.</p><div className="tryout-info-tiles"><div><LuClock aria-hidden="true" /><strong>125 Menit</strong><span>Total Waktu</span></div><div><LuListOrdered aria-hidden="true" /><strong>4 Sesi</strong><span>Pembagian</span></div><div><LuChartNoAxesCombined aria-hidden="true" /><strong>180 Poin</strong><span>Skor Maksimal</span></div><div><LuFileCheck aria-hidden="true" /><strong>Review Mode</strong><span>Tersedia</span></div></div></section>
+            <section className="tryout-prestart-info"><p className="dash-kicker">INFORMASI SIMULASI</p><h1>{selectedAssessment?.title}</h1><p>Try Out ini menggunakan sistem waktu mundur (timer) dan penilaian standar JLPT. Anda dapat meninjau jawaban setelah menyelesaikan seluruh sesi.</p><div className="tryout-info-tiles"><div><LuClock aria-hidden="true" /><strong>{selectedAssessment?.durationMinutes ?? 125} Menit</strong><span>Total Waktu</span></div><div><LuListOrdered aria-hidden="true" /><strong>{selectedAssessment?.sections?.length ?? 4} Sesi</strong><span>Pembagian</span></div><div><LuChartNoAxesCombined aria-hidden="true" /><strong>{selectedAssessment?.maxScore ?? 180} Poin</strong><span>Skor Maksimal</span></div><div><LuFileCheck aria-hidden="true" /><strong>Review Mode</strong><span>Tersedia</span></div></div></section>
             <div className="tryout-prestart-warning"><strong><LuTriangleAlert aria-hidden="true" /> Peringatan</strong><p>Timer akan mulai setelah Anda menekan tombol Mulai Try Out. Pastikan Anda siap sebelum memulai.</p></div>
           </main>
-          <aside className="tryout-prestart-sidebar"><section className="tryout-sections"><h2>Materi Sesi</h2><div><LuListOrdered aria-hidden="true" /><strong>Kosakata &amp; Kanji</strong><small>25 Menit</small></div><div><LuSpellCheck aria-hidden="true" /><strong>Tata Bahasa</strong><small>30 Menit</small></div><div><LuBookOpen aria-hidden="true" /><strong>Reading (Dokkai)</strong><small>35 Menit</small></div><div><LuHeadphones aria-hidden="true" /><strong>Audio (Choukai)</strong><small>35 Menit</small></div></section><button className="tryout-start-button" type="button" onClick={() => setView("runner")}>Mulai Try Out <LuArrowRight aria-hidden="true" /></button></aside>
+          <aside className="tryout-prestart-sidebar"><section className="tryout-sections"><h2>Materi Sesi</h2>{selectedAssessment?.sections?.map((section) => <div key={section}><LuListOrdered aria-hidden="true" /><strong>{section}</strong><small>{selectedAssessment.questions.filter((question) => question.section === section).length} soal</small></div>) ?? <><div><LuListOrdered aria-hidden="true" /><strong>Kosakata &amp; Kanji</strong><small>25 Menit</small></div><div><LuSpellCheck aria-hidden="true" /><strong>Tata Bahasa</strong><small>30 Menit</small></div><div><LuBookOpen aria-hidden="true" /><strong>Reading (Dokkai)</strong><small>35 Menit</small></div><div><LuHeadphones aria-hidden="true" /><strong>Audio (Choukai)</strong><small>35 Menit</small></div></>}</section><button className="tryout-start-button" type="button" onClick={() => setView("runner")}>Mulai Try Out <LuArrowRight aria-hidden="true" /></button></aside>
         </div>
       </div>
     );
   }
 
-  const visibleTryouts = tryouts.filter(
+  const visibleTryouts = catalog.filter(
     (item) =>
       listFilter === "SEMUA LEVEL" ||
       (listFilter === "N4" && item.level === "N4") ||
@@ -606,12 +615,12 @@ export function SenseiTryoutScreen({ membership = "sensei" }: { membership?: "lm
            {visibleTryouts.map((item, index) => (
              <article className="tryout-card" key={item.id}>
                <div className="tryout-card-number">{String(index + 1).padStart(2, "0")}</div>
-               <div className="tryout-card-main">
-                 <header className="tryout-card-header"><h3>{item.level} | {item.title.replace(`${item.level} — `, "")}</h3><span className={`tryout-status-badge status-${item.status.toLowerCase().replaceAll(" ", "-")}`}>{item.status}</span></header>
+                <div className="tryout-card-main">
+                  <header className="tryout-card-header"><h3>{item.level} | {item.title.replace(`Try Out ${item.level} — `, "").replace(`${item.level} — `, "")}</h3><span className={`tryout-status-badge status-${item.status.toLowerCase().replaceAll(" ", "-")}`}>{item.status}</span></header>
                  <p>{item.description}</p>
                  <div className="tryout-card-meta"><span>{item.meta}</span></div>
                </div>
-               <footer><button type="button" onClick={() => setView(item.view)}>{item.view === "info" ? "Mulai Try Out" : item.view === "review-unavailable" ? "Lihat Hasil" : "Lihat Status"}</button></footer>
+               <footer><button type="button" onClick={() => { setSelectedAssessment(item.assessment); setQuestion(item.assessment ? 1 : 4); setAnswer(""); setSecondsLeft((item.assessment?.durationMinutes ?? 98.7) * 60); setView(item.view); }}>{item.view === "info" ? "Mulai Try Out" : item.view === "review-unavailable" ? "Lihat Hasil" : "Lihat Status"}</button></footer>
              </article>
            ))}
         </div>

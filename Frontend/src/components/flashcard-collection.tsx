@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LuBookOpen,
   LuChevronDown,
@@ -16,6 +16,7 @@ import {
 } from "react-icons/lu";
 import { StudentNavigation } from "@/components/student-navigation";
 import { parseMembership } from "@/lib/dashboard-mock";
+import { usePublishedCurriculum } from "@/lib/curriculum-store";
 
 type DeckItem = {
   level: string;
@@ -110,6 +111,7 @@ const summaryMetrics = [
 
 export function FlashcardCollection() {
   const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
+  const curriculum = usePublishedCurriculum();
   const [search, setSearch] = useState("");
   const [filterMode, setFilterMode] = useState<"all" | "level" | "chapter" | "review">("all");
   const [selectedLevel, setSelectedLevel] = useState("N5");
@@ -132,7 +134,33 @@ export function FlashcardCollection() {
     return () => document.removeEventListener("click", handleOutside);
   }, []);
 
-  const visible = decks.filter((deck) => {
+  const allDecks = useMemo(() => {
+    if (!curriculum.flashcardDecks || curriculum.flashcardDecks.length === 0) {
+      return decks;
+    }
+    const publishedDeckItems: DeckItem[] = curriculum.flashcardDecks.map((deck) => {
+      const chapter = curriculum.chapters.find((c) => c.id === deck.chapterId);
+      const chapterLabel = chapter ? `Chapter ${chapter.order}` : "Chapter 1";
+      return {
+        level: deck.programCode,
+        chapter: chapterLabel,
+        title: deck.title,
+        category: "Bahasa Jepang",
+        cardCount: deck.cards?.length ?? 0,
+        progress: 0,
+        glyph: deck.title.charAt(0) || "札",
+        description: deck.description || "Flashcard kosakata dan pola penting.",
+        action: "Mulai" as const,
+        ctaLabel: "Mulai Belajar",
+      };
+    });
+    return [
+      ...decks.filter((d) => !publishedDeckItems.some((pub) => pub.title.toLowerCase() === d.title.toLowerCase())),
+      ...publishedDeckItems,
+    ];
+  }, [curriculum.flashcardDecks, curriculum.chapters]);
+
+  const visible = allDecks.filter((deck) => {
     const matchesSearch = `${deck.chapter} ${deck.title} ${deck.category}`
       .toLowerCase()
       .includes(search.toLowerCase());

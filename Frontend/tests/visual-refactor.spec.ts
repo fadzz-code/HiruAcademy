@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/login", "/register", "/program", "/placement", "/blog", "/testimoni", "/sensei", "/dashboard?membership=free", "/dashboard?membership=lms", "/dashboard?membership=sensei", "/journey?membership=lms", "/journey/n5?membership=lms", "/learn/n5/chapter-1?membership=lms", "/flashcards?membership=lms", "/practice?membership=lms", "/library?membership=lms", "/tryout?membership=lms", "/schedule?membership=sensei", "/replay?membership=sensei", "/mini-checkpoint?membership=sensei", "/admin", "/admin/users", "/admin/program", "/admin/invoices", "/admin/content-library"];
+const routes = ["/", "/login", "/register", "/program", "/placement", "/blog", "/testimoni", "/sensei", "/dashboard?membership=free", "/dashboard?membership=lms", "/dashboard?membership=sensei", "/journey?membership=lms", "/journey/n5?membership=lms", "/learn/n5/chapter-1?membership=lms", "/flashcards?membership=lms", "/practice?membership=lms", "/library?membership=lms", "/tryout?membership=lms", "/schedule?membership=sensei", "/replay?membership=sensei", "/mini-checkpoint?membership=sensei", "/admin", "/admin/program-harga", "/admin/kurikulum-materi", "/admin/bank-soal", "/admin/invoice", "/admin/pencairan-komisi", "/admin/pengaturan-integrasi"];
 
 for (const width of [390, 768, 1440]) {
   test.describe(`viewport ${width}`, () => {
@@ -137,6 +137,8 @@ test("practice supports level, category, answer, score, and history flow", async
 
 test("practice skips categories for Dasar", async ({ page }) => {
   await page.goto("/practice?membership=lms");
+  await expect(page.getByLabel("Pilih Level")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Pilih Kategori" })).toBeVisible();
   await page.getByLabel("Pilih Level").selectOption("Dasar Bahasa Jepang");
   await expect(page.getByRole("navigation", { name: "Pilih Kategori" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Mulai Latihan" }).first()).toBeVisible();

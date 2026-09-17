@@ -1,10 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { SVGProps } from "react";
+import { useMemo, type SVGProps } from "react";
 import { LandingMotion } from "@/components/landing-motion";
 import { PublicPage } from "@/components/public-shell";
 import { SenseiGrid } from "@/components/sensei-grid";
 import { testimonials } from "@/lib/public-mock";
+import { usePublishedLanding, usePublishedCampaigns, usePublishedTestimonials } from "@/lib/website-store";
+import { usePublishedPrograms } from "@/lib/curriculum-store";
 
 type IconName = "arrow" | "book" | "check" | "compass" | "layers" | "play" | "sparkle" | "target" | "users";
 
@@ -124,15 +128,92 @@ function LmsPreview({ preview }: { preview: (typeof lmsPreviews)[number] }) {
 }
 
 function ArrowLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
-  return <a className={dark ? "button button-dark" : "button button-primary"} href={href}>{children}<Icon name="arrow" width="20" height="20" /></a>;
+  return <Link className={dark ? "button button-dark" : "button button-primary"} href={href}>{children}<Icon name="arrow" width="20" height="20" /></Link>;
 }
 
 export default function Home() {
+  const landing = usePublishedLanding();
+  const campaigns = usePublishedCampaigns();
+  const publishedPrograms = usePublishedPrograms();
+  const publishedTestimonials = usePublishedTestimonials({ featuredOnly: true });
+
+  const hero = landing.hero;
+
+  const currentOffers = useMemo(() => {
+    return offers.map((offer) => {
+      if (offer.id === "free") return { ...offer, campaign: null, basePrice: offer.price, hasDiscount: false };
+
+      const targetPlan = offer.id === "sensei" ? "sensei" : "mandiri";
+      const campaign = campaigns.find(
+        (c) => c.targetPlan === "both" || c.targetPlan === targetPlan
+      );
+
+      const targetCode = campaign?.targetProgramCodes.find((code) => code === "N4") || campaign?.targetProgramCodes[0] || "N5";
+      const program = publishedPrograms.find((p) => p.code === targetCode) || publishedPrograms.find((p) => p.code === "N5");
+
+      const baseAmount =
+        offer.id === "sensei"
+          ? (program && typeof program.senseiPrice === "number" ? program.senseiPrice : 350000)
+          : (program && typeof program.selfStudyPrice === "number" ? program.selfStudyPrice : 99000);
+
+      const baseFormatted =
+        baseAmount >= 1000 && baseAmount % 1000 === 0
+          ? `Mulai Rp ${baseAmount / 1000}k`
+          : `Mulai Rp ${baseAmount.toLocaleString("id-ID")}`;
+
+      if (!campaign) {
+        return {
+          ...offer,
+          price: baseFormatted,
+          campaign: null,
+          basePrice: baseFormatted,
+          hasDiscount: false,
+        };
+      }
+
+      let promoAmount = baseAmount;
+      if (campaign.discountType === "percentage") {
+        promoAmount = Math.round(baseAmount * (1 - campaign.value / 100));
+      } else if (campaign.discountType === "fixed") {
+        promoAmount = Math.max(0, baseAmount - campaign.value);
+      }
+
+      const promoFormatted =
+        promoAmount >= 1000 && promoAmount % 1000 === 0
+          ? `Mulai Rp ${promoAmount / 1000}k`
+          : `Mulai Rp ${promoAmount.toLocaleString("id-ID")}`;
+
+      return {
+        ...offer,
+        subTitle: offer.id === "sensei" ? `${targetCode} Kelas bersama Sensei` : `${targetCode} Belajar Mandiri`,
+        price: promoFormatted,
+        basePrice: baseFormatted,
+        badge: campaign.badgeText || offer.badge,
+        cta: campaign.ctaLabel || offer.cta,
+        campaign,
+        hasDiscount: true,
+      };
+    });
+  }, [campaigns, publishedPrograms]);
+
+  const displayTestimonials = useMemo(() => {
+    if (publishedTestimonials.length > 0) {
+      return publishedTestimonials.map((t) => ({
+        name: t.name,
+        quote: t.quote,
+        membership: t.context,
+        avatarSrc: t.photoUrl,
+        initials: t.name.slice(0, 2).toUpperCase(),
+      }));
+    }
+    return testimonials;
+  }, [publishedTestimonials]);
+
   return (
     <PublicPage>
       <main id="top" data-landing-motion>
         <LandingMotion />
-        <section className="hero" data-reveal><div className="hero-orb hero-orb-one" /><div className="hero-orb hero-orb-two" /><div className="container hero-grid"><div className="hero-copy"><p className="eyebrow"><Icon name="sparkle" width="17" height="17" /> LIVE CLASS + LMS DALAM SATU ALUR BELAJAR</p><h1>Belajar Bahasa Jepang Terarah dari <span>Dasar sampai Siap JLPT</span></h1><p className="hero-lead">Placement test, learning journey, flashcard, latihan, try out, komunitas, dan kelas bersama Sensei tersedia dalam satu pengalaman belajar yang konsisten.</p><div className="hero-actions"><ArrowLink href="/register">Coba Gratis</ArrowLink><a className="text-link" href="#program"><Icon name="play" width="21" height="21" /> Lihat Program</a></div></div><div className="hero-visual" aria-label="Ilustrasi perjalanan belajar bahasa Jepang"><div className="sun" aria-hidden="true" /><div className="cloud cloud-one" /><div className="cloud cloud-two" /><div className="learning-card card-kanji"><small>Hari ini</small><strong><ruby>学<rt>まな</rt></ruby>ぶ</strong><span>belajar</span></div><div className="learning-card card-progress"><span className="mini-icon"><Icon name="layers" width="19" height="19" /></span><div><small>Perjalananmu</small><strong>Terus bertumbuh</strong></div><div className="progress"><i /></div></div><div className="torii" aria-hidden="true"><i /><b /><span /><em /></div><div className="hill hill-back" /><div className="hill hill-front" /><div className="floating-note note-one">あ</div><div className="floating-note note-two">夢</div></div></div></section>
+        <section className="hero" data-reveal><div className="hero-orb hero-orb-one" /><div className="hero-orb hero-orb-two" /><div className="container hero-grid"><div className="hero-copy"><p className="eyebrow"><Icon name="sparkle" width="17" height="17" /> {hero.eyebrow || "LIVE CLASS + LMS DALAM SATU ALUR BELAJAR"}</p><h1>{hero.heading && hero.heading.includes("Dasar sampai Siap JLPT") ? (<>{hero.heading.split("Dasar sampai Siap JLPT")[0]}<span>Dasar sampai Siap JLPT</span>{hero.heading.split("Dasar sampai Siap JLPT")[1]}</>) : (hero.heading || <>Belajar Bahasa Jepang Terarah dari <span>Dasar sampai Siap JLPT</span></>)}</h1><p className="hero-lead">{hero.support || "Placement test, learning journey, flashcard, latihan, try out, komunitas, dan kelas bersama Sensei tersedia dalam satu pengalaman belajar yang konsisten."}</p><div className="hero-actions"><ArrowLink href={hero.primaryCtaPath || "/register"}>{hero.primaryCtaLabel || "Coba Gratis"}</ArrowLink><a className="text-link" href={hero.secondaryCtaPath || "#program"}><Icon name="play" width="21" height="21" /> {hero.secondaryCtaLabel || "Lihat Program"}</a></div></div><div className="hero-visual" aria-label="Ilustrasi perjalanan belajar bahasa Jepang"><div className="sun" aria-hidden="true" /><div className="cloud cloud-one" /><div className="cloud cloud-two" /><div className="learning-card card-kanji"><small>Hari ini</small><strong><ruby>学<rt>まな</rt></ruby>ぶ</strong><span>belajar</span></div><div className="learning-card card-progress"><span className="mini-icon"><Icon name="layers" width="19" height="19" /></span><div><small>Perjalananmu</small><strong>Terus bertumbuh</strong></div><div className="progress"><i /></div></div><div className="torii" aria-hidden="true"><i /><b /><span /><em /></div><div className="hill hill-back" /><div className="hill hill-front" /><div className="floating-note note-one">あ</div><div className="floating-note note-two">夢</div></div></div></section>
 
         <aside className="proof-strip" aria-label="Pencapaian HIRU Academy" data-reveal><div className="container proof-strip-grid">{proofItems.map((item, index) => <div className="proof-item reveal-item" key={item.value} style={{ "--reveal-index": index } as React.CSSProperties}><span><Icon name={item.icon} width="24" height="24" /></span><p><strong {...(item.label ? { "data-counter": item.value.replace(/\D/g, ""), "data-suffix": item.value.replace(/\d/g, "") } : {})}>{item.value}</strong>{item.label && <small>{item.label}</small>}</p></div>)}</div></aside>
 
@@ -140,11 +221,11 @@ export default function Home() {
           <div className="container">
             <div className="section-heading">
               <span className="eyebrow" style={{ margin: "0 auto 16px" }}>INVESTASI BELAJAR</span>
-              <h2>Pilih cara belajar yang paling sesuai</h2>
-              <p>Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem.</p>
+              <h2>{landing.pricing?.title || "Pilih cara belajar yang paling sesuai"}</h2>
+              <p>{landing.pricing?.support || "Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem."}</p>
             </div>
             <div className="pricing-grid">
-              {offers.map((offer, index) => (
+              {currentOffers.map((offer, index) => (
                 <article
                   className={`pricing-card reveal-item${offer.popular ? " pricing-card-popular" : ""}`}
                   key={offer.id}
@@ -156,7 +237,7 @@ export default function Home() {
                     </div>
                   )}
                   <div className="pricing-card-header">
-                    {!offer.popular && <span className="pricing-badge-pill">{offer.badge}</span>}
+                    {(!offer.popular || offer.hasDiscount) && <span className="pricing-badge-pill">{offer.badge}</span>}
                     <h3 className="pricing-title">{offer.title}</h3>
                     <span className="pricing-subtitle">{offer.subTitle}</span>
                     <p className="pricing-desc">{offer.description}</p>
@@ -164,6 +245,19 @@ export default function Home() {
 
                   <div className="pricing-price-box">
                     <span className="pricing-amount">{offer.price}</span>
+                    {offer.hasDiscount && (
+                      <s
+                        style={{
+                          fontSize: "14px",
+                          color: "var(--muted)",
+                          textDecoration: "line-through",
+                          fontWeight: 600,
+                          alignSelf: "center",
+                        }}
+                      >
+                        {offer.basePrice}
+                      </s>
+                    )}
                     <span className="pricing-period">{offer.period}</span>
                   </div>
 
@@ -195,9 +289,9 @@ export default function Home() {
 
         <section className="section landing-sensei" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Bersama Sensei Berpengalaman</h2></div><SenseiGrid limit={3} reveal /><div className="landing-sensei-action"><Link className="button button-primary" href="/sensei">Lihat Semua Sensei</Link></div></div></section>
 
-        <section className="section landing-testimonials" data-reveal><div className="container"><div className="section-heading"><p className="kicker">CERITA PEMBELAJAR</p><h2>Cerita dari Pembelajar Hiru Academy</h2></div><div className="testimonial-grid">{testimonials.map((testimonial, index) => <article className="testimonial-card reveal-item" key={testimonial.name} style={{ "--reveal-index": index } as React.CSSProperties}><div className="testimonial-avatar">{testimonial.avatarSrc ? <Image alt={`Foto ${testimonial.name}`} fill sizes="64px" src={testimonial.avatarSrc} /> : <span aria-hidden="true">{testimonial.initials}</span>}</div><blockquote>{testimonial.quote}</blockquote><footer><strong>{testimonial.name}</strong><small>{testimonial.membership}</small></footer></article>)}</div><div className="landing-testimonials-action"><Link className="button button-primary" href="/testimoni">Lihat lebih banyak</Link></div></div></section>
+        <section className="section landing-testimonials" data-reveal><div className="container"><div className="section-heading"><p className="kicker">CERITA PEMBELAJAR</p><h2>{landing.testimonial?.heading || "Cerita dari Pembelajar Hiru Academy"}</h2></div><div className="testimonial-grid">{displayTestimonials.map((testimonial, index) => <article className="testimonial-card reveal-item" key={testimonial.name} style={{ "--reveal-index": index } as React.CSSProperties}><div className="testimonial-avatar">{testimonial.avatarSrc ? <Image alt={`Foto ${testimonial.name}`} fill sizes="64px" src={testimonial.avatarSrc} /> : <span aria-hidden="true">{testimonial.initials}</span>}</div><blockquote>{testimonial.quote}</blockquote><footer><strong>{testimonial.name}</strong><small>{testimonial.membership}</small></footer></article>)}</div><div className="landing-testimonials-action"><Link className="button button-primary" href="/testimoni">Lihat lebih banyak</Link></div></div></section>
 
-        <section className="final-cta" id="tentang" data-reveal><div className="container"><div className="cta-panel"><div className="cta-pattern" aria-hidden="true">あ <span>日</span> 語</div><h2>Belum tahu harus mulai dari level mana?</h2><p>Belum yakin levelmu? Gunakan Placement Test. Sudah punya target? Coba Chapter 1 gratis pada level pilihanmu.</p><ArrowLink href="/placement">Mulai Sekarang</ArrowLink></div></div></section>
+        <section className="final-cta" id="tentang" data-reveal><div className="container"><div className="cta-panel"><div className="cta-pattern" aria-hidden="true">あ <span>日</span> 語</div><h2>{landing.finalCta?.heading || "Belum tahu harus mulai dari level mana?"}</h2><p>{landing.finalCta?.support || "Belum yakin levelmu? Gunakan Placement Test. Sudah punya target? Coba Chapter 1 gratis pada level pilihanmu."}</p><ArrowLink href={landing.finalCta?.ctaPath || "/placement"}>{landing.finalCta?.ctaLabel || "Mulai Sekarang"}</ArrowLink></div></div></section>
       </main>
     </PublicPage>
   );

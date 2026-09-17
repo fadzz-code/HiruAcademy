@@ -1,14 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { LuSparkles } from "react-icons/lu";
 import { PublicPage } from "@/components/public-shell";
 import { levelCatalog, plans } from "@/lib/public-mock";
+import { usePublishedPrograms } from "@/lib/curriculum-store";
 
 export default function ProgramPage() {
-  const [selectedPlan, setSelectedPlan] = useState(plans[2]);
+  const publishedPrograms = usePublishedPrograms();
+  const [selectedPlanId, setSelectedPlanId] = useState("sensei");
   const [selectedLevel, setSelectedLevel] = useState(levelCatalog[1]);
+
+  const matchedProgram = publishedPrograms.find(
+    (p) => p.code.toLowerCase() === selectedLevel.code.toLowerCase()
+  );
+
+  const currentPlans = useMemo(() => {
+    if (!matchedProgram) return plans;
+    return plans.map((plan) => {
+      if (plan.id === "lms" && typeof matchedProgram.selfStudyPrice === "number") {
+        const p = matchedProgram.selfStudyPrice;
+        const formatted = p >= 1000 && p % 1000 === 0 ? `${p / 1000}k` : p.toLocaleString("id-ID");
+        const duration = matchedProgram.accessDurationMonths
+          ? `${matchedProgram.accessDurationMonths} bulan`
+          : plan.period;
+        return {
+          ...plan,
+          price: `Mulai Rp${formatted}${duration ? `/${duration}` : ""}`,
+          period: duration,
+        };
+      }
+      if (plan.id === "sensei" && typeof matchedProgram.senseiPrice === "number") {
+        const p = matchedProgram.senseiPrice;
+        const formatted = p >= 1000 && p % 1000 === 0 ? `${p / 1000}k` : p.toLocaleString("id-ID");
+        return {
+          ...plan,
+          price: `Mulai Rp${formatted}/bulan`,
+        };
+      }
+      return plan;
+    });
+  }, [matchedProgram]);
+
+  const selectedPlan = currentPlans.find((p) => p.id === selectedPlanId) ?? currentPlans[2];
 
   return (
     <PublicPage active="Program">
@@ -59,7 +94,7 @@ export default function ProgramPage() {
             </div>
           </div>
           <div className="pricing-grid">
-            {plans.map((plan) => {
+            {currentPlans.map((plan) => {
               const isSelected = selectedPlan.id === plan.id;
               const isPopular = plan.id === "sensei";
               const displayPrice = plan.price.replace(/99\.000/g, "99k").replace(/350\.000/g, "350k");
@@ -71,14 +106,14 @@ export default function ProgramPage() {
                 <article
                   key={plan.id}
                   className={`pricing-card${isPopular ? " pricing-card-popular" : ""}${isSelected ? " selected-pricing-card" : ""}`}
-                  onClick={() => setSelectedPlan(plan)}
+                  onClick={() => setSelectedPlanId(plan.id)}
                   style={{ cursor: "pointer" }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      setSelectedPlan(plan);
+                      setSelectedPlanId(plan.id);
                     }
                   }}
                   aria-pressed={isSelected}
@@ -120,7 +155,7 @@ export default function ProgramPage() {
                       className={`button ${isSelected ? "button-primary" : "button-secondary"} pricing-cta-btn`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setSelectedPlan(plan);
+                        setSelectedPlanId(plan.id);
                       }}
                     >
                       {plan.id === "free"

@@ -1,13 +1,19 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
+import { Suspense, useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { PublicPage } from "@/components/public-shell";
 import {
   calculatePlacementResult,
   placementResult as defaultResult,
   plans,
 } from "@/lib/public-mock";
+import {
+  calculateCustomPlacementResult,
+  recordPlacementAttempt,
+  usePublishedPlacement,
+} from "@/lib/placement-store";
 
 const tierIcons: Record<string, React.ReactNode> = {
   sensei: (
@@ -40,19 +46,68 @@ function getPlacementAnswers() {
   return sessionStorage.getItem("hiru-placement-answers") || "";
 }
 
-export default function PlacementResultPage() {
+function PlacementResultContent() {
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name") || "";
+  const whatsapp = searchParams.get("whatsapp") || "";
+  const target = searchParams.get("target") || "";
+
+  const { config: publishedConfig } = usePublishedPlacement();
   const saved = useSyncExternalStore(subscribe, getPlacementAnswers, () => "");
-  const result = useMemo(() => {
-    if (!saved) return defaultResult;
+
+  const { result, overallScore } = useMemo(() => {
+    if (!saved) return { result: defaultResult, overallScore: 71 };
     try {
       const parsed = JSON.parse(saved);
-      return parsed && Object.keys(parsed).length > 0
-        ? calculatePlacementResult(parsed)
-        : defaultResult;
+      if (!parsed || Object.keys(parsed).length === 0) {
+        return { result: defaultResult, overallScore: 71 };
+      }
+      if (publishedConfig?.questions && publishedConfig.questions.length > 0) {
+        const custom = calculateCustomPlacementResult(
+          parsed,
+          publishedConfig.questions,
+          publishedConfig.rules || []
+        );
+        return {
+          result: {
+            level: custom.recommendedLevel,
+            areas: custom.areas.map((a) => ({
+              name: a.name,
+              score: a.score,
+            })),
+          },
+          overallScore: custom.score,
+        };
+      }
+      const legacy = calculatePlacementResult(parsed);
+      const avg =
+        legacy.areas.length > 0
+          ? Math.round(legacy.areas.reduce((acc, a) => acc + a.score, 0) / legacy.areas.length)
+          : 0;
+      return { result: legacy, overallScore: avg };
     } catch {
-      return defaultResult;
+      return { result: defaultResult, overallScore: 71 };
     }
-  }, [saved]);
+  }, [saved, publishedConfig]);
+
+  const recordedRef = useRef(false);
+
+  useEffect(() => {
+    if (!name.trim() && !whatsapp.trim()) return;
+    if (recordedRef.current) return;
+    const sessionKey = `hiru-lead-recorded:${name.trim()}:${whatsapp.trim()}:${result.level}`;
+    if (sessionStorage.getItem(sessionKey)) return;
+
+    recordedRef.current = true;
+    sessionStorage.setItem(sessionKey, "1");
+    recordPlacementAttempt({
+      name: name.trim() || "Peserta",
+      whatsapp: whatsapp.trim(),
+      target: target.trim() || "Belum menentukan",
+      score: overallScore,
+      recommendedLevel: result.level,
+    });
+  }, [name, whatsapp, target, overallScore, result.level]);
 
   const senseiPlan = plans.find((p) => p.id === "sensei") || plans[2];
   const lmsPlan = plans.find((p) => p.id === "lms") || plans[1];
@@ -144,5 +199,13 @@ export default function PlacementResultPage() {
         </section>
       </main>
     </PublicPage>
+  );
+}
+
+export default function PlacementResultPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: "80px", textAlign: "center", color: "var(--muted)" }}>Memuat hasil placement...</div>}>
+      <PlacementResultContent />
+    </Suspense>
   );
 }

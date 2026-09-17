@@ -1,21 +1,37 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LuArrowLeft, LuArrowRight, LuCheck, LuClock, LuVolume2 } from "react-icons/lu";
 import { placementQuestions } from "@/lib/public-mock";
+import { usePublishedPlacement } from "@/lib/placement-store";
 
 const storageKey = "hiru-placement-answers";
-const TOTAL_SECONDS = 300; // 5 menit
 
-function PlacementQuestionRunner() {
+function PlacementQuestionRunner({ totalSeconds }: { totalSeconds: number }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "";
   const target = searchParams.get("target") || "";
 
+  const { config: publishedConfig } = usePublishedPlacement();
+
+  const questions = useMemo(() => {
+    if (publishedConfig?.questions && publishedConfig.questions.length > 0) {
+      return publishedConfig.questions.map((q) => ({
+        number: q.number,
+        area: q.area,
+        prompt: q.prompt,
+        answers: q.options.map((opt) => opt.text),
+        correctAnswer: q.options.find((opt) => opt.isCorrect)?.text || "",
+      }));
+    }
+    return placementQuestions;
+  }, [publishedConfig]);
+
   const [index, setIndex] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(TOTAL_SECONDS);
+  const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
+
   const [answers, setAnswers] = useState<Record<number, string>>(() => {
     if (typeof window === "undefined") return {};
     const saved = sessionStorage.getItem(storageKey);
@@ -31,7 +47,7 @@ function PlacementQuestionRunner() {
     }
   });
 
-  const question = placementQuestions[index];
+  const question = questions[index] || questions[0];
 
   const finishTest = useCallback(() => {
     const qs = searchParams ? searchParams.toString() : "";
@@ -56,7 +72,7 @@ function PlacementQuestionRunner() {
   }
 
   function nextQuestion() {
-    if (index === placementQuestions.length - 1) {
+    if (index === questions.length - 1) {
       finishTest();
     } else {
       setIndex(index + 1);
@@ -94,7 +110,7 @@ function PlacementQuestionRunner() {
         <section className="question-card placement-card-custom">
           <div className="question-header-row">
             <span className="question-area-badge">{question.area}</span>
-            <span className="question-number-pill">Soal {question.number}/{placementQuestions.length}</span>
+            <span className="question-number-pill">Soal {question.number}/{questions.length}</span>
           </div>
 
           <h1 className="placement-question-prompt">{question.prompt}</h1>
@@ -146,7 +162,7 @@ function PlacementQuestionRunner() {
               disabled={!answers[question.number]}
               onClick={nextQuestion}
             >
-              {index === placementQuestions.length - 1 ? "Selesaikan Test" : "Lanjut Soal"}{" "}
+              {index === questions.length - 1 ? "Selesaikan Test" : "Lanjut Soal"}{" "}
               <LuArrowRight aria-hidden="true" />
             </button>
           </div>
@@ -157,9 +173,12 @@ function PlacementQuestionRunner() {
 }
 
 export default function PlacementQuestionPage() {
+  const { config: publishedConfig } = usePublishedPlacement();
+  const totalSeconds = (publishedConfig?.durationMinutes || 5) * 60;
+
   return (
     <Suspense fallback={<div style={{ padding: "80px", textAlign: "center", color: "var(--muted)" }}>Memuat soal placement...</div>}>
-      <PlacementQuestionRunner />
+      <PlacementQuestionRunner key={totalSeconds} totalSeconds={totalSeconds} />
     </Suspense>
   );
 }

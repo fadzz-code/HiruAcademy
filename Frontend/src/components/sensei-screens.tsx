@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   LuArrowLeft,
@@ -15,6 +16,8 @@ import {
   LuVolume2,
 } from "react-icons/lu";
 import { replayMarkers, replays, scheduleSessions } from "@/lib/sensei-mock";
+import { usePublishedCurriculum } from "@/lib/curriculum-store";
+import { formatStudentScheduleDate, usePublishedClassOperations, type StudentScheduleItem } from "@/lib/class-store";
 
 type StateAction = { label: string; href?: string; onClick?: () => void };
 
@@ -25,13 +28,15 @@ function SenseiState({ eyebrow, title, status, description, facts, primary, seco
 
 export function ScheduleScreen() {
   const [view, setView] = useState<"calendar" | "list" | "empty">("calendar");
+  const operations = usePublishedClassOperations();
+  const sessions = useMemo(() => { const active = operations.schedule.map((session) => ({ ...session, meta: `${formatStudentScheduleDate(session.meta.split(" – ")[0])} – ${formatStudentScheduleDate(session.meta.split(" – ")[1] || session.meta)}` })); const keys = new Set(active.flatMap((session) => [session.id, session.title.toLowerCase()])); return [...scheduleSessions.filter((session) => !keys.has(session.id) && !keys.has(session.title.toLowerCase())), ...active]; }, [operations.schedule]);
   const [period, setPeriod] = useState(0);
   if (view === "empty") return <SenseiState eyebrow="ZOOM • EMPTY" title="Belum ada sesi pada periode ini" status="Processing" description="Jadwal akan muncul setelah cohort dan sesi dipublikasikan tim akademik." facts={["Status sistem", "Jadwal resmi", "Verifikasi paket"]} primary={{ label: "Kembali Jadwal", onClick: () => { setPeriod(0); setView("calendar"); } }} secondary={{ label: "Lihat Replay", href: "/replay?membership=sensei" }} />;
-  return <><div className="sensei-title-row"><PageHead eyebrow="BELAJAR DENGAN SENSEI • JADWAL KELAS" title="Jadwal cohort dan sesi bersama Sensei" description="Tanggal, jam, durasi, Sensei, cohort, dan link kelas mengikuti konfigurasi jadwal." /><Link href="/replay?membership=sensei">Lihat Replay</Link></div><div className="sensei-controls"><button type="button" aria-label="Periode sebelumnya" onClick={() => { setPeriod(-1); setView("empty"); }}>Sebelumnya</button><span>{period === 0 ? "Periode aktif dari tim akademik" : "Periode tanpa sesi"}</span><button type="button" aria-label="Periode berikutnya" onClick={() => { setPeriod(1); setView("empty"); }}>Berikutnya</button><b>Cohort Aktif</b><button className={view === "calendar" ? "active" : ""} type="button" onClick={() => setView("calendar")}>Kalender</button><button className={view === "list" ? "active" : ""} type="button" onClick={() => setView("list")}>Daftar</button></div>{view === "calendar" ? <section className="schedule-layout"><div className="calendar-card"><div className="calendar-grid schedule-placeholder">{["Sen","Sel","Rab","Kam","Jum","Sab","Min","—","—","Zoom","—","—","Replay","—"].map((day, index) => day === "Zoom" ? <Link className="event" href="/schedule/chapter-4?membership=sensei" key={`${day}-${index}`}>{day}</Link> : <span className={day === "Replay" ? "event" : ""} key={`${day}-${index}`}>{day}</span>)}</div></div><SessionList /></section> : <SessionList />}<section className="sensei-announcement"><strong>Pengumuman</strong><p>Link Zoom aktif sesuai waktu dan jadwal yang ditentukan.</p></section><Link className="sensei-back" href="/dashboard?membership=sensei">Kembali Dashboard</Link></>;
+  return <><div className="sensei-title-row"><PageHead eyebrow="BELAJAR DENGAN SENSEI • JADWAL KELAS" title="Jadwal cohort dan sesi bersama Sensei" description="Tanggal, jam, durasi, Sensei, cohort, dan link kelas mengikuti konfigurasi jadwal." /><Link href="/replay?membership=sensei">Lihat Replay</Link></div><div className="sensei-controls"><button type="button" aria-label="Periode sebelumnya" onClick={() => { setPeriod(-1); setView("empty"); }}>Sebelumnya</button><span>{period === 0 ? "Periode aktif dari tim akademik" : "Periode tanpa sesi"}</span><button type="button" aria-label="Periode berikutnya" onClick={() => { setPeriod(1); setView("empty"); }}>Berikutnya</button><b>Cohort Aktif</b><button className={view === "calendar" ? "active" : ""} type="button" onClick={() => setView("calendar")}>Kalender</button><button className={view === "list" ? "active" : ""} type="button" onClick={() => setView("list")}>Daftar</button></div>{view === "calendar" ? <section className="schedule-layout"><div className="calendar-card"><div className="calendar-grid schedule-placeholder">{["Sen","Sel","Rab","Kam","Jum","Sab","Min","—","—","Zoom","—","—","Replay","—"].map((day, index) => day === "Zoom" ? <Link className="event" href="/schedule/chapter-4?membership=sensei" key={`${day}-${index}`}>{day}</Link> : <span className={day === "Replay" ? "event" : ""} key={`${day}-${index}`}>{day}</span>)}</div></div><SessionList sessions={sessions} /></section> : <SessionList sessions={sessions} />}<section className="sensei-announcement"><strong>Pengumuman</strong><p>Link Zoom aktif sesuai waktu dan jadwal yang ditentukan.</p></section><Link className="sensei-back" href="/dashboard?membership=sensei">Kembali Dashboard</Link></>;
 }
 
-function SessionList() {
-  return <aside className="upcoming-panel"><p className="dash-kicker">Sesi mendatang</p><small>Data sesi diperbarui secara berkala.</small>{scheduleSessions.map((session) => session.id === "chapter-4" ? <Link className="schedule-session" href="/schedule/chapter-4?membership=sensei" key={session.id}><div><strong>{session.title}</strong><small>{session.meta}</small></div><span>{session.status}</span></Link> : <div className="schedule-session" key={session.id}><div><strong>{session.title}</strong><small>{session.meta}</small></div><span>{session.status}</span></div>)}</aside>;
+function SessionList({ sessions }: { sessions: (typeof scheduleSessions[number] | StudentScheduleItem)[] }) {
+  return <aside className="upcoming-panel"><p className="dash-kicker">Sesi mendatang</p><small>Data sesi diperbarui secara berkala.</small>{sessions.map((session) => { const href = session.id === "chapter-4" ? "/schedule/chapter-4?membership=sensei" : "meetingUrl" in session && session.chapter ? `/schedule/${session.chapter}?membership=sensei` : undefined; const content = <><div><strong>{session.title}</strong><small>{session.meta}{"senseiName" in session && session.senseiName ? ` • ${session.senseiName}` : ""}{"chapter" in session && session.chapter ? ` • ${session.chapter}` : ""}</small></div><span>{session.status}</span></>; return href ? <Link className="schedule-session" href={href} key={session.id}>{content}</Link> : <div className="schedule-session" key={session.id}>{content}</div>; })}</aside>;
 }
 
 export function ClassDetailScreen() {
@@ -100,20 +105,61 @@ export function ClassDetailScreen() {
   );
 }
 
+type ReplayItem = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  featured?: boolean;
+  youtubeVideoId?: string;
+  durationMinutes?: number;
+  date?: string;
+};
+
 export function ReplayScreen() {
+  const curriculum = usePublishedCurriculum();
   const [filter, setFilter] = useState("Semua");
   const [search, setSearch] = useState("");
   const [processing, setProcessing] = useState(false);
+
+  const publishedReplays: ReplayItem[] = useMemo(() => {
+    return (curriculum.replays || [])
+      .filter((r) => r.status === "Published")
+      .map((r) => ({
+        id: r.id,
+        title: r.title,
+        description: r.description,
+        category: r.programCode ? `Chapter ${r.programCode}` : "Chapter 4",
+        featured: false,
+        youtubeVideoId: r.youtubeVideoId,
+        durationMinutes: r.durationMinutes || 90,
+        date: r.date,
+      }));
+  }, [curriculum.replays]);
+
+  const allReplays: ReplayItem[] = useMemo(() => {
+    if (!publishedReplays.length) return replays;
+    return [
+      ...replays.filter(
+        (orig) =>
+          !publishedReplays.some(
+            (p) => p.id === orig.id || p.title.toLowerCase() === orig.title.toLowerCase()
+          )
+      ),
+      ...publishedReplays,
+    ];
+  }, [publishedReplays]);
+
   const visible = useMemo(
     () =>
-      replays.filter(
+      allReplays.filter(
         (item) =>
           (filter === "Semua" || item.category === filter) &&
           item.title.toLowerCase().includes(search.toLowerCase())
       ),
-    [filter, search]
+    [allReplays, filter, search]
   );
-  const featured = replays[0];
+  const featured = allReplays[0];
 
   if (processing) {
     return (
@@ -179,7 +225,14 @@ export function ReplayScreen() {
             <h2>{featured.title}</h2>
             <p>{featured.description}</p>
             <div className="replay-featured-actions">
-              <Link className="button button-primary" href="/replay/chapter-4?membership=sensei">
+              <Link
+                className="button button-primary"
+                href={
+                  featured.youtubeVideoId
+                    ? `/replay/chapter-4?membership=sensei&v=${encodeURIComponent(featured.youtubeVideoId)}`
+                    : "/replay/chapter-4?membership=sensei"
+                }
+              >
                 Putar Rekaman
               </Link>
               <button
@@ -205,14 +258,23 @@ export function ReplayScreen() {
             <article key={item.id} className="replay-session-card">
               <div className="replay-card-thumb">
                 <LuPlay aria-hidden="true" />
-                <span className="replay-time-tag">90 Menit</span>
+                <span className="replay-time-tag">
+                  {item.durationMinutes ? `${item.durationMinutes} Menit` : "90 Menit"}
+                </span>
               </div>
               <div className="replay-card-body">
                 <span className="replay-category-tag">{item.category || "Kelas Rutin"}</span>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
                 <div className="replay-card-footer">
-                  <Link href="/replay/chapter-4?membership=sensei" className="button button-primary">
+                  <Link
+                    href={
+                      item.youtubeVideoId
+                        ? `/replay/chapter-4?membership=sensei&v=${encodeURIComponent(item.youtubeVideoId)}`
+                        : "/replay/chapter-4?membership=sensei"
+                    }
+                    className="button button-primary"
+                  >
                     Buka Replay
                   </Link>
                 </div>
@@ -239,6 +301,17 @@ export function ReplayScreen() {
 }
 
 export function ReplayPlayerScreen({ youtubeVideoId }: { youtubeVideoId?: string }) {
+  const searchParams = useSearchParams();
+  const curriculum = usePublishedCurriculum();
+  const queryVideoId = searchParams.get("v") || undefined;
+  const queryReplayId = searchParams.get("id") || undefined;
+
+  const matchedPublished = queryReplayId
+    ? curriculum.replays.find((r) => r.id === queryReplayId)
+    : curriculum.replays.find((r) => r.youtubeVideoId) || curriculum.replays[0];
+
+  const activeVideoId = youtubeVideoId || queryVideoId || matchedPublished?.youtubeVideoId;
+
   const [tab, setTab] = useState("Ringkasan");
   const [state, setState] = useState<"player" | "error">("player");
   const [marker, setMarker] = useState("00:00");
@@ -269,8 +342,8 @@ export function ReplayPlayerScreen({ youtubeVideoId }: { youtubeVideoId?: string
       </Link>
       <PageHead
         eyebrow="REPLAY • CHAPTER 4 • COHORT AKTIF"
-        title="Pola Kalimat dan Kehidupan Sehari-hari"
-        description="Rekaman bimbingan Sensei lengkap dengan chapter markers, materi modul, dan ringkasan kelas."
+        title={matchedPublished?.title || "Pola Kalimat dan Kehidupan Sehari-hari"}
+        description={matchedPublished?.description || "Rekaman bimbingan Sensei lengkap dengan chapter markers, materi modul, dan ringkasan kelas."}
       />
 
       {/* YouTube-Ready Video Player Structure */}
@@ -285,10 +358,10 @@ export function ReplayPlayerScreen({ youtubeVideoId }: { youtubeVideoId?: string
           border: "1px solid #3d4554",
         }}
       >
-        {youtubeVideoId ? (
+        {activeVideoId ? (
           <div style={{ position: "relative", width: "100%", paddingBottom: "56.25%", height: 0 }}>
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}?rel=0&modestbranding=1`}
+              src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?rel=0&modestbranding=1`}
               title="YouTube video player"
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

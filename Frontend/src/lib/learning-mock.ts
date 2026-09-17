@@ -1,4 +1,6 @@
 import type { Membership } from "@/lib/dashboard-mock";
+import { readPublishedCurriculum } from "@/lib/curriculum-store";
+import { readAssessments, type AssessmentQuestion } from "@/lib/admin-assessment-store";
 
 export type LearningActivityKey = "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint";
 export type LearningActivityState = "completed" | "current" | "available" | "lockedByProgress" | "lockedByEntitlement";
@@ -19,10 +21,71 @@ const flashcards: FlashcardItem[] = [
 export function getLearningData(membership: Membership, levelSlug: string, chapterSlug: string) {
   const level = levelSlug.toUpperCase();
   const chapterNumber = chapterSlug.replace("chapter-", "");
+  const chapterNum = Number(chapterNumber) || 0;
   const fixture = levelSlug === "n4" && chapterSlug === "chapter-4";
   const chapterTitle = fixture ? "Pola Kalimat dan Kehidupan Sehari-hari" : `${level} | Chapter ${chapterNumber}`;
   const basePath = `/learn/${levelSlug}/${chapterSlug}`;
   const query = `?membership=${membership}`;
+
+  const curriculum = readPublishedCurriculum();
+  const publishedChapter = curriculum.chapters.find(
+    (c) =>
+      c.programCode.toLowerCase() === levelSlug.toLowerCase() &&
+      (c.slug === chapterSlug || c.order === chapterNum)
+  );
+
+  let chapterCards: FlashcardItem[] = flashcards;
+  let matchedDeck = publishedChapter?.flashcardDeckId
+    ? curriculum.flashcardDecks.find((d) => d.id === publishedChapter.flashcardDeckId)
+    : undefined;
+
+  if (!matchedDeck && publishedChapter) {
+    matchedDeck = curriculum.flashcardDecks.find((d) => d.chapterId === publishedChapter.id);
+  }
+  if (!matchedDeck) {
+    matchedDeck = curriculum.flashcardDecks.find(
+      (d) =>
+        d.programCode.toLowerCase() === levelSlug.toLowerCase() &&
+        d.cards &&
+        d.cards.length > 0
+    );
+  }
+
+  if (matchedDeck && matchedDeck.cards && matchedDeck.cards.length > 0) {
+    chapterCards = matchedDeck.cards.map((c) => ({
+      id: c.id,
+      term: c.front,
+      reading: c.reading,
+      meaning: c.meaning || c.back,
+      example: {
+        before: c.example,
+        focus: "",
+        focusReading: "",
+        after: "",
+        translation: c.back || c.meaning,
+      },
+    }));
+  }
+
+  let checkpointQuestions: AssessmentQuestion[] | undefined;
+  const allAssessments = readAssessments();
+  let matchedAssessment = publishedChapter?.checkpointAssessmentId
+    ? allAssessments.find((a) => a.id === publishedChapter.checkpointAssessmentId)
+    : undefined;
+
+  if (!matchedAssessment && publishedChapter) {
+    matchedAssessment = allAssessments.find(
+      (a) =>
+        a.type === "checkpoint" &&
+        a.level.toLowerCase() === levelSlug.toLowerCase() &&
+        a.chapter === publishedChapter.order
+    );
+  }
+
+  if (matchedAssessment && matchedAssessment.status === "Published" && matchedAssessment.questions?.length) {
+    checkpointQuestions = matchedAssessment.questions;
+  }
+
   const activities: LessonActivity[] = [
     { key: "video", order: "01", title: "Video Lesson", railTitle: "Video Lesson", description: "Tonton penjelasan utama chapter.", icon: "▶", state: "current", href: `${basePath}/video${query}`, statusLabel: "Belum Mulai" },
     { key: "grammar", order: "02", title: "Modul Tata Bahasa", railTitle: "Modul Tata Bahasa", description: "Baca dan tandai poin penting.", icon: "本", state: "available", href: `${basePath}/grammar${query}`, statusLabel: "Belum Mulai" },
@@ -38,14 +101,15 @@ export function getLearningData(membership: Membership, levelSlug: string, chapt
     levelSlug,
     chapterSlug,
     chapterNumber,
-    chapterTitle,
+    chapterTitle: publishedChapter?.title || chapterTitle,
     overviewDescription: fixture ? "Selesaikan setiap modul untuk membuka checkpoint dan melanjutkan journey." : "Selesaikan aktivitas chapter untuk melanjutkan journey.",
     videoTitle: fixture ? "Pola kalimat untuk aktivitas sehari-hari" : `Video ${chapterTitle}`,
     activities,
-    cards: flashcards,
+    cards: chapterCards,
     audioQuestion,
     readingQuestion,
-    readingPassage: "毎朝、田中さんは七時に起きます。朝ご飯を食べてから、日本語を三十分勉強します。そのあと、八時に会社へ行きます。",
+    readingPassage: publishedChapter?.readingPassage || "毎朝、田中さんは七時に起きます。朝ご飯を食べてから、日本語を三十分勉強します。そのあと、八時に会社へ行きます。",
+    checkpointQuestions,
   };
 }
 

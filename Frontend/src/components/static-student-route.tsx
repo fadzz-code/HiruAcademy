@@ -21,16 +21,17 @@ import { StudentDashboard } from "@/components/student-dashboard";
 import { StudentNavigation } from "@/components/student-navigation";
 import { VideoLesson } from "@/components/video-lesson";
 import { hasTryoutAccess } from "@/lib/assessment-mock";
-import { getDashboardData, parseMembership } from "@/lib/dashboard-mock";
+import { getDashboardData } from "@/lib/dashboard-mock";
 import { findJourneyLevel, getJourneyChapters, getJourneyLevels, canAccessLearning } from "@/lib/journey-mock";
 import { getLearningData } from "@/lib/learning-mock";
 import { hasSenseiAccess } from "@/lib/sensei-mock";
 import { StudentBreadcrumb } from "@/components/student-breadcrumb";
+import { getEffectiveMembership } from "@/lib/business-store";
 
 type RouteKind = "dashboard" | "levels" | "journey" | "learning" | "video" | "grammar" | "kanji" | "flashcards" | "audio" | "reading" | "checkpoint" | "tryout" | "schedule" | "class-detail" | "replay" | "replay-player" | "ask" | "mini";
 
 export function StaticStudentRoute({ kind, level, chapter }: { kind: RouteKind; level?: string; chapter?: string }) {
-  const membership = parseMembership(useSearchParams().get("membership") ?? undefined);
+  const membership = getEffectiveMembership(useSearchParams().get("membership") ?? undefined);
   if (kind === "dashboard") return <StudentDashboard data={getDashboardData(membership)} previewEnabled={process.env.NODE_ENV !== "production"} />;
   if (kind === "levels") return <JourneyShell membership={membership}><LevelSelection membership={membership} levels={getJourneyLevels(membership)} /></JourneyShell>;
   if (kind === "tryout") {
