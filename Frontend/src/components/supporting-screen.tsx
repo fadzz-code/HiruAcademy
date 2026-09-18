@@ -825,24 +825,36 @@ function ProgressScreen({ membership }: { membership: "free" | "lms" | "sensei" 
       <main className="supporting-main progress-page">
         <div className="progress-title-row">
           <header className="supporting-header">
-            <p className="dash-kicker">PROGRES &amp; ACHIEVEMENT</p>
             <h1>Rayakan progres tanpa kehilangan fokus</h1>
-            <p>Progress, streak, mastery, dan pencapaian dihitung dari journey serta aktivitas belajarmu.</p>
+            <p>Progress, streak, mastery, dan pencapaian belajarmu.</p>
           </header>
-          <Link href={`/profile${query}`} className="button button-secondary progress-profile-btn">Profil</Link>
         </div>
         <section className="progress-summary">
           <div className="progress-summary-info">
             <p className="dash-kicker">MEMBER LEVEL N4</p>
             <h2>Perjalanan belajar terus bertumbuh</h2>
-            <p>Persentase dan milestone mengikuti progres belajar yang valid.</p>
+            <p>Persentase dan milestone mengikuti progres belajar valid.</p>
+          </div>
+          <div className="progress-summary-tracker">
             <span className="progress-streak-badge">
               <LuFlame aria-hidden="true" /> 12 Hari Streak
             </span>
+            <div className="progress-bar-wrap">
+              <div
+                className="progress-bar-track"
+                role="progressbar"
+                aria-valuenow={65}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Progress Journey N4"
+              >
+                <div className="progress-bar-fill" style={{ width: "65%" }} />
+              </div>
+              <strong className="progress-bar-pct">65%</strong>
+            </div>
           </div>
           <div className="progress-stats">
             {[
-              { value: "65%", label: "Journey N4", icon: LuRoute },
               { value: "450", label: "Kanji mastered", icon: LuBookOpen },
               { value: "18", label: "Latihan selesai", icon: LuCircleCheck },
               { value: "82%", label: "Akurasi", icon: LuAward },
