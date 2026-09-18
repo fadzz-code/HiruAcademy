@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, type SVGProps } from "react";
+import { type SVGProps, useMemo } from "react";
 import { LandingMotion } from "@/components/landing-motion";
+import { LearningPath } from "@/components/learning-path";
 import { PublicPage } from "@/components/public-shell";
 import { SenseiGrid } from "@/components/sensei-grid";
 import { testimonials } from "@/lib/public-mock";
-import { usePublishedLanding, usePublishedCampaigns, usePublishedTestimonials } from "@/lib/website-store";
-import { usePublishedPrograms } from "@/lib/curriculum-store";
+import { usePublishedLanding, usePublishedTestimonials } from "@/lib/website-store";
 
 type IconName = "arrow" | "book" | "check" | "compass" | "layers" | "play" | "sparkle" | "target" | "users";
 
@@ -31,9 +31,9 @@ function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconName }) 
 const offers = [
   {
     id: "free",
-    badge: "GRATIS",
+    badge: "",
     title: "Coba Gratis",
-    subTitle: "Free Trial",
+    subTitle: "",
     description: "Cocok untuk kamu yang ingin mencoba sistem belajar Hiru sebelum berlangganan.",
     price: "Rp 0",
     period: "/selamanya",
@@ -49,9 +49,9 @@ const offers = [
   },
   {
     id: "sensei",
-    badge: "POPULER",
+    badge: "",
     title: "LMS プラス (Plus)",
-    subTitle: "N5 Kelas bersama Sensei",
+    subTitle: "Kelas bersama Sensei",
     description: "Cocok untuk kamu yang membutuhkan jadwal rutin, bimbingan dan evaluasi langsung.",
     price: "Mulai Rp 350k",
     period: "/bulan",
@@ -69,7 +69,7 @@ const offers = [
     id: "lms",
     badge: "BELAJAR FLEKSIBEL",
     title: "LMS のみ (Only)",
-    subTitle: "N5 Belajar Mandiri",
+    subTitle: "Belajar Mandiri",
     description: "Cocok untuk kamu yang ingin belajar menyesuaikan waktu dan kecepatan sendiri.",
     price: "Mulai Rp 99k",
     period: "/6 bulan",
@@ -91,16 +91,9 @@ const proofItems = [
   { icon: "target" as const, value: "Try Out & Evaluasi Rutin" },
 ];
 
-const learningFlow = [
-  { icon: "compass" as const, eyebrow: "01 — Placement Test", title: "Temukan Level yang Tepat", description: "Ketahui kemampuan awalmu dan dapatkan rekomendasi program yang sesuai dengan target belajarmu.", cta: "Cek Level Sekarang →", href: "/placement" },
-  { icon: "layers" as const, eyebrow: "02 — Belajar Terstruktur", title: "Belajar Secara Bertahap", description: "Ikuti materi sesuai urutan melalui video pembelajaran, modul, flashcard, latihan, dan checkpoint.", cta: "Mulai Belajar →", href: "/dashboard" },
-  { icon: "target" as const, eyebrow: "03 — Try Out JLPT", title: "Ukur Kesiapanmu", description: "Kerjakan simulasi JLPT, lihat hasilnya, lalu pelajari pembahasan untuk mengetahui bagian yang perlu ditingkatkan.", cta: "Ikuti Try Out →", href: "/tryout" },
-  { icon: "check" as const, eyebrow: "04 — Sertifikat", title: "Dapatkan Bukti Pencapaian", description: "Selesaikan program dan evaluasi akhir untuk mendapatkan sertifikat sebagai bukti pencapaian belajarmu.", cta: "Lihat Ketentuan →", href: null },
-];
-
 const lmsPreviews = [
   { key: "dashboard", icon: "layers" as const, label: "Dashboard", imageSrc: "/showcase/dashboard-showcase.png" },
-  { key: "journey", icon: "compass" as const, label: "Learning Journey", imageSrc: "/showcase/dashboard-showcase.png" },
+  { key: "journey", icon: "compass" as const, label: "Pembelajaran", imageSrc: "/showcase/dashboard-showcase.png" },
   { key: "lesson", icon: "play" as const, label: "Materi / Video Lesson", imageSrc: "/showcase/dashboard-showcase.png" },
   { key: "flashcard", icon: "book" as const, label: "Flashcard", imageSrc: "/showcase/dashboard-showcase.png" },
   { key: "evaluation", icon: "target" as const, label: "Try Out / Evaluasi", imageSrc: "/showcase/dashboard-showcase.png" },
@@ -133,68 +126,10 @@ function ArrowLink({ href, children, dark = false }: { href: string; children: R
 
 export default function Home() {
   const landing = usePublishedLanding();
-  const campaigns = usePublishedCampaigns();
-  const publishedPrograms = usePublishedPrograms();
   const publishedTestimonials = usePublishedTestimonials({ featuredOnly: true });
 
   const hero = landing.hero;
-
-  const currentOffers = useMemo(() => {
-    return offers.map((offer) => {
-      if (offer.id === "free") return { ...offer, campaign: null, basePrice: offer.price, hasDiscount: false };
-
-      const targetPlan = offer.id === "sensei" ? "sensei" : "mandiri";
-      const campaign = campaigns.find(
-        (c) => c.targetPlan === "both" || c.targetPlan === targetPlan
-      );
-
-      const targetCode = campaign?.targetProgramCodes.find((code) => code === "N4") || campaign?.targetProgramCodes[0] || "N5";
-      const program = publishedPrograms.find((p) => p.code === targetCode) || publishedPrograms.find((p) => p.code === "N5");
-
-      const baseAmount =
-        offer.id === "sensei"
-          ? (program && typeof program.senseiPrice === "number" ? program.senseiPrice : 350000)
-          : (program && typeof program.selfStudyPrice === "number" ? program.selfStudyPrice : 99000);
-
-      const baseFormatted =
-        baseAmount >= 1000 && baseAmount % 1000 === 0
-          ? `Mulai Rp ${baseAmount / 1000}k`
-          : `Mulai Rp ${baseAmount.toLocaleString("id-ID")}`;
-
-      if (!campaign) {
-        return {
-          ...offer,
-          price: baseFormatted,
-          campaign: null,
-          basePrice: baseFormatted,
-          hasDiscount: false,
-        };
-      }
-
-      let promoAmount = baseAmount;
-      if (campaign.discountType === "percentage") {
-        promoAmount = Math.round(baseAmount * (1 - campaign.value / 100));
-      } else if (campaign.discountType === "fixed") {
-        promoAmount = Math.max(0, baseAmount - campaign.value);
-      }
-
-      const promoFormatted =
-        promoAmount >= 1000 && promoAmount % 1000 === 0
-          ? `Mulai Rp ${promoAmount / 1000}k`
-          : `Mulai Rp ${promoAmount.toLocaleString("id-ID")}`;
-
-      return {
-        ...offer,
-        subTitle: offer.id === "sensei" ? `${targetCode} Kelas bersama Sensei` : `${targetCode} Belajar Mandiri`,
-        price: promoFormatted,
-        basePrice: baseFormatted,
-        badge: campaign.badgeText || offer.badge,
-        cta: campaign.ctaLabel || offer.cta,
-        campaign,
-        hasDiscount: true,
-      };
-    });
-  }, [campaigns, publishedPrograms]);
+  const currentOffers = offers;
 
   const displayTestimonials = useMemo(() => {
     if (publishedTestimonials.length > 0) {
@@ -222,7 +157,7 @@ export default function Home() {
             <div className="section-heading">
               <span className="eyebrow" style={{ margin: "0 auto 16px" }}>INVESTASI BELAJAR</span>
               <h2>{landing.pricing?.title || "Pilih cara belajar yang paling sesuai"}</h2>
-              <p>{landing.pricing?.support || "Pilih cara belajar, lalu tentukan level N5–N1 secara bebas. Harga dan akses mengikuti konfigurasi sistem."}</p>
+              <p>{landing.pricing?.support || "Pilih cara belajar yang sesuai dengan kebutuhanmu."}</p>
             </div>
             <div className="pricing-grid">
               {currentOffers.map((offer, index) => (
@@ -237,27 +172,14 @@ export default function Home() {
                     </div>
                   )}
                   <div className="pricing-card-header">
-                    {(!offer.popular || offer.hasDiscount) && <span className="pricing-badge-pill">{offer.badge}</span>}
+                    {offer.badge && <span className="pricing-badge-pill">{offer.badge}</span>}
                     <h3 className="pricing-title">{offer.title}</h3>
-                    <span className="pricing-subtitle">{offer.subTitle}</span>
+                    {offer.subTitle && <span className="pricing-subtitle">{offer.subTitle}</span>}
                     <p className="pricing-desc">{offer.description}</p>
                   </div>
 
                   <div className="pricing-price-box">
                     <span className="pricing-amount">{offer.price}</span>
-                    {offer.hasDiscount && (
-                      <s
-                        style={{
-                          fontSize: "14px",
-                          color: "var(--muted)",
-                          textDecoration: "line-through",
-                          fontWeight: 600,
-                          alignSelf: "center",
-                        }}
-                      >
-                        {offer.basePrice}
-                      </s>
-                    )}
                     <span className="pricing-period">{offer.period}</span>
                   </div>
 
@@ -283,7 +205,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section soft-section" id="cara-belajar" data-reveal><div className="container"><div className="section-heading"><h2>Belajar Terarah dari Menentukan Level hingga Mencapai Target</h2><p>Mulai dari mengetahui kemampuan awal, mempelajari materi secara bertahap, hingga mengukur kesiapan menghadapi JLPT—semuanya tersedia dalam satu alur belajar yang terstruktur.</p></div><div className="offer-grid learning-flow-grid">{learningFlow.map((item, index) => <article className="offer-card reveal-item" key={item.title} style={{ "--reveal-index": Math.min(index, 2) } as React.CSSProperties}><div className={`offer-icon offer-icon-${index + 1}`}><Icon name={item.icon} width="28" height="28" /></div><span className="card-number">{item.eyebrow.replace(" — ", " · ")}</span><h3>{item.title}</h3><p>{item.description}</p>{item.href ? <a href={item.href}>{item.cta}</a> : <span className="footer-disabled offer-disabled" aria-disabled="true">{item.cta}</span>}</article>)}</div></div></section>
+        <LearningPath />
 
         <section className="section lms-showcase" data-reveal><div className="container section-heading"><h2>Bukan Hanya Belajar Saat Zoom</h2><p>Lanjutkan belajar melalui materi, rekaman, latihan, dan evaluasi yang tersimpan di LMS Hiru Academy.</p></div><div className="lms-showcase-viewport"><div className="lms-showcase-track"><div className="lms-showcase-group">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div><div className="lms-showcase-group lms-showcase-copy" aria-hidden="true">{lmsPreviews.map((preview) => <LmsPreview key={preview.key} preview={preview} />)}</div></div></div></section>
 

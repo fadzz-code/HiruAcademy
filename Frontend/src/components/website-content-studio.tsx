@@ -928,6 +928,7 @@ function CampaignHub() {
   const [statusFilter, setStatusFilter] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Campaign | null>(null);
   const [previewCampaign, setPreviewCampaign] = useState<Campaign | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const filtered = store.campaigns.filter((c: Campaign) => {
     const matchesQ =
@@ -968,6 +969,9 @@ function CampaignHub() {
       };
     });
     setEditingCampaign(null);
+    const isPub = campaignToSave.status === "Published";
+    setToastMessage(isPub ? "Kampanye berhasil diterbitkan ke publik!" : "Draf kampanye berhasil disimpan.");
+    setTimeout(() => setToastMessage(null), 2500);
   }
 
   function handleDelete() {
@@ -991,6 +995,7 @@ function CampaignHub() {
 
   return (
     <div className="cms-campaign-hub">
+      <SaveToast message={toastMessage || ""} open={!!toastMessage} />
       <div className="cms-header-bar">
         <div>
           <h3>Daftar Kampanye Promo</h3>

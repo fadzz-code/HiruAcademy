@@ -22,7 +22,6 @@ export function CertificateDetailScreen() {
             <p className="dash-kicker">DIGITAL CERTIFICATE</p>
             <p>Sertifikat resmi digital kelulusan program HIRU Academy.</p>
           </header>
-          <Link href={`/certificate${query}`}>Certificate Center</Link>
         </div>
 
         <section className="certificate-preview">

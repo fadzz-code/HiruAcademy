@@ -48,47 +48,9 @@ export default function ProgramPage() {
   return (
     <PublicPage active="Program">
       <main className="public-main program-page">
-        <section className="program-intro-card">
-          <div className="program-intro-copy">
-            <p className="kicker">PROGRAM &amp; LEVEL</p>
-            <h1>Pilih metode belajar yang sesuai untukmu</h1>
-            <p>Mulai langsung dari level yang sesuai kemampuanmu, tanpa harus mengambil level sebelumnya. Materi level sebelumnya akan terbuka dan bisa dipelajari kembali.</p>
-            <Link className="button button-dark" href="/placement">
-              Coba Placement Test <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="program-intro-flow">
-            <p className="kicker">ALUR MEMILIH PROGRAM</p>
-            <ol>
-              <li>
-                <strong>01</strong>
-                <div>
-                  <h2>Pilih metode belajar</h2>
-                  <p>Coba Gratis, Belajar Mandiri, atau Kelas bersama Sensei.</p>
-                </div>
-              </li>
-              <li>
-                <strong>02</strong>
-                <div>
-                  <h2>Pilih level yang sesuai</h2>
-                  <p>Pilih level berdasarkan kemampuan dan target belajar.</p>
-                </div>
-              </li>
-              <li>
-                <strong>03</strong>
-                <div>
-                  <h2>Konfirmasi program yang dipilih</h2>
-                  <p>Cek kembali metode belajar, level yang dipilih, dan biaya sebelum mendaftar.</p>
-                </div>
-              </li>
-            </ol>
-          </div>
-        </section>
-
         <section className="public-section program-pricing-section">
           <div className="public-section-head program-section-title">
             <div>
-              <p className="kicker">METODE BELAJAR</p>
               <h2>Pilih metode belajar</h2>
               <p>Sesuaikan dengan waktu dan kebutuhan bimbinganmu.</p>
             </div>
@@ -125,8 +87,8 @@ export default function ProgramPage() {
                   )}
 
                   <div className="pricing-card-header">
-                    {!isPopular && <span className="pricing-badge-pill">{plan.badge}</span>}
-                    {isPopular && <span className="pricing-badge-pill" style={{ visibility: "hidden" }}>&nbsp;</span>}
+                    {!isPopular && plan.id !== "free" && <span className="pricing-badge-pill">{plan.badge}</span>}
+                    {(isPopular || plan.id === "free") && <span className="pricing-badge-pill" style={{ visibility: "hidden" }}>&nbsp;</span>}
                     <h3 className="pricing-title">{plan.title}</h3>
                     <p className="pricing-desc">{plan.description}</p>
                   </div>
@@ -175,7 +137,6 @@ export default function ProgramPage() {
           <div className="public-section-head level-section-head">
             <div className="program-section-title">
               <div>
-                <p className="kicker">PILIH LEVEL</p>
                 <h2>Pilih level sesuai kemampuanmu.</h2>
                 <p>Tidak harus memulai dari level N5, pilih level berdasarkan kemampuan dan target belajarmu.</p>
                 <p className="level-placement-helper">
@@ -245,9 +206,9 @@ export default function ProgramPage() {
               </div>
             </div>
 
-            <div className="summary-action-box">
-              <Link className="button button-primary summary-cta" href={`/register?placement=${selectedLevel.code}&plan=${selectedPlan.id}`}>
-                Lanjutkan Pendaftaran <span aria-hidden="true">→</span>
+            <div className="summary-action-box" style={{ width: "100%", display: "flex", justifyContent: "center", margin: "20px auto 0" }}>
+              <Link className="button button-primary summary-cta" href={`/register?placement=${selectedLevel.code}&plan=${selectedPlan.id}`} style={{ margin: "0 auto" }}>
+                Lanjutkan Pendaftaran
               </Link>
             </div>
           </div>

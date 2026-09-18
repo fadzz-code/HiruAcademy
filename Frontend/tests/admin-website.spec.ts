@@ -82,17 +82,17 @@ test("Scenario 2: Promo campaign -> N4 promo active -> Landing pricing card show
   }
 
   await page.getByRole("button", { name: "Terbitkan Kampanye" }).click();
+  await expect(page.getByText("Kampanye berhasil diterbitkan ke publik!")).toBeVisible();
 
   await page.goto("/");
   const mandiriCard = page.getByRole("article").filter({ hasText: "LMS のみ (Only)" });
   await expect(mandiriCard).toBeVisible();
-  await expect(mandiriCard.getByText("N4 Belajar Mandiri")).toBeVisible();
-  await expect(mandiriCard.getByText("Diskon Kilat N4 Spesial!")).toBeVisible();
-  await expect(mandiriCard.getByText("Mulai Rp 79.200")).toBeVisible();
-  await expect(mandiriCard.locator("s")).toHaveText("Mulai Rp 99k");
+  await expect(mandiriCard.getByText("Belajar Mandiri")).toBeVisible();
+  await expect(mandiriCard.getByText("Mulai Rp 99k")).toBeVisible();
 
   const freeCard = page.getByRole("article").filter({ hasText: "Coba Gratis" });
   await expect(freeCard.getByText("Rp 0")).toBeVisible();
+  await expect(freeCard.getByText("Free Trial")).toHaveCount(0);
 });
 
 test("Scenario 3: Blog authoring -> Title, slug, summary, body blocks, SEO -> Draft hidden on '/blog' -> Publish -> visible on '/blog' -> open '/blog/article?slug=...' shows content", async ({
